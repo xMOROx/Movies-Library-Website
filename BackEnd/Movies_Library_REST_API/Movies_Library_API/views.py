@@ -3,8 +3,8 @@ from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
-from Movies_Library_APP.models import Movie
-from Movies_Library_APP.serializers import MovieSerializer
+from Movies_Library_API.models import Movie
+from Movies_Library_API.serializers import MovieSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 

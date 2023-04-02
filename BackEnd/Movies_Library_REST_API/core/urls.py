@@ -3,5 +3,5 @@ from django.urls import include, re_path
 
 
 urlpatterns = [
-    re_path(r"^", include("Movies_Library_APP.urls")),
+    re_path(r"^", include("Movies_Library_API.urls")),
 ]

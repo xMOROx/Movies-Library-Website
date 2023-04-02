@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from Movies_Library_APP.models import Movie
+from Movies_Library_API.models import Movie
 
 
 class MovieSerializer(serializers.ModelSerializer):

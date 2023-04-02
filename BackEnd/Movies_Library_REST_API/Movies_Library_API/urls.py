@@ -1,5 +1,5 @@
 from django.urls import include, re_path, path
-from Movies_Library_APP import views
+from Movies_Library_API import views
 
 
 urlpatterns = [
