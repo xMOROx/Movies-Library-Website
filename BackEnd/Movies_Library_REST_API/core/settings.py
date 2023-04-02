@@ -1,4 +1,8 @@
 from pathlib import Path
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -7,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "PUT_SECRET_KEY_HERE"
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -64,9 +68,9 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "testdb",
-        "USER": "root",
-        "PASSWORD": "PUT_YOUR_PASSWORD_HERE",  # Put your password here
+        "NAME": env("NAME"),
+        "USER": env("USER_NAME"),
+        "PASSWORD": env("PASSWORD"),  # Put your password here
         "HOST": "127.0.0.1",
         "PORT": "3306",
     }
