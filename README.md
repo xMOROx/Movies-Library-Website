@@ -6,5 +6,5 @@ Repository for Python Course at AGH UST.
   - Angular 
  ## Backend 
   - Django 
-  - Firebase
+  - mysql
   
