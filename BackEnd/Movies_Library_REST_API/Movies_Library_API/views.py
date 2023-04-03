@@ -6,7 +6,7 @@ from rest_framework import status
 from Movies_Library_API.models import Movie
 from Movies_Library_API.serializers import MovieSerializer
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from Movies_Library_API.movie_db_requests import MovieRequests
 
 
 # Create your views here.
@@ -45,3 +45,30 @@ def movie_detail(request, pk):
     if request.method == "GET":
         serializer = MovieSerializer(data, context={"request": request})
         return JsonResponse(serializer.data)
+
+
+@api_view(["GET"])
+def movie_details_api(request, pk):
+    if request.method == "GET":
+        data = MovieRequests().get_movie_details(pk)
+
+        if data is not None:
+            return JsonResponse(data.__dict__(), safe=False)
+
+        return JsonResponse(
+            {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
+        )
+
+
+@api_view(["GET"])
+def popular_movies(request):
+    if request.method == "GET":
+        data = MovieRequests().get_popular_movies()
+        data_json = MovieRequests().__convert_movie_list_to_json__(data)
+
+        if data is not None:
+            return JsonResponse(data_json, safe=False)
+
+        return JsonResponse(
+            {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
+        )

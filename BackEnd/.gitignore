@@ -1,2 +1,5 @@
 /Movies_Library_REST_API/core/.env
 /Movies_Library_REST_API/Movies_Library_API/config.py
+Movies_Library_REST_API/core/__pycache__/
+Movies_Library_REST_API/Movies_Library_API/__pycache__/
+Movies_Library_REST_API/Movies_Library_API/migrations/__pycache__/
