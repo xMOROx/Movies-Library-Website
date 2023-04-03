@@ -4,10 +4,10 @@ from . import models
 
 # Register your models here.
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("id", "username", "email", "is_staff", "is_active")
-    list_display_links = ("id", "username")
-    search_fields = ("username",)
-    list_filter = ("is_staff", "is_active")
+    list_display = ("id", "email", "is_staff", "is_superuser", "is_active")
+    list_display_links = ["id", "email"]
+    search_fields = ("email", "first_name", "last_name")
+    list_filter = ("is_staff", "is_active", "is_superuser")
     list_per_page = 25
 
 

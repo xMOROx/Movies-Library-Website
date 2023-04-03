@@ -1,7 +1,8 @@
 from django.contrib import admin
-from django.urls import include, re_path
+from django.urls import include, re_path, path
 
 
 urlpatterns = [
-    re_path(r"^", include("Movies_Library_API.urls")),
+    path("admin/", admin.site.urls),
+    re_path(r"^api/v1/", include("Movies_Library_API.urls")),
 ]

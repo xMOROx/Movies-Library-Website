@@ -72,3 +72,31 @@ def popular_movies(request):
         return JsonResponse(
             {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
         )
+
+
+@api_view(["GET"])
+def upcoming_movies(request):
+    if request.method == "GET":
+        data = MovieRequests().get_upcoming_movies()
+        data_json = MovieRequests().__convert_movie_list_to_json__(data)
+
+        if data is not None:
+            return JsonResponse(data_json, safe=False)
+
+        return JsonResponse(
+            {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
+        )
+
+
+@api_view(["GET"])
+def latest_movies(request):
+    if request.method == "GET":
+        data = MovieRequests().get_latest_movies()
+        data_json = MovieRequests().__convert_movie_list_to_json__(data)
+
+        if data is not None:
+            return JsonResponse(data_json, safe=False)
+
+        return JsonResponse(
+            {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
+        )

@@ -12,6 +12,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
+JWT_SECRET_KEY = env("JWT_SECRET_KEY")
+JWT_EXPIRATION_TIME = env("JWT_EXPIRES_IN")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

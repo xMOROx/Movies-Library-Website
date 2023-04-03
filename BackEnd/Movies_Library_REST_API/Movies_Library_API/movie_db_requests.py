@@ -52,7 +52,7 @@ class MovieRequests:
 
     def get_upcoming_movies(self):
         response = requests.get(
-            url=self._URL + "movie/upcoming",
+            url=self._URL + "movie/upcoming",  # TODO: change to discover endpoint
             params={"api_key": config.api_key, "language": "en-US", "region": "US"},
         )
         if response.status_code == 200:
@@ -65,7 +65,7 @@ class MovieRequests:
 
     def get_latest_movies(self):
         response = requests.get(
-            url=self._URL + "movie/now_playing",
+            url=self._URL + "movie/now_playing",  # TODO: change to discover endpoint
             params={"api_key": config.api_key, "language": "en-US"},
         )
         if response.status_code == 200:
