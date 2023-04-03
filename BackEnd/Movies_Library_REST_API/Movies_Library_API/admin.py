@@ -2,7 +2,6 @@ from django.contrib import admin
 from . import models
 
 
-# Register your models here.
 class UserAdmin(admin.ModelAdmin):
     list_display = ("id", "email", "is_staff", "is_superuser", "is_active")
     list_display_links = ["id", "email"]

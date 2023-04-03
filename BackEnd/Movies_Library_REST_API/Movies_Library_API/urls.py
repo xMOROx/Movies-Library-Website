@@ -14,6 +14,9 @@ urlpatterns = [
     re_path(r"^popular_movies$", views.popular_movies, name="popular_movies"),
     re_path(r"^upcoming_movies$", views.upcoming_movies, name="upcoming_movies"),
     re_path(r"^latest_movies$", views.latest_movies, name="latest_movies"),
+    # User endpoints
     re_path(r"^register$", apis.RegisterAPI.as_view(), name="register"),
     re_path(r"^login$", apis.LoginAPI.as_view(), name="login"),
+    re_path(r"^logout$", apis.LogoutAPI.as_view(), name="logout"),
+    re_path(r"^me$", apis.UserAPI.as_view(), name="me"),
 ]

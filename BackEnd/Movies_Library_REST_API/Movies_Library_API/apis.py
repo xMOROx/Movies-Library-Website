@@ -1,7 +1,7 @@
 from rest_framework import views, response, exceptions, permissions
 
 from .serializers import UserSerializer
-from . import services
+from . import services, authentication
 
 
 class RegisterAPI(views.APIView):
@@ -39,8 +39,12 @@ class LoginAPI(views.APIView):
 
 
 class UserAPI(views.APIView):
-    authentication_classes = ()
-    permission_classes = ()
+    """
+    This is a protected API view. It requires a valid JWT token to be sent in the request's cookies.
+    """
+
+    authentication_classes = (authentication.CustomUserAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
         user = request.user
@@ -48,3 +52,17 @@ class UserAPI(views.APIView):
         serializer = UserSerializer(user)
 
         return response.Response(data=serializer.data)
+
+
+class LogoutAPI(views.APIView):
+    authentication_classes = (authentication.CustomUserAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+        resp = response.Response()
+
+        resp.delete_cookie(key="jwt")
+
+        resp.data = {"message": "success logout"}
+
+        return resp
