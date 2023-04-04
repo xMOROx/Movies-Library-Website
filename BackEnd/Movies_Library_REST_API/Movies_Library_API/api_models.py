@@ -1,5 +1,8 @@
+from django.conf import settings
+
+
 class MovieDetails:
-    _POSTER_URL = "https://image.tmdb.org/t/p/original"
+    _POSTER_URL = settings.POSTER_URL
 
     def __init__(
         self,

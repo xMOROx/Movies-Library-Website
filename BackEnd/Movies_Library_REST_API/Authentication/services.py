@@ -6,8 +6,8 @@ from django.conf import settings
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .models import User
-from . import models
+    from Authentication.models import User
+from .models import models
 
 
 @dataclasses.dataclass
@@ -55,6 +55,7 @@ def create_token(user_id: int) -> str:
         + datetime.timedelta(hours=int(settings.JWT_EXPIRATION_TIME)),
         iat=datetime.datetime.utcnow(),
     )
+
     token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm="HS256")
 
     return token
