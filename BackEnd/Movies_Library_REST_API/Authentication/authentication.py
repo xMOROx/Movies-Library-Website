@@ -1,5 +1,5 @@
 from django.conf import settings
-from rest_framework import exceptions, permissions, authentication
+from rest_framework import exceptions, authentication
 import jwt
 
 from . import models
@@ -10,7 +10,7 @@ class CustomUserAuthentication(authentication.BaseAuthentication):
         token = request.COOKIES.get("jwt")
 
         if not token:
-            return None
+            raise exceptions.AuthenticationFailed("Unauthenticated")
 
         try:
             payload = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])

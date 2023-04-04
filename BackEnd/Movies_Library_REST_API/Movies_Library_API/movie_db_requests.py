@@ -1,10 +1,11 @@
 import requests
 import Movies_Library_API.config as config
 from Movies_Library_API.api_models import MovieDetails, Genre
+from django.conf import settings
 
 
 class MovieRequests:
-    _URL = "https://api.themoviedb.org/3/"
+    _URL = settings.API_URL
 
     def __convert_json_to_movie__(self, json):
         movie_id = json["id"]

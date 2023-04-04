@@ -20,6 +20,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# API URLS
+POSTER_URL = "https://image.tmdb.org/t/p/original"
+API_URL = "https://api.themoviedb.org/3/"
 
 # Application definition
 
@@ -32,6 +35,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "Movies_Library_API.apps.MoviesLibraryApiConfig",
+    "Authentication.apps.AuthenticationConfig",
     "corsheaders",
 ]
 
@@ -112,7 +116,7 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-AUTH_USER_MODEL = "Movies_Library_API.User"
+AUTH_USER_MODEL = "Authentication.User"
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
