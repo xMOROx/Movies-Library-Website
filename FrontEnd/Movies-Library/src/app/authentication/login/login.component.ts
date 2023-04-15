@@ -1,32 +1,31 @@
-import { Component } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {User} from "../../models/User";
-import {environment} from "../../../environments/environment";
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { User } from "../../models/User";
+import { environment } from "../../../environments/environment";
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
-  public email: string;
-  public password: string;
-
-  constructor(private httpClient: HttpClient) {
-    this.email = "";
-    this.password = "";
-  }
-
-  onSubmit() {
-    let credentials: User = {
-      email: this.email,
-      password: this.password
-    };
-    this.httpClient.post(environment.backEnd + '/auth/login', credentials).subscribe(r => {
-      this.httpClient.get(environment.backEnd + '/auth/me').subscribe(r => {
-        console.log(r);
-      });
+export class LoginComponent implements OnInit {
+  signinForm: FormGroup;
+  constructor(
+    public fb: FormBuilder,
+    public authService: AuthService,
+    public router: Router
+  ) {
+    this.signinForm = this.fb.group({
+      email: [''],
+      password: [''],
     });
   }
 
-}
+  ngOnInit(): void { }
+  public signIn(): void {
+    this.authService.signIn(this.signinForm.value);
+  }
+} 
