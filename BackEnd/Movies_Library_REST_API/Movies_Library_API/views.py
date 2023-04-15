@@ -1,19 +1,31 @@
-from django.shortcuts import render
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
 from Movies_Library_API.models import Movie
+from Authentication.models import User
 from Movies_Library_API.serializers import MovieSerializer
-from rest_framework.decorators import api_view
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+)
+from rest_framework.permissions import IsAuthenticated
 from Movies_Library_API.movie_db_requests import MovieRequests
 
 
 # Create your views here.
 @api_view(["GET", "POST", "DELETE"])
-def movie_list(request):
+@permission_classes([IsAuthenticated])
+def movie_list(request, user_id):
     if request.method == "GET":
-        data = Movie.objects.all()
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return JsonResponse(
+                {"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        data = Movie.objects.filter(users=user)
 
         serializer = MovieSerializer(data, context={"request": request}, many=True)
 
@@ -34,6 +46,7 @@ def movie_list(request):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def movie_detail(request, pk):
     try:
         data = Movie.objects.get(pk=pk)
@@ -48,6 +61,7 @@ def movie_detail(request, pk):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def movie_details_api(request, pk):
     if request.method == "GET":
         data = MovieRequests().get_movie_details(pk)
@@ -61,6 +75,7 @@ def movie_details_api(request, pk):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def popular_movies(request):
     if request.method == "GET":
         data = MovieRequests().get_popular_movies()
@@ -75,6 +90,7 @@ def popular_movies(request):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def upcoming_movies(request):
     if request.method == "GET":
         data = MovieRequests().get_upcoming_movies()
@@ -89,6 +105,7 @@ def upcoming_movies(request):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def latest_movies(request):
     if request.method == "GET":
         data = MovieRequests().get_latest_movies()
