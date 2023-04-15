@@ -1,9 +1,6 @@
 from django.db import models
 
-from rest_framework import views, response, exceptions, permissions
 
-from .serializers import UserSerializer
-from . import services, authentication
 from django.contrib.auth import models as auth_models
 
 
