@@ -2,7 +2,7 @@ from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
-from Movies_Library_API.models import Movie
+from ..models.movie_lib_models import Movie
 from Authentication.models import User
 from Movies_Library_API.serializers import MovieSerializer
 from rest_framework.decorators import (

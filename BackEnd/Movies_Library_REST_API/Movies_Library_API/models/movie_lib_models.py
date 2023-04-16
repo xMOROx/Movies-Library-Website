@@ -9,7 +9,14 @@ class Movie(models.Model):
     runtime = models.IntegerField(
         default=0, validators=[MinValueValidator(0), MaxValueValidator(500)]
     )
-    users = models.ManyToManyField(User, through="Movie_User")
+
+    users = models.ManyToManyField(
+        User,
+        related_name="Movies_Users",
+        through="Movie_User",
+        through_fields=("movie", "user"),
+        blank=True,
+    )
 
     def __str__(self):
         return self.title
@@ -27,7 +34,21 @@ class Movie(models.Model):
 
 class Actor(models.Model):
     name = models.CharField(max_length=255)
-    movies = models.ManyToManyField(Movie, related_name="actors")
+    movies = models.ManyToManyField(
+        Movie,
+        related_name="Movies_Actors",
+        through="Movie_Actor",
+        through_fields=("actor", "movie"),
+        blank=True,
+    )
+
+    users = models.ManyToManyField(
+        User,
+        related_name="Users_Actors",
+        through="User_Actor",
+        through_fields=("actor", "user"),
+        blank=True,
+    )
 
     def __str__(self):
         return self.name
