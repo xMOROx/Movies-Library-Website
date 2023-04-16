@@ -17,8 +17,8 @@ export class RegisterComponent implements OnInit {
     this.signupForm = this.fb.group({
       email: [''],
       password: [''],
-      lastName: [''],
-      firstName: ['']
+      last_name: [''],
+      first_name: ['']
     })
   }
 
@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
 
   registerUser() {
     this.authService.singUp(this.signupForm.value).subscribe((res) => {
-      if (res.result) {
+      if (res.status == 201) {
         this.signupForm.reset();
         this.router.navigate(['login']);
       }
