@@ -1,12 +1,19 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
 from rest_framework import permissions
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 User = get_user_model()
 
 
 class IsOwner(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        user_id = view.kwargs.get("user_id")
-        user = get_object_or_404(User, pk=user_id)
-        return user == request.user
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
+        jwt_object = JWTAuthentication()
+        header = jwt_object.get_header(request)
+        raw_token = jwt_object.get_raw_token(header)
+        validated_token = jwt_object.get_validated_token(raw_token)
+        user = jwt_object.get_user(validated_token)
+
+        return user.id == int(view.kwargs.get("user_id"))

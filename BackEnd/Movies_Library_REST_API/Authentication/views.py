@@ -13,6 +13,7 @@ from .models import User
 class UserRegisterView(CreateAPIView):
     queryset = User.objects.all()
     permission_classes = [permissions.AllowAny]
+    authentication_classes = []
     serializer_class = UserSerializer
 
     def post(self, request, *args, **kwargs):
@@ -21,8 +22,12 @@ class UserRegisterView(CreateAPIView):
         serializer.save()
 
         id = serializer.data.get("id")
-
-        response_data = {"User id": id, "message": "User created successfully"}
+        print(request.data)
+        response_data = {
+            "User id": id,
+            "message": "User created successfully",
+            "status": HTTP_201_CREATED,
+        }
 
         return response.Response(response_data, status=HTTP_201_CREATED)
 

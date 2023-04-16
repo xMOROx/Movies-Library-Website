@@ -4,9 +4,14 @@ from .views import admin_views as auth_views
 
 urlpatterns = [
     re_path(
-        r"^users/(?P<user_id>[0-9]+)/movies$",
-        movies_views.movie_list,
-        name="movie_list_users",
+        r"^users/(?P<user_id>[0-9]+)/movies/details$",
+        movies_views.list_of_details_for_movies_per_user,
+        name="details of user movies",
+    ),
+    re_path(
+        r"^users/(?P<user_id>[0-9]+)/movies/(?P<movie_id>[0-9]+)/details$",
+        movies_views.details_of_movie_for_user,
+        name="details of movie for user",
     ),
     re_path(
         r"^admin/users$", auth_views.AdminUserListView.as_view(), name="admin users"

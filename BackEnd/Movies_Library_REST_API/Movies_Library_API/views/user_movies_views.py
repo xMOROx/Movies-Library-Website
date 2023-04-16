@@ -4,7 +4,7 @@ from rest_framework import status
 
 from ..models.movie_lib_models import Movie, Movie_User
 from Authentication.models import User
-from Movies_Library_API.serializers import MovieSerializer, Movie_UserSerializer
+from Movies_Library_API.serializers import Movie_UserSerializer
 from rest_framework import views
 from rest_framework.permissions import IsAuthenticated
 from Movies_Library_API.movie_db_requests import MovieRequests
@@ -12,7 +12,7 @@ from Authentication.permissions import IsOwner
 
 
 class AddMovieToUserView(views.APIView):
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated & IsOwner]
 
     def post(self, request, user_id, movie_id):
         movie_user = Movie_User.objects.filter(user=user_id, movie=movie_id).first()

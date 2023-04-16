@@ -11,4 +11,4 @@ class MovieSerializer(serializers.ModelSerializer):
 class Movie_UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie_User
-        fields = ("is_favorite", "status", "rating")
+        fields = "__all__"

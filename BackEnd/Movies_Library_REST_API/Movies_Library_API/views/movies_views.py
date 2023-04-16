@@ -1,48 +1,58 @@
 from django.http.response import JsonResponse
-from rest_framework.parsers import JSONParser
 from rest_framework import status
 
 from ..models.movie_lib_models import Movie
 from Authentication.models import User
-from Movies_Library_API.serializers import MovieSerializer
+from Movies_Library_API.serializers import MovieSerializer, Movie_UserSerializer
 from rest_framework.decorators import (
     api_view,
     permission_classes,
+    authentication_classes,
 )
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from Movies_Library_API.movie_db_requests import MovieRequests
+from Authentication.permissions import IsOwner
 
 
-# Create your views here.
-@api_view(["GET", "POST", "DELETE"])
-@permission_classes([IsAuthenticated])
-def movie_list(request, user_id):
+@api_view(["GET"])
+@permission_classes([IsAuthenticated & IsOwner])
+@authentication_classes([JWTAuthentication])
+def list_of_details_for_movies_per_user(request, user_id):
     if request.method == "GET":
         try:
-            user = User.objects.get(pk=user_id)
+            _ = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return JsonResponse(
+                {"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND
+            )
+        data = Movie.users.through.objects.filter(user_id=user_id)
+
+        serializer_movie_user = Movie_UserSerializer(data, many=True)
+        return JsonResponse(serializer_movie_user.data, safe=False)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated & IsOwner])
+def details_of_movie_for_user(request, user_id, movie_id):
+    if request.method == "GET":
+        try:
+            _ = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
                 {"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND
             )
 
-        data = Movie.objects.filter(users=user)
+        try:
+            data = Movie.users.through.objects.get(user_id=user_id, movie_id=movie_id)
+        except Exception:
+            return JsonResponse(
+                {"message": "The movie does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
-        serializer = MovieSerializer(data, context={"request": request}, many=True)
-
-        return JsonResponse(serializer.data, safe=False)
-    elif request.method == "POST":
-        movie_data = JSONParser().parse(request)
-        serializer = MovieSerializer(data=movie_data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == "DELETE":
-        count = Movie.objects.all().delete()
-        return JsonResponse(
-            {"message": "{} Movies were deleted successfully!".format(count[0])},
-            status=status.HTTP_204_NO_CONTENT,
-        )
+        serializer_movie_user = Movie_UserSerializer(data)
+        return JsonResponse(serializer_movie_user.data)
 
 
 @api_view(["GET"])
