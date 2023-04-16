@@ -2,7 +2,7 @@ from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
-from Movies_Library_API.models import Movie
+from ..models.movie_lib_models import Movie
 from Authentication.models import User
 from Movies_Library_API.serializers import MovieSerializer
 from rest_framework.decorators import (
@@ -47,9 +47,9 @@ def movie_list(request, user_id):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def movie_detail(request, pk):
+def movie_detail(request, movie_id):
     try:
-        data = Movie.objects.get(pk=pk)
+        data = Movie.objects.get(movie_id)
     except Movie.DoesNotExist:
         return JsonResponse(
             {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
@@ -62,9 +62,9 @@ def movie_detail(request, pk):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def movie_details_api(request, pk):
+def movie_details_api(request, movie_id):
     if request.method == "GET":
-        data = MovieRequests().get_movie_details(pk)
+        data = MovieRequests().get_movie_details(movie_id)
 
         if data is not None:
             return JsonResponse(data.__dict__(), safe=False)

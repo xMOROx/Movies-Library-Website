@@ -4,6 +4,7 @@ from rest_framework.status import (
     HTTP_201_CREATED,
     HTTP_400_BAD_REQUEST,
     HTTP_204_NO_CONTENT,
+    HTTP_200_OK,
 )
 from .serializers import UserSerializer
 from .models import User
