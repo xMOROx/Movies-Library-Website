@@ -4,3 +4,6 @@ Movies_Library_REST_API/core/__pycache__/
 Movies_Library_REST_API/Movies_Library_API/__pycache__/
 Movies_Library_REST_API/Movies_Library_API/migrations/__pycache__/
 Movies_Library_REST_API/Movies_Library_API/migrations/*
+Movies_Library_REST_API/Authentication/__pycache__/
+Movies_Library_REST_API/Authentication/migrations/__pycache__/
+Movies_Library_REST_API/Authentication/migrations/*
