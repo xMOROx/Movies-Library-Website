@@ -1,68 +1,60 @@
 from rest_framework import views, response, exceptions, permissions
-
+from rest_framework.generics import CreateAPIView
+from rest_framework.status import (
+    HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
+    HTTP_204_NO_CONTENT,
+)
 from .serializers import UserSerializer
-from . import services, authentication
+from .models import User
 
 
-class RegisterAPI(views.APIView):
-    def post(self, request):
-        serializer = UserSerializer(data=request.data)
+class UserRegisterView(CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = UserSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        data = serializer.validated_data
+        id = serializer.data.get("id")
 
-        serializer.instance = services.create_user(user_data_class=data)
+        response_data = {"User id": id, "message": "User created successfully"}
 
-        return response.Response(data=serializer.data, status=201)
-
-
-class LoginAPI(views.APIView):
-    def post(self, request):
-        email = request.data.get("email")
-        password = request.data.get("password")
-
-        user = services.user_email_selector(email=email)
-
-        if user is None:
-            raise exceptions.AuthenticationFailed("Invalid credentials")
-
-        if not user.check_password(password):
-            raise exceptions.AuthenticationFailed("Invalid credentials")
-
-        token = services.create_token(user_id=user.id)
-
-        resp = response.Response()
-
-        resp.set_cookie(key="jwt", value=token, httponly=True)
-
-        return resp
+        return response.Response(response_data, status=HTTP_201_CREATED)
 
 
-class UserAPI(views.APIView):
-    """
-    This is a protected API view. It requires a valid JWT token to be sent in the request's cookies.
-    """
-
-    authentication_classes = (authentication.CustomUserAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get(self, request):
-        user = request.user
+class UserView(views.APIView):
+    def get(self, request, user_id):
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            raise exceptions.NotFound("User does not exist")
 
         serializer = UserSerializer(user)
 
-        return response.Response(data=serializer.data)
+        return response.Response(serializer.data)
 
+    def put(self, request, user_id):
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            raise exceptions.NotFound("User does not exist")
 
-class LogoutAPI(views.APIView):
-    authentication_classes = (authentication.CustomUserAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
+        serializer = UserSerializer(user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-    def post(self, request):
-        resp = response.Response()
+        return response.Response(serializer.data)
 
-        resp.delete_cookie(key="jwt")
+    def delete(self, request, user_id):
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            raise exceptions.NotFound("User does not exist")
 
-        resp.data = {"message": "success logout"}
+        user.delete()
 
-        return resp
+        return response.Response(status=HTTP_204_NO_CONTENT)
