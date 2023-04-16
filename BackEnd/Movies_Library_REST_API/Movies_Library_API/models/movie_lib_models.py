@@ -24,13 +24,6 @@ class Movie(models.Model):
     def get_movies_for_user(self, user):
         return self.objects.filter(users=user)
 
-    def __dict__(self):
-        return {
-            "title": self.title,
-            "poster_url": self.poster_url,
-            "runtime": self.runtime,
-        }
-
 
 class Actor(models.Model):
     name = models.CharField(max_length=255)
@@ -53,9 +46,6 @@ class Actor(models.Model):
     def __str__(self):
         return self.name
 
-    def __dict__(self):
-        return {"name": self.name}
-
 
 class Movie_User(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -69,15 +59,6 @@ class Movie_User(models.Model):
     def __str__(self):
         return f"{self.user} - {self.movie}"
 
-    def __dict__(self):
-        return {
-            "user": self.user.__dict__(),
-            "movie": self.movie.__dict__(),
-            "is_favorite": self.is_favorite,
-            "status": self.status,
-            "rating": self.rating,
-        }
-
 
 class Movie_Actor(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
@@ -89,12 +70,6 @@ class Movie_Actor(models.Model):
     def __str__(self):
         return f"{self.movie} - {self.actor}"
 
-    def __dict__(self):
-        return {
-            "movie": self.movie.__dict__(),
-            "actor": self.actor.__dict__(),
-        }
-
 
 class User_Actor(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -105,9 +80,3 @@ class User_Actor(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.actor}"
-
-    def __dict__(self):
-        return {
-            "user": self.user.__dict__(),
-            "actor": self.actor.__dict__(),
-        }

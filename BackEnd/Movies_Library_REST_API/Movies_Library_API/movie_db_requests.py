@@ -1,6 +1,9 @@
 import requests
 import Movies_Library_API.config as config
-from Movies_Library_API.api_models import MovieDetails, Genre
+from .models.api_models import (
+    MovieDetails,
+    Genre,
+)
 from django.conf import settings
 
 

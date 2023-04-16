@@ -4,13 +4,13 @@ from rest_framework.status import (
     HTTP_204_NO_CONTENT,
     HTTP_200_OK,
 )
-from Authentication.serializers import UserSerializer
+from Authentication.serializers import UserSerializer, AdminUserSerializer
 from Authentication.models import User
 
 
 class AdminUserListView(views.APIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = AdminUserSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
     def get(self, request):
@@ -22,7 +22,7 @@ class AdminUserListView(views.APIView):
 
 class AdminUserUpdateView(views.APIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = AdminUserSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
     def patch(self, request, user_id, format=None):
@@ -59,7 +59,7 @@ class AdminUserUpdateView(views.APIView):
 
 class BanUserView(views.APIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = AdminUserSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
     def patch(self, request, user_id):

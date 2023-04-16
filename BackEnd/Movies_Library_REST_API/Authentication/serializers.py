@@ -10,8 +10,16 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "password", "email", "first_name", "last_name", "is_banned")
-        extra_kwargs = {"password": {"write_only": True}}
+        fields = (
+            "id",
+            "password",
+            "email",
+            "first_name",
+            "last_name",
+        )
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
 
     def create(self, validated_data):
         user = User.objects.create_user(
@@ -39,9 +47,37 @@ class UserSerializer(serializers.ModelSerializer):
             instance.last_name = validated_data["last_name"]
             del validated_data["last_name"]
 
+        instance.save()
+        return instance
+
+
+class AdminUserSerializer(UserSerializer):
+    class Meta:
+        model = User
+        fields = UserSerializer.Meta.fields + (
+            "is_staff",
+            "is_superuser",
+            "is_banned",
+            "is_active",
+        )
+
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        if "is_staff" in validated_data:
+            instance.is_staff = validated_data["is_staff"]
+            del validated_data["is_staff"]
+
+        if "is_superuser" in validated_data:
+            instance.is_superuser = validated_data["is_superuser"]
+            del validated_data["is_superuser"]
+
         if "is_banned" in validated_data:
             instance.is_banned = validated_data["is_banned"]
             del validated_data["is_banned"]
+
+        if "is_active" in validated_data:
+            instance.is_active = validated_data["is_active"]
+            del validated_data["is_active"]
 
         instance.save()
         return instance
