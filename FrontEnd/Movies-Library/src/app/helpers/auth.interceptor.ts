@@ -1,9 +1,9 @@
-import {Injectable} from "@angular/core";
-import {HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse} from "@angular/common/http";
-import {AuthService} from "../services/auth.service";
-import {catchError, filter, switchMap, take} from "rxjs/operators";
-import {BehaviorSubject, throwError} from "rxjs";
-import {TokenService} from "../services/token.service";
+import { Injectable } from "@angular/core";
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse } from "@angular/common/http";
+import { AuthService } from "../services/auth.service";
+import { catchError, filter, switchMap, take } from "rxjs/operators";
+import { BehaviorSubject, throwError } from "rxjs";
+import { TokenService } from "../services/token.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -14,7 +14,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    const authToken = this.tokenService.getToken();
+    const authToken = this.tokenService.getAccessToken();
     if (authToken) {
       this.addTokenHeader(req, authToken);
     }
@@ -55,6 +55,6 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private addTokenHeader(request: HttpRequest<any>, token: string) {
-    return request.clone({headers: request.headers.set("Authorization", "Bearer " + token)});
+    return request.clone({ headers: request.headers.set("Authorization", "Bearer " + token) });
   }
 }
