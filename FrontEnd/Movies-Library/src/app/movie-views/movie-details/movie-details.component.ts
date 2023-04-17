@@ -41,16 +41,13 @@ export class MovieDetailsComponent implements OnInit {
         release_date: res.release_date,
         runtime: res.runtime
       };
-      this.auth.getUserProfile(localStorage.getItem('user_id')).subscribe((user: User) => {
-        this.user = user;
-        this.moviesService.getMovieDetailsForUser(this.movie?.movie_id, user.id)?.pipe(catchError(err => {
-          this.status = "Not watched";
-          return throwError(() => new Error(err));
-        })).subscribe((data: any) => {
-          this.status = data.status;
-          this.rating = data.rating;
-          this.is_favorite = data.is_favorite;
-        });
+      this.moviesService.getMovieDetailsForUser(this.movie?.movie_id, this.user!.id)?.pipe(catchError(err => {
+        this.status = "Not watched";
+        return throwError(() => new Error(err));
+      })).subscribe((data: any) => {
+        this.status = data.status;
+        this.rating = data.rating;
+        this.is_favorite = data.is_favorite;
       });
     });
   }
