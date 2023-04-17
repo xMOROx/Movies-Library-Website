@@ -15,6 +15,8 @@ import {PopularMoviesComponent} from './movie-views/popular-movies/popular-movie
 import {LatestMoviesComponent} from './movie-views/latest-movies/latest-movies.component';
 import {UpcomingMoviesComponent} from './movie-views/upcoming-movies/upcoming-movies.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [
     {

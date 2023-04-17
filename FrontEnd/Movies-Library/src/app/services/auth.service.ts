@@ -31,10 +31,6 @@ export class AuthService {
   constructor(private http: HttpClient, public router: Router, private tokenService: TokenService) {
   }
 
-  public getUser() {
-    return this.currentUser;
-  }
-
   public singUp(user: User): Observable<any> {
     let url = `${this.endpoint}/register-user`;
     return this.http.post<any>(url, user).pipe(catchError(this.handleError));
@@ -51,14 +47,18 @@ export class AuthService {
         localStorage.setItem('access_token', res.access);
         localStorage.setItem('refresh_token', res.refresh);
 
-        this.getUserProfile(decode_token.user_id).subscribe((res) => {
+        this.getUserProfile(decode_token.user_id).subscribe((res: User) => {
           this.currentUser = res;
+          if (res !== undefined) {
+            localStorage.setItem('user_id', <string>res.id);
+          }
           this.router.navigate(['user-profile/' + res.id]);
         });
       });
   }
 
-  public getUserProfile(id: number): Observable<any> {
+
+  public getUserProfile(id: any): Observable<any> {
     let api = `${this.endpoint}/users/${id}`;
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -78,13 +78,13 @@ export class AuthService {
 
   public isLoggedIn(): boolean {
     let authToken = localStorage.getItem('access_token');
-    return (authToken !== null) ? true : false;
+    return (authToken !== null);
   }
 
   public logout(): void {
-    if (localStorage.removeItem('access_token') == null) {
-      this.router.navigate(['login']);
-    }
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user_id')
+    this.router.navigate(['login']);
   }
 
   public handleError(error: HttpErrorResponse) {

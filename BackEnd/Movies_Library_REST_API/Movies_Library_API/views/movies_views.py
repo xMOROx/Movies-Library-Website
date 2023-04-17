@@ -48,7 +48,7 @@ def details_of_movie_for_user(request, user_id, movie_id):
         except Exception:
             return JsonResponse(
                 {"message": "The movie does not exist"},
-                status=status.HTTP_404_NOT_FOUND,
+                    status=status.HTTP_404_NOT_FOUND,
             )
 
         serializer_movie_user = Movie_UserSerializer(data)

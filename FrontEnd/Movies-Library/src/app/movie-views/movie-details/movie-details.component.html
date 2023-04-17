@@ -10,10 +10,12 @@
     <p>{{movie.overview}}</p>
     <p>{{movie.release_date}}</p>
     <p>{{getRuntime(movie.runtime)}}</p>
-    <select>
-      <option>Not watched</option>
-      <option>Watched</option>
-      <option>Plan to watch</option>
-    </select>
+    <mat-form-field appearance="fill">
+      <mat-select (selectionChange)="addMovie()" [(value)]="status">
+        <mat-option value="Not watched">Not watched</mat-option>
+        <mat-option value="Plan to watch">Plan to watch</mat-option>
+        <mat-option value="Watched">Watched</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 </div>

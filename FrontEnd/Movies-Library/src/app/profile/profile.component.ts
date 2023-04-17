@@ -12,8 +12,8 @@ export class ProfileComponent implements OnInit {
 
   public currentUser: User = {
     email: '',
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
     password: '',
   };
   constructor(
@@ -22,10 +22,7 @@ export class ProfileComponent implements OnInit {
   ) {
     let id: any = this.actRoute.snapshot.paramMap.get('id');
     this.authService.getUserProfile(id).subscribe((res) => {
-      this.currentUser.email = res.email;
-      this.currentUser.firstName = res.first_name;
-      this.currentUser.lastName = res.last_name;
-      this.currentUser.password = res.password;
+      this.currentUser = res;
     });
   }
 
