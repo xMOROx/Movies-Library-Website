@@ -1,27 +1,22 @@
-import {Injectable} from '@angular/core';
-import {Observable, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import {
   HttpClient,
   HttpHeaders,
-  HttpErrorResponse, HttpResponse,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import {Router} from '@angular/router';
-import {User} from '../models/User';
-import jwt_decode from 'jwt-decode';
-import {TokenService} from "./token.service";
-import {environment} from "../../environments/environment";
+import { Router } from '@angular/router';
+import { User } from '../models/User';
+import { TokenService } from "./token.service";
+import { environment } from "../../environments/environment";
+import { StorageService } from './storage.service';
 
-
-const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json'})
-};
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUser: any = {}
   private endpoint: string = `${environment.backEnd}api/v1/auth`;
   private httpOptions = {
     headers: new HttpHeaders({
@@ -29,7 +24,11 @@ export class AuthService {
     })
   };
 
-  constructor(private http: HttpClient, public router: Router, private tokenService: TokenService) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private tokenService: TokenService,
+    private storageService: StorageService) {
   }
 
   public singUp(user: User): Observable<any> {
@@ -45,14 +44,11 @@ export class AuthService {
           return;
         }
         let decode_token = this.tokenService.getDecodedAccessToken(res.access);
-        localStorage.setItem('access_token', res.access);
-        localStorage.setItem('refresh_token', res.refresh);
 
-        this.getUserProfile(decode_token.user_id).subscribe((res: User) => {
-          this.currentUser = res;
-          if (res !== undefined) {
-            localStorage.setItem('user_id', <string>res.id);
-          }
+        this.tokenService.createToken(res.access, res.refresh);
+
+        this.getUserProfile(decode_token.user_id).subscribe((res) => {
+          this.storageService.saveUser(res);
           this.router.navigate(['user-profile/' + res.id]);
         });
       });
@@ -61,10 +57,12 @@ export class AuthService {
 
   public getUserProfile(id: any): Observable<any> {
     let api = `${this.endpoint}/users/${id}`;
+
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
       "Authorization": "Bearer " + localStorage.getItem('access_token')
     });
+
     this.httpOptions = {
       headers: headers
     };
@@ -78,14 +76,14 @@ export class AuthService {
   }
 
   public isLoggedIn(): boolean {
-    let authToken = localStorage.getItem('access_token');
-    return (authToken !== null);
+    return !!this.tokenService.getAccessToken();
   }
 
   public logout(): void {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user_id')
-    this.router.navigate(['login']);
+    if (this.tokenService.removeAccessToken()) {
+      this.storageService.clean();
+      this.router.navigate(['login']);
+    }
   }
 
   public handleError(error: HttpErrorResponse) {
@@ -98,7 +96,7 @@ export class AuthService {
     return throwError(() => new Error(msg));
   }
 
-  public refreshToken(token: string) {
-    return this.http.post(`${this.endpoint}/token/refresh`, {"refresh": token});
+  public refreshToken(refresh: string) {
+    return this.http.post(`${this.endpoint}/token/refresh`, { "refresh": refresh });
   }
 }

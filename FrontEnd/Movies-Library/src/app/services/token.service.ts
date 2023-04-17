@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import jwt_decode from "jwt-decode";
 
+const ACCESS = 'access_token';
+const REFRESH = 'refresh_token';
 @Injectable({
   providedIn: 'root'
 })
@@ -8,22 +10,36 @@ export class TokenService {
 
   constructor() { }
 
-  public getToken(): string | null {
-    return localStorage.getItem('access_token');
+  public getAccessToken(): string | null {
+    return localStorage.getItem(ACCESS);
+  }
+
+  public removeAccessToken(): boolean {
+    if (!localStorage.getItem(ACCESS)) {
+      return false;
+    }
+
+    localStorage.removeItem(ACCESS);
+    return true;
   }
 
   public saveToken(token: string): void {
-    localStorage.removeItem('access_token');
-    localStorage.setItem('access_token', token);
+    localStorage.removeItem(ACCESS);
+    localStorage.setItem(ACCESS, token);
   }
 
   public getRefreshToken(): string | null {
-    return localStorage.getItem('refresh_token')
+    return localStorage.getItem(REFRESH)
   }
 
   public saveRefreshToken(token: string): void {
-    localStorage.removeItem('refresh_token');
-    localStorage.setItem('refresh_token', token);
+    localStorage.removeItem(REFRESH);
+    localStorage.setItem(REFRESH, token);
+  }
+
+  public createToken(access: string, refresh: string): void {
+    localStorage.setItem(ACCESS, access);
+    localStorage.setItem(REFRESH, refresh);
   }
 
   public getDecodedAccessToken(token: string): any {
