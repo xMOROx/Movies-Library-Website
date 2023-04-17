@@ -1,20 +1,19 @@
-import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Observable, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 import {
   HttpClient,
   HttpHeaders,
-  HttpErrorResponse,
+  HttpErrorResponse, HttpResponse,
 } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { User } from '../models/User';
+import {Router} from '@angular/router';
+import {User} from '../models/User';
 import jwt_decode from 'jwt-decode';
-
-
+import {TokenService} from "./token.service";
 
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({'Content-Type': 'application/json'})
 };
 
 @Injectable({
@@ -28,24 +27,25 @@ export class AuthService {
       'Content-Type': 'application/json'
     })
   };
-  constructor(private http: HttpClient, public router: Router) { }
+
+  constructor(private http: HttpClient, public router: Router, private tokenService: TokenService) {
+  }
 
   public singUp(user: User): Observable<any> {
     let url = `${this.endpoint}/register-user`;
-    return this.http.post(url, user).pipe(catchError(this.handleError));
+    return this.http.post<any>(url, user).pipe(catchError(this.handleError));
   }
 
   public signIn(user: User): any {
-    return this.http.
-      post<any>(`${this.endpoint}/signin`, user)
+    return this.http.post<any>(`${this.endpoint}/signin`, user)
       .subscribe((res: any) => {
         if (res.access == null) {
           alert("Invalid credentials");
           return;
         }
-
-        let decode_token = this.getDecodedAccessToken(res.access);
+        let decode_token = this.tokenService.getDecodedAccessToken(res.access);
         localStorage.setItem('access_token', res.access);
+        localStorage.setItem('refresh_token', res.refresh);
 
         this.getUserProfile(decode_token.user_id).subscribe((res) => {
           this.currentUser = res;
@@ -77,10 +77,6 @@ export class AuthService {
     return (authToken !== null) ? true : false;
   }
 
-  public getToken(): string | null {
-    return localStorage.getItem('access_token');
-  }
-
   public logout(): void {
     if (localStorage.removeItem('access_token') == null) {
       this.router.navigate(['login']);
@@ -97,12 +93,8 @@ export class AuthService {
     return throwError(() => new Error(msg));
   }
 
-  public getDecodedAccessToken(token: string): any {
-    try {
-      return jwt_decode(token);
-    } catch (Error) {
-      return null;
-    }
+  public refreshToken(token: string) {
+    return this.http.post(`${this.endpoint}/token/refresh`, {"refresh": token});
   }
 }
 

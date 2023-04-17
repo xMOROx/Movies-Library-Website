@@ -5,6 +5,7 @@ import { environment } from "../../../environments/environment";
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import {ValidateService} from "../../services/validate.service";
 
 @Component({
   selector: 'app-login',
@@ -12,13 +13,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  signinForm: FormGroup;
+  signInForm: FormGroup;
   constructor(
     public fb: FormBuilder,
     public authService: AuthService,
-    public router: Router
+    public router: Router,
+    private validateService: ValidateService
   ) {
-    this.signinForm = this.fb.group({
+    this.signInForm = this.fb.group({
       email: [''],
       password: [''],
     });
@@ -26,6 +28,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void { }
   public signIn(): void {
-    this.authService.signIn(this.signinForm.value);
+    if (this.validateService.validateEmail(this.signInForm.value.email)) {
+      this.authService.signIn(this.signInForm.value);
+    }
   }
-} 
+}

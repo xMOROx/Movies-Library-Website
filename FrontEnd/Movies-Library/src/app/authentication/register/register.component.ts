@@ -31,7 +31,7 @@ export class RegisterComponent implements OnInit {
         this.signupForm.reset();
         this.router.navigate(['login']);
       }
-    })
+    });
   }
 
 }
