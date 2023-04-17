@@ -20,6 +20,9 @@ class AddMovieToUserView(views.APIView):
         movie_user_serializer = Movie_UserSerializer(data=request.data)
         movie_user_serializer.is_valid(raise_exception=True)
 
+        # TODO if status "Not watched" delete record from Movie_User
+        # TODO if status not "Watched" cannot set is_favorite = True and give rating
+
         if movie_user is not None:
             try:
                 if "rating" in movie_user_serializer.validated_data:
@@ -73,7 +76,7 @@ class AddMovieToUserView(views.APIView):
                 )
 
         if "rating" not in movie_user_serializer.validated_data:
-            movie_user_serializer.validated_data["rating"] = 0
+            movie_user_serializer.validated_data["rating"] = None
 
         if "is_favorite" not in movie_user_serializer.validated_data:
             movie_user_serializer.validated_data["is_favorite"] = False

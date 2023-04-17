@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  width: 100%;
+}
+
+picture {
+  display: inline-block;
+  position: relative;
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+}
+
+img {
+  width: auto;
+  height: 100%;
+}

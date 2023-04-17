@@ -1,0 +1,8 @@
+<div class="container">
+  <picture>
+    <img src="{{movie.movie.poster_url}}">
+  </picture>
+  <h4>{{movie.movie.title}}</h4>
+  <p>{{movie.status}}</p>
+  <p *ngIf="movie.rating">{{movie.rating}}</p>
+</div>

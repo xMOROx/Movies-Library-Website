@@ -1,7 +1,7 @@
 from django.http.response import JsonResponse
 from rest_framework import status
 
-from ..models.movie_lib_models import Movie
+from ..models.movie_lib_models import Movie_User, Movie
 from Authentication.models import User
 from Movies_Library_API.serializers import MovieSerializer, Movie_UserSerializer
 from rest_framework.decorators import (
@@ -26,10 +26,11 @@ def list_of_details_for_movies_per_user(request, user_id):
             return JsonResponse(
                 {"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND
             )
-        data = Movie.users.through.objects.filter(user_id=user_id)
+        data = Movie_User.objects.select_related("movie").filter(user_id=user_id)
 
-        serializer_movie_user = Movie_UserSerializer(data, many=True)
-        return JsonResponse(serializer_movie_user.data, safe=False)
+        serializer = Movie_UserSerializer(data, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
 
 
 @api_view(["GET"])
@@ -49,7 +50,7 @@ def details_of_movie_for_user(request, user_id, movie_id):
         except Exception:
             return JsonResponse(
                 {"message": "The movie does not exist"},
-                    status=status.HTTP_404_NOT_FOUND,
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         serializer_movie_user = Movie_UserSerializer(data)

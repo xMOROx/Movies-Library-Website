@@ -6,6 +6,7 @@ import { RegisterComponent } from "./authentication/register/register.component"
 import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
 import { ProfileComponent } from './profile/profile.component';
 import {MovieDetailsComponent} from "./movie-views/movie-details/movie-details.component";
+import {UserMoviesComponent} from "./movie-views/user-movies/user-movies.component";
 
 
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'user-profile/:id', component: ProfileComponent },
+  { path: 'user-profile/:id/movies', component: UserMoviesComponent },
   { path: 'movies/:id', component: MovieDetailsComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }

@@ -32,15 +32,7 @@ export class MovieDetailsComponent implements OnInit {
     }
 
     this.moviesService.getMovieById(this.route.snapshot.paramMap.get('id')).subscribe((res: any) => {
-      this.movie = {
-        movie_id: res.id,
-        movie_title: res.original_title,
-        overview: res.overview,
-        genres: res.genres,
-        poster_path: environment.posterPath + res.poster_path,
-        release_date: res.release_date,
-        runtime: res.runtime
-      };
+      this.movie = this.moviesService.parseMovie(res);
       this.moviesService.getMovieDetailsForUser(this.movie?.movie_id, this.user!.id)?.pipe(catchError(err => {
         this.status = "Not watched";
         return throwError(() => new Error(err));
