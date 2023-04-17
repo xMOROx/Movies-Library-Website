@@ -101,6 +101,3 @@ export class AuthService {
     return this.http.post(`${this.endpoint}/token/refresh`, {"refresh": token});
   }
 }
-
-
-

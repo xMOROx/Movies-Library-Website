@@ -26,11 +26,6 @@ export class MoviesService {
   }
 
   public addMovieToUser(movie_id: any, user_id: any, status: any) {
-    let body = {
-      status: status,
-      user: user_id,
-      movie: movie_id
-    };
-    return this.http.post(`${this.endpoint}users/${user_id}/movies/${movie_id}`, body, this.httpOptions);
+    return this.http.post(`${this.endpoint}users/${user_id}/movies/${movie_id}`, {"status": status}, this.httpOptions);
   }
 }
