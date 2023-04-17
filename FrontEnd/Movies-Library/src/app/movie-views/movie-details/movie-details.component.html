@@ -1,0 +1,21 @@
+<div class="container">
+  <div *ngIf="movie">
+    <picture>
+      <img src="{{movie.poster_path}}">
+    </picture>
+    <h1>{{movie.movie_title}}</h1>
+    <div>
+      <p *ngFor="let genre of movie.genres">{{genre.genre_name}}</p>
+    </div>
+    <p>{{movie.overview}}</p>
+    <p>{{movie.release_date}}</p>
+    <p>{{getRuntime(movie.runtime)}}</p>
+    <mat-form-field appearance="fill">
+      <mat-select (selectionChange)="addMovie()" [(value)]="status">
+        <mat-option value="Not watched">Not watched</mat-option>
+        <mat-option value="Plan to watch">Plan to watch</mat-option>
+        <mat-option value="Watched">Watched</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

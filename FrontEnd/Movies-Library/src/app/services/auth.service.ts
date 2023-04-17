@@ -10,6 +10,7 @@ import {Router} from '@angular/router';
 import {User} from '../models/User';
 import jwt_decode from 'jwt-decode';
 import {TokenService} from "./token.service";
+import {environment} from "../../environments/environment";
 
 
 const httpOptions = {
@@ -21,7 +22,7 @@ const httpOptions = {
 })
 export class AuthService {
   private currentUser: any = {}
-  private endpoint: string = 'http://localhost:8080/api/v1/auth';
+  private endpoint: string = `${environment.backEnd}api/v1/auth`;
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -47,14 +48,18 @@ export class AuthService {
         localStorage.setItem('access_token', res.access);
         localStorage.setItem('refresh_token', res.refresh);
 
-        this.getUserProfile(decode_token.user_id).subscribe((res) => {
+        this.getUserProfile(decode_token.user_id).subscribe((res: User) => {
           this.currentUser = res;
+          if (res !== undefined) {
+            localStorage.setItem('user_id', <string>res.id);
+          }
           this.router.navigate(['user-profile/' + res.id]);
         });
       });
   }
 
-  public getUserProfile(id: number): Observable<any> {
+
+  public getUserProfile(id: any): Observable<any> {
     let api = `${this.endpoint}/users/${id}`;
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -74,13 +79,13 @@ export class AuthService {
 
   public isLoggedIn(): boolean {
     let authToken = localStorage.getItem('access_token');
-    return (authToken !== null) ? true : false;
+    return (authToken !== null);
   }
 
   public logout(): void {
-    if (localStorage.removeItem('access_token') == null) {
-      this.router.navigate(['login']);
-    }
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user_id')
+    this.router.navigate(['login']);
   }
 
   public handleError(error: HttpErrorResponse) {
@@ -97,6 +102,3 @@ export class AuthService {
     return this.http.post(`${this.endpoint}/token/refresh`, {"refresh": token});
   }
 }
-
-
-
