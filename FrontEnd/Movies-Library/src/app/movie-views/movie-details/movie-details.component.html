@@ -1,0 +1,19 @@
+<div class="container">
+  <div *ngIf="movie">
+    <picture>
+      <img src="{{movie.poster_path}}">
+    </picture>
+    <h1>{{movie.movie_title}}</h1>
+    <div>
+      <p *ngFor="let genre of movie.genres">{{genre.genre_name}}</p>
+    </div>
+    <p>{{movie.overview}}</p>
+    <p>{{movie.release_date}}</p>
+    <p>{{getRuntime(movie.runtime)}}</p>
+    <select>
+      <option>Not watched</option>
+      <option>Watched</option>
+      <option>Plan to watch</option>
+    </select>
+  </div>
+</div>

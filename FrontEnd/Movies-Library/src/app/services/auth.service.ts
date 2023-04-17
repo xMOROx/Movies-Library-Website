@@ -31,6 +31,10 @@ export class AuthService {
   constructor(private http: HttpClient, public router: Router, private tokenService: TokenService) {
   }
 
+  public getUser() {
+    return this.currentUser;
+  }
+
   public singUp(user: User): Observable<any> {
     let url = `${this.endpoint}/register-user`;
     return this.http.post<any>(url, user).pipe(catchError(this.handleError));
