@@ -80,7 +80,7 @@ def movie_details_api(request, movie_id):
         data = MovieRequests().get_movie_details(movie_id)
 
         if data is not None:
-            return JsonResponse(data.__dict__(), safe=False)
+            return JsonResponse(data, safe=False)
 
         return JsonResponse(
             {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND

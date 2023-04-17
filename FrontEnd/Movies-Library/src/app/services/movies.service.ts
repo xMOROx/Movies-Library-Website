@@ -26,7 +26,7 @@ export class MoviesService {
     return this.http.get(`${this.endpoint}users/${user_id}/movies/${movie_id}/details`, this.httpOptions);
   }
 
-  public addMovieToUser(movie_id: any, user_id: any, status: any) {
-    return this.http.post(`${this.endpoint}users/${user_id}/movies/${movie_id}`, {"status": status}, this.httpOptions);
+  public addMovieToUser(movie_id: any, user_id: any, body: any) {
+    return this.http.put(`${this.endpoint}users/${user_id}/movies/${movie_id}`, body, this.httpOptions);
   }
 }
