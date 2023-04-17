@@ -14,14 +14,24 @@ from Authentication.permissions import IsOwner
 class AddMovieToUserView(views.APIView):
     permission_classes = [IsAuthenticated & IsOwner]
 
-    def post(self, request, user_id, movie_id):
+    def put(self, request, user_id, movie_id):
         movie_user = Movie_User.objects.filter(user=user_id, movie=movie_id).first()
 
+        movie_user_serializer = Movie_UserSerializer(data=request.data)
+        movie_user_serializer.is_valid(raise_exception=True)
+
         if movie_user is not None:
-            return JsonResponse(
-                {"message": "The movie is already added to the user"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            try:
+                movie_user.status = movie_user_serializer.validated_data["status"]
+                movie_user.rating = movie_user_serializer.validated_data["rating"]
+                movie_user.is_favorite = movie_user_serializer.validated_data["is_favorite"]
+                movie_user.save()
+                return JsonResponse(None, status=status.HTTP_204_NO_CONTENT, safe=False)
+            except:
+                return JsonResponse(
+                    {"message": "The movie could not be updated"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         try:
             user = User.objects.get(pk=user_id)
@@ -31,8 +41,6 @@ class AddMovieToUserView(views.APIView):
             )
 
         movie_requests = MovieRequests()
-        movie_user_serializer = Movie_UserSerializer(data=request.data)
-        movie_user_serializer.is_valid(raise_exception=True)
 
         try:
             movie = Movie.objects.get(pk=movie_id)
@@ -57,6 +65,15 @@ class AddMovieToUserView(views.APIView):
                     {"message": "The movie could not be added"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+
+        if "rating" not in movie_user_serializer.validated_data:
+            movie_user_serializer.validated_data["rating"] = 0
+
+        if "is_favorite" not in movie_user_serializer.validated_data:
+            movie_user_serializer.validated_data["is_favorite"] = False
+
+        if "status" not in movie_user_serializer.validated_data:
+            movie_user_serializer.validated_data["status"] = "Not watched"
 
         movie_user = Movie_User.objects.create(
             user=user,

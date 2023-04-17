@@ -6,6 +6,7 @@ import {User} from "../../models/User";
 import {AuthService} from "../../services/auth.service";
 import {catchError} from "rxjs/operators";
 import {throwError} from "rxjs";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-movie-details',
@@ -15,6 +16,8 @@ import {throwError} from "rxjs";
 export class MovieDetailsComponent implements OnInit {
   public movie?: Movie;
   public status?: string;
+  public rating?: any;
+  public is_favorite?: boolean;
   public user?: User;
 
   constructor(private moviesService: MoviesService, private route: ActivatedRoute, private auth: AuthService) {
@@ -22,7 +25,15 @@ export class MovieDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.moviesService.getMovieById(this.route.snapshot.paramMap.get('id')).subscribe((res: any) => {
-      this.movie = res;
+      this.movie = {
+        movie_id: res.id,
+        movie_title: res.original_title,
+        overview: res.overview,
+        genres: res.genres,
+        poster_path: environment.posterPath + res.poster_path,
+        release_date: res.release_date,
+        runtime: res.runtime
+      };
       this.auth.getUserProfile(localStorage.getItem('user_id')).subscribe((user: User) => {
         this.user = user;
         this.moviesService.getMovieDetailsForUser(this.movie?.movie_id, user.id)?.pipe(catchError(err => {
@@ -30,6 +41,8 @@ export class MovieDetailsComponent implements OnInit {
           return throwError(err);
         })).subscribe((data: any) => {
           this.status = data.status;
+          this.rating = data.rating;
+          this.is_favorite = data.is_favorite;
         });
       });
     });
@@ -44,9 +57,12 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   public addMovie() {
-    this.moviesService.addMovieToUser(this.movie?.movie_id, this.user?.id, this.status).subscribe(res => {
-      console.log(res);
-    });
+    let body = {
+      "status": this.status,
+      "rating": this.rating,
+      "is_favorite": this.is_favorite
+    };
+    this.moviesService.addMovieToUser(this.movie?.movie_id, this.user?.id, body).subscribe();
   }
 
 }
