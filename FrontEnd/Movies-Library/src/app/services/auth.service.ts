@@ -10,6 +10,7 @@ import {Router} from '@angular/router';
 import {User} from '../models/User';
 import jwt_decode from 'jwt-decode';
 import {TokenService} from "./token.service";
+import {environment} from "../../environments/environment";
 
 
 const httpOptions = {
@@ -21,7 +22,7 @@ const httpOptions = {
 })
 export class AuthService {
   private currentUser: any = {}
-  private endpoint: string = 'http://localhost:8080/api/v1/auth';
+  private endpoint: string = `${environment.backEnd}api/v1/auth`;
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
