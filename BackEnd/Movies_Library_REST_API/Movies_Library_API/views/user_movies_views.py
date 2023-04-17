@@ -47,10 +47,10 @@ class AddMovieToUserView(views.APIView):
 
             try:
                 movie = Movie.objects.create(
-                    id=movie_api.movie_id,
-                    title=movie_api.movie_title,
-                    poster_url=movie_api.poster_path,
-                    runtime=movie_api.runtime,
+                    id=movie_api["id"],
+                    title=movie_api["original_title"],
+                    poster_url=movie_api["poster_path"],
+                    runtime=movie_api["runtime"],
                 )
             except:
                 return JsonResponse(
