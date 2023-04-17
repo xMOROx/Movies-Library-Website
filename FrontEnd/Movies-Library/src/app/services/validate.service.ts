@@ -13,7 +13,7 @@ export class ValidateService {
 
   }
 
-  public validatePassword(password: string) {
+  public validatePassword(password: string) { // Minimum eight characters, at least one letter and one number
     return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
   }
 }
