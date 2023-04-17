@@ -7,6 +7,7 @@ import {AuthService} from "../../services/auth.service";
 import {catchError} from "rxjs/operators";
 import {throwError} from "rxjs";
 import {environment} from "../../../environments/environment";
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-movie-details',
@@ -20,10 +21,16 @@ export class MovieDetailsComponent implements OnInit {
   public is_favorite?: boolean;
   public user?: User;
 
-  constructor(private moviesService: MoviesService, private route: ActivatedRoute, private auth: AuthService) {
+  constructor(private moviesService: MoviesService, private route: ActivatedRoute, private storage: StorageService) {
   }
 
   ngOnInit(): void {
+    this.user = this.storage.getUser();
+
+    if (this.user == null) {
+      return;
+    }
+
     this.moviesService.getMovieById(this.route.snapshot.paramMap.get('id')).subscribe((res: any) => {
       this.movie = {
         movie_id: res.id,
@@ -38,7 +45,7 @@ export class MovieDetailsComponent implements OnInit {
         this.user = user;
         this.moviesService.getMovieDetailsForUser(this.movie?.movie_id, user.id)?.pipe(catchError(err => {
           this.status = "Not watched";
-          return throwError(err);
+          return throwError(() => new Error(err));
         })).subscribe((data: any) => {
           this.status = data.status;
           this.rating = data.rating;
@@ -49,10 +56,10 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   public getRuntime(runtime: number): string {
-    if (Math.floor(runtime/60) == 0) {
+    if (Math.floor(runtime / 60) == 0) {
       return runtime.toString();
     } else {
-      return Math.floor(runtime/60).toString() + 'h ' + (runtime % 60).toString() + 'min';
+      return Math.floor(runtime / 60).toString() + 'h ' + (runtime % 60).toString() + 'min';
     }
   }
 

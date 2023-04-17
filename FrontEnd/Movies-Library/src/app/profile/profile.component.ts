@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../models/User';
 import { AuthService } from '../services/auth.service';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-profile',
@@ -18,12 +19,10 @@ export class ProfileComponent implements OnInit {
   };
   constructor(
     public authService: AuthService,
-    private actRoute: ActivatedRoute
+    private storageService: StorageService
   ) {
-    let id: any = this.actRoute.snapshot.paramMap.get('id');
-    this.authService.getUserProfile(id).subscribe((res) => {
-      this.currentUser = res;
-    });
+    this.currentUser = this.storageService.getUser();
+
   }
 
   ngOnInit() {
