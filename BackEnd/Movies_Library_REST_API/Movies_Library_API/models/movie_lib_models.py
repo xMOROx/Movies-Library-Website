@@ -50,10 +50,15 @@ class Actor(models.Model):
 class Movie_User(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    is_favorite = models.BooleanField(default=False)
-    status = models.CharField(max_length=255, default="Not Watched")
+    is_favorite = models.BooleanField(default=False, null=True, blank=True)
+    status = models.CharField(
+        max_length=255, default="Not Watched", null=True, blank=True
+    )
     rating = models.IntegerField(
-        default=0, validators=[MinValueValidator(0), MaxValueValidator(10)]
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
