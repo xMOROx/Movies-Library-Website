@@ -41,9 +41,6 @@ export class MoviesService {
       return this.http.get<AggregatedMovie[]>(`${this.endpoint}users/${id}/movies/details`, this.httpOptions).pipe(
         tap((movies: AggregatedMovie[]) => {
           this.movieList = movies;
-          this.movieList.forEach((movie: AggregatedMovie) => {
-            movie.movie.poster_url = environment.posterPath + movie.movie.poster_url;
-          });
         })
       );
     }
