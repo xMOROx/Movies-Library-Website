@@ -28,7 +28,8 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private tokenService: TokenService,
-    private storageService: StorageService) {
+    private storageService: StorageService
+    ) {
   }
 
   public singUp(user: User): Observable<any> {

@@ -5,7 +5,9 @@
     <div class="status">Status</div>
     <div class="rating">Rating</div>
   </header>
-  <div class="movie" *ngFor="let movie of movieList">
-    <app-aggregated-movie [movie] = movie></app-aggregated-movie>
+  <div *ngIf="movieList != undefined" class="movies">
+    <div class="movie" *ngFor="let movie of (movieList | filterByStatus: 'all')">
+      <app-aggregated-movie [movie] = "movie"></app-aggregated-movie>
+    </div>
   </div>
 </div>

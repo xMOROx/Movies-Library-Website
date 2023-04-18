@@ -57,4 +57,5 @@ export class MoviesService {
   public addMovieToUser(movie_id: any, user_id: any, body: any) {
     return this.http.put(`${this.endpoint}users/${user_id}/movies/${movie_id}`, body, this.httpOptions);
   }
+
 }
