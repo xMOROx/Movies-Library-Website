@@ -1,0 +1,11 @@
+<div class="container">
+  <header>
+    <div class="poster">Poster</div>
+    <div class="title">Title</div>
+    <div class="status">Status</div>
+    <div class="rating">Rating</div>
+  </header>
+  <div class="movie" *ngFor="let movie of movieList">
+    <app-aggregated-movie [movie] = movie></app-aggregated-movie>
+  </div>
+</div>

@@ -17,6 +17,8 @@ import {UpcomingMoviesComponent} from './movie-views/upcoming-movies/upcoming-mo
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
+import { UserMoviesComponent } from './movie-views/user-movies/user-movies.component';
+import { AggregatedMovieComponent } from './movie-views/aggregated-movie/aggregated-movie.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import {MatSelectModule} from "@angular/material/select";
     MovieDetailsComponent,
     PopularMoviesComponent,
     LatestMoviesComponent,
-    UpcomingMoviesComponent
+    UpcomingMoviesComponent,
+    UserMoviesComponent,
+    AggregatedMovieComponent
   ],
   imports: [
     BrowserModule,
