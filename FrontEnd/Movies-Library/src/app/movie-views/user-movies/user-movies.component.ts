@@ -19,6 +19,7 @@ export class UserMoviesComponent implements OnInit {
     last_name: '',
     password: '',
   };
+  public filter = "all";
 
   constructor(private moviesService: MoviesService, private storageService: StorageService) {
   }
@@ -32,5 +33,4 @@ export class UserMoviesComponent implements OnInit {
       });
     });
   }
-
 }

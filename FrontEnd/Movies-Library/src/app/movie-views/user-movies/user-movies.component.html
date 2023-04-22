@@ -1,4 +1,9 @@
 <div class="container">
+  <div class="filter">
+    <div (click)="filter = 'all'">All movies</div>
+    <div (click)="filter = 'Watched'">Watched</div>
+    <div (click)="filter = 'Plan to watch'">Plan to watch</div>
+  </div>
   <header>
     <div class="poster">Poster</div>
     <div class="title">Title</div>
@@ -6,7 +11,7 @@
     <div class="rating">Rating</div>
   </header>
   <div *ngIf="movieList != undefined" class="movies">
-    <div class="movie" *ngFor="let movie of (movieList | filterByStatus: 'all')">
+    <div class="movie" *ngFor="let movie of (movieList | filterByStatus: filter)">
       <app-aggregated-movie [movie] = "movie"></app-aggregated-movie>
     </div>
   </div>
