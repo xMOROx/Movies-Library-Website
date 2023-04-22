@@ -22,7 +22,6 @@ class UserRegisterView(CreateAPIView):
         serializer.save()
 
         id = serializer.data.get("id")
-        print(request.data)
         response_data = {
             "User id": id,
             "message": "User created successfully",

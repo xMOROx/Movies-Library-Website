@@ -23,7 +23,7 @@ export class MoviesService {
   public parseMovie(movie: any): Movie {
     return {
       movie_id: movie.id,
-      movie_title: movie.original_title,
+      movie_title: movie.title,
       overview: movie.overview,
       genres: movie.genres,
       poster_path: environment.posterPath + movie.poster_path,
@@ -57,4 +57,5 @@ export class MoviesService {
   public addMovieToUser(movie_id: any, user_id: any, body: any) {
     return this.http.put(`${this.endpoint}users/${user_id}/movies/${movie_id}`, body, this.httpOptions);
   }
+
 }

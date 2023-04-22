@@ -19,6 +19,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import { UserMoviesComponent } from './movie-views/user-movies/user-movies.component';
 import { AggregatedMovieComponent } from './movie-views/aggregated-movie/aggregated-movie.component';
+import { FilterByStatusPipe } from './pipes/filter-by-status.pipe';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { AggregatedMovieComponent } from './movie-views/aggregated-movie/aggrega
     LatestMoviesComponent,
     UpcomingMoviesComponent,
     UserMoviesComponent,
-    AggregatedMovieComponent
+    AggregatedMovieComponent,
+    FilterByStatusPipe
   ],
   imports: [
     BrowserModule,
