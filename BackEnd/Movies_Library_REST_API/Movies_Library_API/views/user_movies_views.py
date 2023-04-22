@@ -34,7 +34,11 @@ class AddMovieToUserView(views.APIView):
                 if "status" in movie_user_serializer.validated_data:
                     movie_user.status = movie_user_serializer.validated_data["status"]
 
-                movie_user.save()
+                if movie_user.status == "Not watched":
+                    movie_user.delete()
+                else:
+                    movie_user.save()
+
                 return JsonResponse(None, status=status.HTTP_204_NO_CONTENT, safe=False)
             except:
                 return JsonResponse(
@@ -65,7 +69,7 @@ class AddMovieToUserView(views.APIView):
             try:
                 movie = Movie.objects.create(
                     id=movie_api["id"],
-                    title=movie_api["original_title"],
+                    title=movie_api["title"],
                     poster_url=movie_api["poster_path"],
                     runtime=movie_api["runtime"],
                 )
