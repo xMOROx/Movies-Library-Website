@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
-import { LoginComponent } from "./authentication/login/login.component";
-import { RegisterComponent } from "./authentication/register/register.component";
-import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
-import { ProfileComponent } from './profile/profile.component';
-import {MovieDetailsComponent} from "./movie-views/movie-details/movie-details.component";
-import {UserMoviesComponent} from "./movie-views/user-movies/user-movies.component";
+import { LoginComponent } from "src/app/authentication/components/login/login.component";
+import { RegisterComponent } from "src/app/authentication/components/register/register.component";
+import { PageNotFoundComponent } from "src/app/core/components/page-not-found/page-not-found.component";
+import { ProfileComponent } from 'src/app/features/content/profile/profile.component';
+import { MovieDetailsComponent } from "src/app/features/content/movie-views/movie-details/movie-details.component";
+import { UserMoviesComponent } from "src/app/features/content/movie-views/user-movies/user-movies.component";
 
 
 const routes: Routes = [
