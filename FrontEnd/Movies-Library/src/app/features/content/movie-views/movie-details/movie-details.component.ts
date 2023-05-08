@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Movie } from "src/app/models/Movie";
 import { MoviesService } from "src/app/core/services/movies.service";
 import { ActivatedRoute } from "@angular/router";
-import { User } from "src/app/models/User";
+import { User } from "src/app/authentication/models/User";
 import { AuthService } from "src/app/authentication/services/auth.service";
 import { catchError } from "rxjs/operators";
 import { throwError } from "rxjs";

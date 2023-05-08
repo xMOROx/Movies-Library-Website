@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AuthService } from "src/app/authentication/services/auth.service";
-import { User } from "src/app/models/User";
-import { environment } from "../../../environments/environment";
+import { User } from "src/app/authentication/models/User";
+import { environment } from "src/environments/environment";
 import { Movie } from "src/app/models/Movie";
 import { Observable, of, tap } from "rxjs";
 import { AggregatedMovie } from "src/app/models/AggregatedMovie";

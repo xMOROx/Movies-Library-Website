@@ -6,7 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-
+  public socialData = [
+    { url: 'placeholder', name: 'placeholder', img: 'placeholder' },
+  ];
   constructor() { }
 
   ngOnInit() {

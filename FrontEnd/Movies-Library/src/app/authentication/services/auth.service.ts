@@ -7,9 +7,9 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { User } from '../../models/User';
+import { User } from 'src/app/authentication/models/User';
 import { TokenService } from "./token.service";
-import { environment } from "../../../environments/environment";
+import { environment } from "src/environments/environment";
 import { StorageService } from './storage.service';
 
 

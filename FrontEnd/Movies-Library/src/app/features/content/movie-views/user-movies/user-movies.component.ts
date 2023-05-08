@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MoviesService } from "src/app/core/services/movies.service";
 import { AggregatedMovie } from "src/app/models/AggregatedMovie";
 import { StorageService } from "src/app/authentication/services/storage.service";
-import { User } from "src/app/models/User";
+import { User } from "src/app/authentication/models/User";
 import { environment } from "src/environments/environment";
 
 @Component({
