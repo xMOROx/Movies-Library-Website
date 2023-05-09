@@ -7,7 +7,7 @@ from Authentication.models import User
 from Movies_Library_API.serializers import Movie_UserSerializer
 from rest_framework import views
 from rest_framework.permissions import IsAuthenticated
-from Movies_Library_API.movie_db_requests import MovieRequests
+from ..requests.movie_db_requests import MovieRequests
 from Authentication.permissions import IsOwner
 
 
@@ -29,7 +29,9 @@ class AddMovieToUserView(views.APIView):
                     movie_user.rating = movie_user_serializer.validated_data["rating"]
 
                 if "is_favorite" in movie_user_serializer.validated_data:
-                    movie_user.is_favorite = movie_user_serializer.validated_data["is_favorite"]
+                    movie_user.is_favorite = movie_user_serializer.validated_data[
+                        "is_favorite"
+                    ]
 
                 if "status" in movie_user_serializer.validated_data:
                     movie_user.status = movie_user_serializer.validated_data["status"]

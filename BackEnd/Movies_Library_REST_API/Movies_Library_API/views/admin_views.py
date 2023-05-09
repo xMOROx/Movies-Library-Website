@@ -4,7 +4,7 @@ from rest_framework.status import (
     HTTP_204_NO_CONTENT,
     HTTP_200_OK,
 )
-from Authentication.serializers import UserSerializer, AdminUserSerializer
+from Authentication.serializers import AdminUserSerializer
 from Authentication.models import User
 
 

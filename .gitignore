@@ -10,3 +10,11 @@ BackEnd/Movies_Library_REST_API/Movies_Library_API/migrations/__pycache__/
 BackEnd/Movies_Library_REST_API/Movies_Library_API/migrations/
 BackEnd/Movies_Library_REST_API/Authentication/__pycache__/
 BackEnd/Movies_Library_REST_API/Authentication/migrations/
+BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/actor_urls.cpython-310.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/actors_urls.cpython-310.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/movie_urls.cpython-310.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/movies_urls.cpython-310.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/users_urls.cpython-310.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/requests/__pycache__/movie_db_requests.cpython-310.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/admin_urls.cpython-310.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/requests/__pycache__/actors_requests.cpython-310.pyc
