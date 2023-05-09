@@ -1,4 +1,4 @@
-export interface AggregatedMovie {
+export interface AggregatedMovieModel {
   status: string;
   rating?: number;
   is_favorite: boolean;

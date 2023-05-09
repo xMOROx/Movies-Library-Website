@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AggregatedMovie } from "../../models/AggregatedMovie";
+import { AggregatedMovieModel } from "../../features/content/models/AggregatedMovie.model";
 
 @Pipe({
   name: 'filterByStatus'
 })
 export class FilterByStatusPipe implements PipeTransform {
 
-  transform(movies: AggregatedMovie[], status: string): AggregatedMovie[] {
+  transform(movies: Array<AggregatedMovieModel>, status: string): Array<AggregatedMovieModel> {
     if (status === "all") {
       return movies;
     }

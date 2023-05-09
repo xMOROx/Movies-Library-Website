@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MoviesService } from "src/app/core/services/movies.service";
-import { AggregatedMovie } from "src/app/models/AggregatedMovie";
+import { MoviesService } from "src/app/features/services/movies.service";
+import { AggregatedMovieModel } from "src/app/features/content/models/AggregatedMovie.model"
 import { StorageService } from "src/app/authentication/services/storage.service";
 import { User } from "src/app/authentication/models/User";
 import { environment } from "src/environments/environment";
@@ -12,7 +12,7 @@ import { environment } from "src/environments/environment";
 })
 export class UserMoviesComponent implements OnInit {
 
-  public movieList?: AggregatedMovie[];
+  public movieList?: Array<AggregatedMovieModel>;
   public currentUser: User = {
     email: '',
     first_name: '',
@@ -26,9 +26,9 @@ export class UserMoviesComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.storageService.getUser();
-    this.moviesService.getUserMovies(this.currentUser.id).subscribe((movies: AggregatedMovie[]) => {
+    this.moviesService.getUserMovies(this.currentUser.id).subscribe((movies: Array<AggregatedMovieModel>) => {
       this.movieList = movies;
-      this.movieList.forEach((movie: AggregatedMovie) => {
+      this.movieList.forEach((movie: AggregatedMovieModel) => {
         movie.movie.poster_url = environment.posterPath + movie.movie.poster_url;
       });
     });

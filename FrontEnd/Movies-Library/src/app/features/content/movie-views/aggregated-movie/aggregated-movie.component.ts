@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AggregatedMovie } from "src/app/models/AggregatedMovie";
+import { AggregatedMovieModel } from "src/app/features/content/models/AggregatedMovie.model";
 
 @Component({
   selector: 'app-aggregated-movie',
@@ -7,7 +7,7 @@ import { AggregatedMovie } from "src/app/models/AggregatedMovie";
   styleUrls: ['./aggregated-movie.component.scss']
 })
 export class AggregatedMovieComponent {
-  @Input() movie!: AggregatedMovie;
+  @Input() movie!: AggregatedMovieModel;
 
   constructor() {
   }

@@ -8,7 +8,7 @@ import { LoginComponent } from 'src/app/authentication/components/login/login.co
 import { RegisterComponent } from './authentication/components/register/register.component';
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { AuthInterceptor } from "./helpers/auth.interceptor";
+import { AuthInterceptor } from "./features/helpers/auth.interceptor";
 import { ProfileComponent } from 'src/app/features/content/profile/profile.component';
 import { MovieDetailsComponent } from 'src/app/features/content/movie-views/movie-details/movie-details.component';
 import { PopularMoviesComponent } from 'src/app/features/content/movie-views/popular-movies/popular-movies.component';
@@ -21,7 +21,7 @@ import { FooterComponent } from './core/components/footer/footer.component';
 import { NavBarComponent } from './core/components/nav-bar/nav-bar.component';
 import { AggregatedMovieComponent } from 'src/app/features/content/movie-views/aggregated-movie/aggregated-movie.component';
 import { FilterByStatusPipe } from './core/pipes/filter-by-status.pipe';
-import { MaterialModule } from "./core/material/material.module";
+import { MaterialModule } from "./shared/material/material.module";
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +37,7 @@ import { MaterialModule } from "./core/material/material.module";
     AggregatedMovieComponent,
     FilterByStatusPipe,
     FooterComponent,
-    NavBarComponent
+    NavBarComponent,
   ],
   imports: [
     BrowserModule,

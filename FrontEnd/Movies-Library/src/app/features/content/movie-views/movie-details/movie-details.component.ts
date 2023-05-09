@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Movie } from "src/app/models/Movie";
-import { MoviesService } from "src/app/core/services/movies.service";
+import { MovieModel } from "src/app/features/content/models/Movie.model";
+import { MoviesService } from "src/app/features/services/movies.service";
 import { ActivatedRoute } from "@angular/router";
 import { User } from "src/app/authentication/models/User";
-import { AuthService } from "src/app/authentication/services/auth.service";
 import { catchError } from "rxjs/operators";
 import { throwError } from "rxjs";
-import { environment } from "src/environments/environment";
 import { StorageService } from 'src/app/authentication/services/storage.service';
 
 @Component({
@@ -15,7 +13,7 @@ import { StorageService } from 'src/app/authentication/services/storage.service'
   styleUrls: ['./movie-details.component.scss']
 })
 export class MovieDetailsComponent implements OnInit {
-  public movie?: Movie;
+  public movie?: MovieModel;
   public status?: string;
   public rating?: any;
   public is_favorite?: boolean;
@@ -33,7 +31,7 @@ export class MovieDetailsComponent implements OnInit {
 
     this.moviesService.getMovieById(this.route.snapshot.paramMap.get('id')).subscribe((res: any) => {
       this.movie = this.moviesService.parseMovie(res);
-      this.moviesService.getMovieDetailsForUser(this.movie?.movie_id, this.user!.id)?.pipe(catchError(err => {
+      this.moviesService.getMovieDetailsForUser(this.movie?.id, this.user!.id)?.pipe(catchError(err => {
         this.status = "Not watched";
         return throwError(() => new Error(err));
       })).subscribe((data: any) => {
@@ -58,7 +56,7 @@ export class MovieDetailsComponent implements OnInit {
       "rating": this.rating,
       "is_favorite": this.is_favorite
     };
-    this.moviesService.addMovieToUser(this.movie?.movie_id, this.user?.id, body).subscribe();
+    this.moviesService.addMovieToUser(this.movie?.id, this.user?.id, body).subscribe();
   }
 
 }

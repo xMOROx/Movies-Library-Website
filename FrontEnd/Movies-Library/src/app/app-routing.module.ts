@@ -16,6 +16,7 @@ const routes: Routes = [
   { path: 'user-profile/:id', component: ProfileComponent },
   { path: 'user-profile/:id/movies', component: UserMoviesComponent },
   { path: 'movies/:id', component: MovieDetailsComponent },
+  { path: 'actors', loadChildren: () => import('./features/actors/actors.module').then(m => m.ActorsModule) },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
