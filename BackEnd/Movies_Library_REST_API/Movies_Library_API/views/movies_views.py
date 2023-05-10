@@ -11,7 +11,7 @@ from rest_framework.decorators import (
 )
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
-from Movies_Library_API.movie_db_requests import MovieRequests
+from ..requests.movie_db_requests import MovieRequests
 from Authentication.permissions import IsOwner
 
 
@@ -30,7 +30,6 @@ def list_of_details_for_movies_per_user(request, user_id):
 
         serializer = Movie_UserSerializer(data, many=True)
         return JsonResponse(serializer.data, safe=False)
-
 
 
 @api_view(["GET"])
