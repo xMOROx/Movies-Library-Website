@@ -2,8 +2,8 @@
 Repository for Python Course at AGH UST.
 
 # Technologies 
- ## Front
-  - Angular 
+ ## Frontend
+  - Angular, Material Angular
  ## Backend 
   - Django 
   - mysql
