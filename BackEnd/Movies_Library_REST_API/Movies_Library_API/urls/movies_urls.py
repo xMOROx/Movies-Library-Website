@@ -34,4 +34,11 @@ urlpatterns = [
         movies_views.movie_provider,
         name="movie providers",
     ),
+    re_path(r"^movies/genres$", movies_views.movie_genres, name="movie genres"),
+    re_path(
+        r"^movies/videos/(?P<genre_id>[0-9]+)$",
+        movies_views.movie_videos,
+        name="movie videos",
+    ),
+    re_path(r"^movies/search$", movies_views.search_movies, name="search movies"),
 ]

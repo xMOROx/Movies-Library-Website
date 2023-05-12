@@ -8,23 +8,30 @@ class MovieRequests:
     _URL = settings.API_URL
 
     def get_popular_movies(
-        self, page: int = 1, languague: str = "en-US"
+        self, page: int = 1, languague: str = "en-US", region: str = "US"
     ) -> dict | None:
         if page is None:
             page = 1
 
         response = requests.get(
             url=self._URL + "movie/popular",
-            params={"api_key": config.api_key, "language": languague, "page": page},
+            params={
+                "api_key": config.api_key,
+                "language": languague,
+                "page": page,
+                "region": region,
+            },
         )
         if response.status_code == 200:
             return response.json()
         return None
 
-    def get_movie_details(self, movie_id: int, languague: str = "en-US") -> dict | None:
+    def get_movie_details(
+        self, movie_id: int, languague: str = "en-US", region: str = "US"
+    ) -> dict | None:
         response = requests.get(
             url=self._URL + "movie/" + str(movie_id),
-            params={"api_key": config.api_key, "language": languague},
+            params={"api_key": config.api_key, "language": languague, "region": region},
         )
         if response.status_code == 200:
             return response.json()
@@ -81,45 +88,67 @@ class MovieRequests:
         return None
 
     def get_now_playing_movies(
-        self, page: int = 1, languague: str = "en-US"
+        self, page: int = 1, languague: str = "en-US", region: str = "US"
     ) -> dict | None:
         response = requests.get(
             url=self._URL + "movie/now_playing",
-            params={"api_key": config.api_key, "language": languague, "page": page},
+            params={
+                "api_key": config.api_key,
+                "language": languague,
+                "page": page,
+                "region": region,
+            },
         )
         if response.status_code == 200:
             return response.json()
         return None
 
     def get_treding_movie_by_media_and_time(
-        self, media_type: str, time_window: str, page: int = 1, languague: str = "en-US"
+        self,
+        media_type: str,
+        time_window: str,
+        page: int = 1,
+        languague: str = "en-US",
+        region: str = "US",
     ) -> dict | None:
         if page is None:
             page = 1
         response = requests.get(
             url=self._URL + "trending/" + media_type + "/" + time_window,
-            params={"api_key": config.api_key, "language": languague, "page": page},
+            params={
+                "api_key": config.api_key,
+                "language": languague,
+                "page": page,
+                "region": region,
+            },
         )
         return response.json()
 
-    def get_movie_credits(self, movie_id: int, languague: str = "en-US") -> dict | None:
+    def get_movie_credits(
+        self, movie_id: int, languague: str = "en-US", region: str = "US"
+    ) -> dict | None:
         response = requests.get(
             url=self._URL + "movie/" + str(movie_id) + "/credits",
-            params={"api_key": config.api_key, "language": languague},
+            params={"api_key": config.api_key, "language": languague, "region": region},
         )
         if response.status_code == 200:
             return response.json()["cast"]
         return None
 
     def get_movie_recommendations(
-        self, movie_id: int, page: int = 1, languague: str = "en-US"
+        self, movie_id: int, page: int = 1, languague: str = "en-US", region: str = "US"
     ) -> dict | None:
         if page is None:
             page = 1
 
         response = requests.get(
             url=self._URL + "movie/" + str(movie_id) + "/recommendations",
-            params={"api_key": config.api_key, "language": languague, "page": page},
+            params={
+                "api_key": config.api_key,
+                "language": languague,
+                "page": page,
+                "region": region,
+            },
         )
 
         if response.status_code == 200:
@@ -128,14 +157,19 @@ class MovieRequests:
         return None
 
     def get_similar_movies(
-        self, movie_id: int, page: int = 1, languague: str = "en-US"
+        self, movie_id: int, page: int = 1, languague: str = "en-US", region: str = "US"
     ) -> dict | None:
         if page is None:
             page = 1
 
         response = requests.get(
             url=self._URL + "movie/" + str(movie_id) + "/similar",
-            params={"api_key": config.api_key, "language": languague, "page": page},
+            params={
+                "api_key": config.api_key,
+                "language": languague,
+                "page": page,
+                "region": region,
+            },
         )
 
         if response.status_code == 200:
@@ -151,7 +185,11 @@ class MovieRequests:
 
         response = requests.get(
             url=self._URL + "movie/" + str(movie_id) + "/watch/providers",
-            params={"api_key": config.api_key, "language": languague},
+            params={
+                "api_key": config.api_key,
+                "language": languague,
+                "region": country_code,
+            },
         )
 
         if response.status_code == 200:
@@ -159,10 +197,51 @@ class MovieRequests:
 
         return None
 
-    def get_movies_by_query(self, query: str, languague: str = "en-US") -> dict | None:
+    def search_movie(
+        self, query: str, page: str = 1, languague: str = "en-US", region: str = "US"
+    ) -> dict | None:
         response = requests.get(
             url=self._URL + "search/movie",
-            params={"api_key": config.api_key, "language": languague, "query": query},
+            params={
+                "api_key": config.api_key,
+                "language": languague,
+                "query": query,
+                "region": region,
+                "page": page,
+            },
+        )
+        if response.status_code == 200:
+            return response.json()
+        return None
+
+    def get_genres(self, languague: str = "en-US") -> dict | None:
+        response = requests.get(
+            url=self._URL + "genre/movie/list",
+            params={"api_key": config.api_key, "language": languague},
+        )
+        if response.status_code == 200:
+            return response.json()
+        return None
+
+    def get_movies_by_genre(
+        self, genre_id: int, page: int = 1, languague: str = "en-US"
+    ) -> dict | None:
+        response = requests.get(
+            url=self._URL + "genre" + str(genre_id) + "/movies",
+            params={
+                "api_key": config.api_key,
+                "language": languague,
+                "page": page,
+            },
+        )
+        if response.status_code == 200:
+            return response.json()
+        return None
+
+    def get_movie_videos(self, movie_id: int, languague: str = "en-US") -> dict | None:
+        response = requests.get(
+            url=self._URL + "movie/" + str(movie_id) + "/videos",
+            params={"api_key": config.api_key, "language": languague},
         )
         if response.status_code == 200:
             return response.json()
