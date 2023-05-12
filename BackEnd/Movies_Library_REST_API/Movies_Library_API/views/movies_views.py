@@ -9,13 +9,12 @@ from rest_framework.decorators import (
     authentication_classes,
 )
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from ..requests.movie_db_requests import MovieRequests
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def movie_detail(request, movie_id):
     try:
         data = Movie.objects.get(movie_id)
@@ -30,8 +29,7 @@ def movie_detail(request, movie_id):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def movie_details_api(request, movie_id):
     if request.method == "GET":
         language = request.GET.get("language", "en-US")
@@ -47,8 +45,7 @@ def movie_details_api(request, movie_id):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def popular_movies(request):
     if request.method == "GET":
         page = request.GET.get("page", 1)
@@ -66,8 +63,7 @@ def popular_movies(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def upcoming_movies(request):
     if request.method == "GET":
         page = request.GET.get("page", 1)
@@ -86,8 +82,7 @@ def upcoming_movies(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def latest_movies(request):
     if request.method == "GET":
         language = request.GET.get("language", "en-US")
@@ -104,8 +99,7 @@ def latest_movies(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def trending_movies(request):
     if request.method == "GET":
         media_type = request.GET.get("media")
@@ -140,8 +134,7 @@ def trending_movies(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def now_playing_movies(request):
     if request.method == "GET":
         page = request.GET.get("page", 1)
@@ -159,8 +152,7 @@ def now_playing_movies(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def movie_credits(request, movie_id):
     if request.method == "GET":
         language = request.GET.get("language", "en-US")
@@ -176,8 +168,7 @@ def movie_credits(request, movie_id):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def movie_recommendations(request, movie_id):
     if request.method == "GET":
         page = request.GET.get("page")
@@ -196,8 +187,7 @@ def movie_recommendations(request, movie_id):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def similar_movies(request, movie_id):
     if request.method == "GET":
         page = request.GET.get("page")
@@ -215,8 +205,7 @@ def similar_movies(request, movie_id):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def movie_provider(request, movie_id):
     if request.method == "GET":
         country_code = request.GET.get("CC", "US")
@@ -232,8 +221,7 @@ def movie_provider(request, movie_id):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def movie_genres(request):
     if request.method == "GET":
         language = request.GET.get("language", "en-US")
@@ -248,8 +236,7 @@ def movie_genres(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def movies_by_genre(request, genre_id):
     if request.method == "GET":
         page = request.GET.get("page")
@@ -265,8 +252,7 @@ def movies_by_genre(request, genre_id):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def movie_videos(request, movie_id):
     if request.method == "GET":
         language = request.GET.get("language", "en-US")
@@ -281,8 +267,7 @@ def movie_videos(request, movie_id):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
 def search_movies(request):
     if request.method == "GET":
         query = request.GET.get("query")
