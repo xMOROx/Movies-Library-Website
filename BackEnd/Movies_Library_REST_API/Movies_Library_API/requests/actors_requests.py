@@ -6,7 +6,7 @@ import Movies_Library_API.config as config
 class ActorsRequest:
     _URL = settings.API_URL
 
-    def getActorDetails(self, actor_id: int, language: str = "en-US") -> dict | None:
+    def get_actor_details(self, actor_id: int, language: str = "en-US") -> dict | None:
         response = requests.get(
             url=self._URL + "person/" + str(actor_id),
             params={"api_key": config.api_key, "language": language},
@@ -16,7 +16,7 @@ class ActorsRequest:
 
         return None
 
-    def getActorExternalData(
+    def get_actor_external_data(
         self, actor_id: int, language: str = "en-US"
     ) -> dict | None:
         response = requests.get(
@@ -28,10 +28,26 @@ class ActorsRequest:
 
         return None
 
-    def getPersonCast(self, actor_id: int, language: str = "en-US") -> dict | None:
+    def get_person_cast(self, actor_id: int, language: str = "en-US") -> dict | None:
         response = requests.get(
             url=self._URL + "person/" + str(actor_id) + "/movie_credits",
             params={"api_key": config.api_key, "language": language},
+        )
+        if response.status_code == 200:
+            return response.json()
+
+        return None
+
+    def get_trending_actors(
+        self, language: str = "en-US", time_window: str = "week"
+    ) -> dict | None:
+        response = requests.get(
+            url=self._URL + "trending/person/week",
+            params={
+                "api_key": config.api_key,
+                "language": language,
+                "time_window": time_window,
+            },
         )
         if response.status_code == 200:
             return response.json()
