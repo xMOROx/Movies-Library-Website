@@ -71,7 +71,7 @@ def popular_movies(request):
 def upcoming_movies(request):
     if request.method == "GET":
         page = request.GET.get("page", 1)
-        time_window = request.GET.get("time", "month")
+        time_window = request.GET.get("time_window", "month")
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
 
@@ -91,7 +91,9 @@ def upcoming_movies(request):
 def latest_movies(request):
     if request.method == "GET":
         language = request.GET.get("language", "en-US")
-        data = MovieRequests().get_latest_movies(language)
+        page = request.GET.get("page", 1)
+        region = request.GET.get("region", "US")
+        data = MovieRequests().get_latest_movies(page, language, region)
 
         if data is not None:
             return JsonResponse(data, safe=False)
@@ -108,7 +110,7 @@ def trending_movies(request):
     if request.method == "GET":
         media_type = request.GET.get("media")
         # ALL, MOVIE, TV, PERSON
-        time_window = request.GET.get("time")
+        time_window = request.GET.get("time_window")
         page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")

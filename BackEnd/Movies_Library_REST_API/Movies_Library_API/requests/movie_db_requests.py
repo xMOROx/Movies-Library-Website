@@ -10,9 +10,6 @@ class MovieRequests:
     def get_popular_movies(
         self, page: int = 1, languague: str = "en-US", region: str = "US"
     ) -> dict | None:
-        if page is None:
-            page = 1
-
         response = requests.get(
             url=self._URL + "movie/popular",
             params={
@@ -45,10 +42,6 @@ class MovieRequests:
         region: str = "US",
     ) -> dict | None:
         start_time = datetime.now()
-        if page is None:
-            page = 1
-        if time_type_start_offset is None:
-            time_type_start_offset = "month"
 
         if time_type_start_offset == "month":
             start_time = datetime.now() + timedelta(days=30)
@@ -75,13 +68,20 @@ class MovieRequests:
 
     def get_latest_movies(
         self,
+        page: int = 1,
         languague: str = "en-US",
+        region: str = "US",
     ) -> (
         dict | None
     ):  # TODO: change latest definition. It should be the latest movie with is now playing
         response = requests.get(
             url=self._URL + "movie/latest",  # TODO: change to discover endpoint
-            params={"api_key": config.api_key, "language": languague},
+            params={
+                "api_key": config.api_key,
+                "language": languague,
+                "region": region,
+                "page": page,
+            },
         )
         if response.status_code == 200:
             return response.json()
@@ -111,8 +111,6 @@ class MovieRequests:
         languague: str = "en-US",
         region: str = "US",
     ) -> dict | None:
-        if page is None:
-            page = 1
         response = requests.get(
             url=self._URL + "trending/" + media_type + "/" + time_window,
             params={
@@ -138,9 +136,6 @@ class MovieRequests:
     def get_movie_recommendations(
         self, movie_id: int, page: int = 1, languague: str = "en-US", region: str = "US"
     ) -> dict | None:
-        if page is None:
-            page = 1
-
         response = requests.get(
             url=self._URL + "movie/" + str(movie_id) + "/recommendations",
             params={
@@ -159,9 +154,6 @@ class MovieRequests:
     def get_similar_movies(
         self, movie_id: int, page: int = 1, languague: str = "en-US", region: str = "US"
     ) -> dict | None:
-        if page is None:
-            page = 1
-
         response = requests.get(
             url=self._URL + "movie/" + str(movie_id) + "/similar",
             params={
@@ -180,9 +172,6 @@ class MovieRequests:
     def get_movie_provider(
         self, movie_id: int, country_code: str = "US", languague: str = "en-US"
     ) -> dict | None:
-        if country_code is None:
-            country_code = "US"
-
         response = requests.get(
             url=self._URL + "movie/" + str(movie_id) + "/watch/providers",
             params={
