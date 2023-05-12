@@ -39,7 +39,7 @@ class ActorsRequest:
         return None
 
     def get_trending_actors(
-        self, language: str = "en-US", time_window: str = "week"
+        self, language: str = "en-US", time_window: str = "week", page: int = 1
     ) -> dict | None:
         response = requests.get(
             url=self._URL + "trending/person/week",
@@ -47,6 +47,7 @@ class ActorsRequest:
                 "api_key": config.api_key,
                 "language": language,
                 "time_window": time_window,
+                "page": page,
             },
         )
         if response.status_code == 200:

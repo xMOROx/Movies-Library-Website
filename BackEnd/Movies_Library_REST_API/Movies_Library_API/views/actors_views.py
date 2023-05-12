@@ -49,7 +49,12 @@ def get_actor_cast(_, actor_id):
 def get_trending_actors(request):
     actor_request = ActorsRequest()
     time_window = request.GET.get("time_window", "week")
-    trending_actors = actor_request.get_trending_actors(time_window=time_window)
+    language = request.GET.get("language", "en-US")
+    page = request.GET.get("page", 1)
+
+    trending_actors = actor_request.get_trending_actors(
+        language=language, time_window=time_window, page=page
+    )
 
     if trending_actors is None:
         return JsonResponse(
