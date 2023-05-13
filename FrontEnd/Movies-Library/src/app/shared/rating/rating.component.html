@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="close">
+    <mat-icon (click)="close()">close</mat-icon>
+  </div>
+  <h4>Rate this</h4>
+  <h2>{{data.title}}</h2>
+  <div>
+    <mat-icon
+      *ngFor="let star of maxRatingArray; let index = index"
+      (mouseenter)="handleMouseEnter(index)"
+      (mouseleave)="handleMouseLeave()"
+      (click)="rate(index)"
+      [ngClass]="{checked: selectedStars > index}">
+      <span *ngIf="selectedStars > index">star</span>
+      <span *ngIf="selectedStars <= index">star_outline</span>
+    </mat-icon>
+  </div>
+</div>
