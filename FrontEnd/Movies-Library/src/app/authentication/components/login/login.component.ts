@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { User } from "src/app/authentication/models/User";
-import { environment } from "src/environments/environment";
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthService } from 'src/app/authentication/services/auth.service';
 import { Router } from '@angular/router';

@@ -1,4 +1,4 @@
-<!-- <main class="contents container">
+<main class="contents container">
 
   <h2>All {{contentType | titlecase}} #NowPlaying</h2>
 
@@ -14,8 +14,8 @@
     <div class="contents__right-side">
 
       <div class="contents__list">
-        <app-poster-card *ngFor="let content of nowPlaying" [model]="content" [isMovie]="contentType === 'movies'">
-        </app-poster-card>
+        <app-movie-card *ngFor="let content of nowPlaying" [model]="content" [isMovie]="contentType === 'movies'">
+        </app-movie-card>
       </div>
 
       <mat-paginator [length]="totalResults" [pageSize]="20" (page)="changePage($event)">
@@ -24,4 +24,4 @@
 
   </div>
 
-</main> -->
+</main>

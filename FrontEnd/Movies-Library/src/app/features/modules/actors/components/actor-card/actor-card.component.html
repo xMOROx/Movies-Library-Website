@@ -1,20 +1,17 @@
 <div class="poster">
 
-  <a [routerLink]="'/actors/' + model?.id" [title]="'Go to ' + model?.name ?? model?.original_name">
+  <a [routerLink]="'/actors/' + model?.['id']" [title]="'Go to ' + model?.['name'] ?? model?.['original_name']">
     <img class="poster__image" loading="lazy"
       [src]="'https://image.tmdb.org/t/p/w220_and_h330_face/' + model!['profile_path']" srcset="https://image.tmdb.org/t/p/w220_and_h330_face/{{model!['profile_path']}} 1x,
          https://image.tmdb.org/t/p/w440_and_h660_face/{{model!['profile_path']}} 2x"
-      [alt]="model?.name ?? model?.original_name">
+      [alt]="model?.['name'] ?? model?.['original_name']" appImageMissing>
   </a>
 
   <div class="poster__content">
-    <a *ngIf="model?.name ?? model?.original_name" [routerLink]="'/actors/' + model?.id"
-      [title]="model?.name ?? model?.original_name" class="poster__title colored-hover">
-      {{model?.name ?? model?.original_name}}
+    <a *ngIf="model?.['name'] ?? model?.['original_name']" [routerLink]="'/actors/' + model?.['id']"
+      [title]="model?.['name'] ?? model?.['original_name']" class="poster__title colored-hover">
+      {{model?.['name'] ?? model?.['original_name']}}
     </a>
-    <!-- <p *ngIf="model!['popularity']" style="text-align: center;">
-      {{(model!['popularity']  | number: '1.0-0')}}
-    </p> -->
   </div>
 
 </div>

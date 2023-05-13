@@ -1,22 +1,68 @@
 <div class="auth-wrapper">
   <form class="form-signin" [formGroup]="signupForm" (ngSubmit)="registerUser()">
-    <h3 class="h3 mb-3 font-weight-normal text-center">Please sign up</h3>
-    <div class="form-group">
-      <label>First name</label>
-      <input type="text" class="form-control" formControlName="first_name" placeholder="Enter name" required />
+    <div class="header__container">
+      <h1 class="h3 mb-3 font-weight-normal text-center">Please sign up</h1>
     </div>
     <div class="form-group">
-      <label>Last name</label>
-      <input type="text" class="form-control" formControlName="last_name" placeholder="Enter name" required />
+      <mat-icon>person</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="First name" formControlName="first_name" required type="text" />
+      </mat-form-field>
     </div>
     <div class="form-group">
-      <label>Email address</label>
-      <input type="email" class="form-control" formControlName="email" placeholder="Enter email" required />
+      <mat-icon>person</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Last name" formControlName="last_name" required type="text" />
+      </mat-form-field>
     </div>
     <div class="form-group">
-      <label>Password</label>
-      <input type="password" class="form-control" formControlName="password" placeholder="Password" required />
+      <mat-icon>email</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Email" formControlName="email" required type="email" />
+      </mat-form-field>
     </div>
-    <button type="submit" class="btn btn-block btn-primary">Sign up</button>
+    <div class="form-group">
+      <mat-icon>lock</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Password" formControlName="password" required type="password" />
+      </mat-form-field>
+    </div>
+    <button mat-raised-button type="submit" class="btn btn-block btn-primary">Sign up</button>
+    <div class="error__container" *ngIf="
+      (signupForm.controls['email'].hasError('required') && signupForm.controls['email'].dirty) ||
+      (signupForm.controls['password'].hasError('required') && signupForm.controls['password'].dirty) ||
+      signupForm.controls['email'].hasError('incorrect') ||
+      (signupForm.controls['last_name'].hasError('required') && signupForm.controls['last_name'].dirty) ||
+      (signupForm.controls['first_name'].hasError('required') && signupForm.controls['first_name'].dirty)
+      || signupForm.controls['password'].hasError('minlength') || signupForm.controls['password'].hasError('maxlength') 
+      || signupForm.controls['email'].hasError('conflict')
+    ">
+      <mat-error *ngIf="signupForm.controls['email'].hasError('required') && signupForm.controls['email'].dirty">
+        Email is required
+      </mat-error>
+      <mat-error *ngIf="signupForm.controls['password'].hasError('required') && signupForm.controls['password'].dirty">
+        Password is required
+      </mat-error>
+      <mat-error *ngIf="signupForm.controls['password'].hasError('minlength')">
+        Password must be at least 8 characters long
+      </mat-error>
+      <mat-error *ngIf="signupForm.controls['password'].hasError('maxlength')">
+        Password cannot be more than 40 characters long
+      </mat-error>
+      <mat-error *ngIf="signupForm.controls['email'].hasError('incorrect')">
+        Email is invalid
+      </mat-error>
+      <mat-error *ngIf="signupForm.controls['email'].hasError('conflict')">
+        Email already exists
+      </mat-error>
+      <mat-error
+        *ngIf="signupForm.controls['first_name'].hasError('required') && signupForm.controls['first_name'].dirty">
+        First name is required
+      </mat-error>
+      <mat-error
+        *ngIf="signupForm.controls['last_name'].hasError('required') && signupForm.controls['last_name'].dirty">
+        Last name is required
+      </mat-error>
+    </div>
   </form>
 </div>

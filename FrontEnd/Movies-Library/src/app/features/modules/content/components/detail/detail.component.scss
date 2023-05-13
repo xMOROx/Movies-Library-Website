@@ -71,6 +71,17 @@
       justify-content: space-between;
     }
 
+    &--reactions {
+      width: 15%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    mat-icon:hover {
+      transform: scale(1.5);
+    }
+
     &--categories {
       display: flex;
       gap: 6px;
@@ -99,7 +110,7 @@
     display: none;
 
     &--reactions {
-      width: 12%;
+      width: 20%;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
@@ -197,3 +208,4 @@
   }
 
 }
+
