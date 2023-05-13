@@ -12,6 +12,7 @@ import {User} from "../../../../../authentication/models/User";
 import {StorageService} from "../../../../../authentication/services/storage.service";
 import {catchError} from "rxjs/operators";
 import {RatingComponent} from "../../../../../shared/rating/rating.component";
+import {TrashService} from "../../../../services/trash.service";
 
 @Component({
   selector: 'app-detail',
@@ -29,6 +30,7 @@ export class DetailComponent implements OnInit {
   public rating?: any;
   public is_favorite?: boolean;
   public user?: User;
+  public isInTrash?: boolean;
 
   @ViewChild('matTrailerDialog') matTrailerDialog!: TemplateRef<any>;
 
@@ -39,7 +41,8 @@ export class DetailComponent implements OnInit {
     private sanitezer: DomSanitizer,
     public trailerDialog: MatDialog,
     private storage: StorageService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private trashService: TrashService
   ) {
     this.contentType = this.router.url.split('/')[1];
 
@@ -55,6 +58,7 @@ export class DetailComponent implements OnInit {
         this.getMovieRecommendationsById(id);
         if (this.user != null) {
           this.getMovieDetailsForUsers(id, this.user.id);
+          this.getMovieFromTrash(id);
         }
       }
 
@@ -98,6 +102,15 @@ export class DetailComponent implements OnInit {
     });
   }
 
+  private getMovieFromTrash(movie_id: any) {
+    if (this.user !== undefined) {
+      this.trashService.getMovieById(this.user.id, movie_id).subscribe((r) => {
+        this.isInTrash = !!r;
+      });
+    }
+
+  }
+
   public openDialog(): void {
     const dialogRef = this.trailerDialog.open(this.matTrailerDialog, {});
     dialogRef.disableClose = false;
@@ -139,5 +152,21 @@ export class DetailComponent implements OnInit {
         this.rating = rating;
       }
     });
+  }
+
+  public addMovieToTrash() {
+    if(this.user !== undefined) {
+      this.trashService.addMovieToTrash(this.user?.id, this.content?.['id']).subscribe(() => {
+        this.isInTrash = true;
+      });
+    }
+  }
+
+  public deleteMovieFromTrash() {
+    if (this.user !== undefined) {
+      this.trashService.deleteMovieFromTrash(this.user.id, this.content?.['id']).subscribe(() => {
+        this.isInTrash = false;
+      });
+    }
   }
 }
