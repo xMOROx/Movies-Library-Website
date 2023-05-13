@@ -1,5 +1,5 @@
 from django.http.response import JsonResponse
-from django.shortcuts import get_list_or_404
+from django.shortcuts import get_list_or_404, get_object_or_404
 
 from rest_framework import status
 from rest_framework.decorators import (
@@ -102,17 +102,24 @@ def add_movie_to_trash(request, user_id, movie_id):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-        movie_trash = MovieTrash.objects.create(
-            user=user,
-            movie=movie
-        )
-        movie_trash.save()
+        try:
+            _ = MovieTrash.objects.get(user=user_id, movie=movie_id)
+            return JsonResponse(
+                {"message": "Movie already in trash"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except MovieTrash.DoesNotExist:
+            movie_trash = MovieTrash.objects.create(
+                user=user,
+                movie=movie
+            )
+            movie_trash.save()
 
-        serializer = MovieTrashSerializer(movie_trash)
+            serializer = MovieTrashSerializer(movie_trash)
 
-        return JsonResponse(
-            serializer.data, status=status.HTTP_201_CREATED, safe=False
-        )
+            return JsonResponse(
+                serializer.data, status=status.HTTP_201_CREATED, safe=False
+            )
 
 
 
@@ -134,7 +141,7 @@ def delete_movie_from_trash(request, user_id, movie_id):
                 {"message": "This movie does not exist"}, status=status.HTTP_404_NOT_FOUND
             )
 
-        movie_trash = MovieTrash.objects.get(user=user_id, movie=movie_id)
+        movie_trash = get_object_or_404(MovieTrash, user=user_id, movie=movie_id)
         movie_trash.delete()
         return JsonResponse(
             None, status=status.HTTP_204_NO_CONTENT, safe=False
