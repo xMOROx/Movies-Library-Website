@@ -24,8 +24,8 @@ export class NavBarComponent implements OnInit {
 
   public openSignDialog() {
     this.dialogSignIn = this.dialog.open(LoginComponent, {
-      minWidth: '200px',
-      width: '40vw',
+      minWidth: '400px',
+      width: '30vw',
       maxWidth: '600px',
       height: 'auto',
       data: {
@@ -40,7 +40,8 @@ export class NavBarComponent implements OnInit {
       width: '30vw',
       minWidth: '400px',
       maxWidth: '600px',
-      height: '50vh',
+      minHeight: '550px',
+      height: 'auto',
       data: {
       },
       backdropClass: 'backdropBackground'

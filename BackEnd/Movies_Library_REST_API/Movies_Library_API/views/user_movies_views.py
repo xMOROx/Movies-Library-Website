@@ -7,6 +7,7 @@ from rest_framework.decorators import (
     authentication_classes,
 )
 from rest_framework import views
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -23,8 +24,13 @@ class AddMovieToUserView(views.APIView):
     def put(self, request, user_id, movie_id):
         movie_user = Movie_User.objects.filter(user=user_id, movie=movie_id).first()
 
-        movie_user_serializer = Movie_UserSerializer(data=request.data)
-        movie_user_serializer.is_valid(raise_exception=True)
+        try:
+            movie_user_serializer = Movie_UserSerializer(data=request.data)
+            movie_user_serializer.is_valid(raise_exception=True)
+        except ValidationError:
+            return JsonResponse(
+                {"message": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         # TODO if status "Not watched" delete record from Movie_User
         # TODO if status not "Watched" cannot set is_favorite = True and give rating
@@ -88,7 +94,7 @@ class AddMovieToUserView(views.APIView):
                 )
 
         if "rating" not in movie_user_serializer.validated_data:
-            movie_user_serializer.validated_data["rating"] = None
+            movie_user_serializer.validated_data["rating"] = 0
 
         if "is_favorite" not in movie_user_serializer.validated_data:
             movie_user_serializer.validated_data["is_favorite"] = False

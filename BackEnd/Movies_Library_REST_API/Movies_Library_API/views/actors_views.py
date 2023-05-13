@@ -61,3 +61,19 @@ def get_trending_actors(request):
             {"message": "Trending actors not found"}, status=status.HTTP_404_NOT_FOUND
         )
     return JsonResponse(trending_actors, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def get_actors(request):
+    actor_request = ActorsRequest()
+    language = request.GET.get("language", "en-US")
+    page = request.GET.get("page", 1)
+
+    actors = actor_request.get_actors(language=language, page=page)
+
+    if actors is None:
+        return JsonResponse(
+            {"message": "Actors not found"}, status=status.HTTP_404_NOT_FOUND
+        )
+    return JsonResponse(actors, status=status.HTTP_200_OK)

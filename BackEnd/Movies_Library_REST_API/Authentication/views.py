@@ -2,12 +2,14 @@ from rest_framework import views, response, exceptions, permissions
 from rest_framework.generics import CreateAPIView
 from rest_framework.status import (
     HTTP_201_CREATED,
-    HTTP_400_BAD_REQUEST,
+    HTTP_409_CONFLICT,
     HTTP_204_NO_CONTENT,
     HTTP_200_OK,
 )
 from .serializers import UserSerializer
 from .models import User
+
+from rest_framework.exceptions import ValidationError
 
 
 class UserRegisterView(CreateAPIView):
@@ -18,10 +20,19 @@ class UserRegisterView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError:
+            return response.Response(
+                {"message": "Email already exists", "status": HTTP_409_CONFLICT},
+                status=HTTP_409_CONFLICT,
+            )
+
         serializer.save()
 
         id = serializer.data.get("id")
+
         response_data = {
             "User id": id,
             "message": "User created successfully",

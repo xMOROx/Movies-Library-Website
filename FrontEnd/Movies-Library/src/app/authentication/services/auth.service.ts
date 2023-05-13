@@ -34,7 +34,7 @@ export class AuthService {
 
   public singUp(user: User): Observable<any> {
     let url = `${this.endpoint}/register-user`;
-    return this.http.post<any>(url, user).pipe(catchError(this.handleError));
+    return this.http.post<any>(url, user);
   }
 
   public signIn(user: User): any {
@@ -77,11 +77,23 @@ export class AuthService {
     };
 
     return this.http.get(api, this.httpOptions).pipe(
-      map((res) => {
-        return res || {}
+      map((res:any) => {
+        return this.parseRoles(res) || {}
       }),
       catchError(this.handleError)
     )
+  }
+
+  public parseRoles(res: any): any {
+    res['roles'] = {
+      admin: res.is_superuser,
+      user: true,
+      staff: res.is_staff
+    };
+
+    delete res['is_superuser'];
+    delete res['is_staff'];
+    return res;
   }
 
   public isLoggedIn(): boolean {
