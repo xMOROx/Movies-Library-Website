@@ -34,7 +34,7 @@ export class AuthService {
 
   public singUp(user: User): Observable<any> {
     let url = `${this.endpoint}/register-user`;
-    return this.http.post<any>(url, user).pipe(catchError(this.handleError));
+    return this.http.post<any>(url, user);
   }
 
   public signIn(user: User): any {
