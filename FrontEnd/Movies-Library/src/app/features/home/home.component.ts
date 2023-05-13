@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import SwiperCore, { Pagination, SwiperOptions } from 'swiper';
+import { Component, OnInit, } from '@angular/core';
+import SwiperCore, { Pagination, SwiperOptions, } from 'swiper';
 import { MovieModel } from 'src/app/features/modules/content/models/Movie.model';
 import { TvModel } from 'src/app/features/modules/content/models/Tv.model';
 import { MoviesService } from "src/app/features/services/movies.service";
 import { ActorModel } from '../modules/actors/models/Actor.model';
 import { ActorsService } from '../modules/actors/services/actors.service';
-
+SwiperCore.use([Pagination]);
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
     navigation: true,
     watchSlidesProgress: true,
     grabCursor: true,
-    pagination: { clickable: true },
+    pagination: { clickable: true, },
     scrollbar: { draggable: true },
     breakpoints: {
       992: { slidesPerView: 6.3, spaceBetween: 20, slidesOffsetBefore: 0, slidesOffsetAfter: 0 },
@@ -41,6 +41,7 @@ export class HomeComponent implements OnInit {
   public selectedActorTab = 0;
   public sortActorBy: string = 'popularity';
   public sortActorOrder: string = 'desc';
+
 
 
   constructor(private moviesService: MoviesService, private actorsService: ActorsService) { }
