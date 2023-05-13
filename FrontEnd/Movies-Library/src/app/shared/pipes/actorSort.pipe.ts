@@ -2,11 +2,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ActorModel } from 'src/app/features/modules/actors/models/Actor.model';
 
 @Pipe({
-  name: 'popularitySort'
+  name: 'actorSort'
 })
-export class PopularitySortPipe implements PipeTransform {
+export class ActorSortPipe implements PipeTransform {
 
-  transform(actors: Array<ActorModel>, order?: string, by?: string): Array<ActorModel> {
+  transform(actors: Array<ActorModel>, order: string, by: string): Array<ActorModel> {
     if (order === 'asc') {
       if (by === 'popularity') {
         return actors.sort((a, b) => a.popularity - b.popularity);

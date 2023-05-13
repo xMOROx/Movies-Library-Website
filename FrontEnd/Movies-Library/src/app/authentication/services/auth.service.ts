@@ -39,20 +39,28 @@ export class AuthService {
 
   public signIn(user: User): any {
     return this.http.post<any>(`${this.endpoint}/signin`, user)
-      .subscribe((res: any) => {
-        if (res.access == null) {
-          alert("Invalid credentials");
-          return;
+      .subscribe(
+        {
+          next: (res: any) => {
+            if (res.access == null) {
+              alert("Invalid credentials");
+              return;
+            }
+            let decode_token = this.tokenService.getDecodedAccessToken(res.access);
+
+            this.tokenService.createToken(res.access, res.refresh);
+
+            this.getUserProfile(decode_token.user_id).subscribe((res) => {
+              this.storageService.saveUser(res);
+              this.router.navigate(['user-profile/' + res.id]);
+            });
+          },
+          error: (_: HttpErrorResponse) => {
+            alert("Invalid credentials");
+          }
         }
-        let decode_token = this.tokenService.getDecodedAccessToken(res.access);
 
-        this.tokenService.createToken(res.access, res.refresh);
-
-        this.getUserProfile(decode_token.user_id).subscribe((res) => {
-          this.storageService.saveUser(res);
-          this.router.navigate(['user-profile/' + res.id]);
-        });
-      });
+      );
   }
 
 
@@ -83,7 +91,7 @@ export class AuthService {
   public logout(): void {
     if (this.tokenService.removeAccessToken()) {
       this.storageService.clean();
-      this.router.navigate(['login']);
+      this.router.navigate(['home']);
     }
   }
 

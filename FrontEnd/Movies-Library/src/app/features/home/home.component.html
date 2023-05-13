@@ -16,7 +16,7 @@
     <mat-tab-group (selectedTabChange)="tabMovieChange($event)" [selectedIndex]="selectedMovieTab" mat-align-tabs="end">
 
       <mat-tab *ngFor="let tab of movieTabList" [label]="tab">
-        <swiper [config]="config" style="display: flex; flex-direction: column-reverse;">
+        <swiper [config]="config" style="display: flex; flex-direction: column-reverse;" [autoplay]="true" #MovieSwiper>
           <ng-template swiperSlide *ngFor="let movie of moviesList | slice:0:15">
             <app-movie-card [model]="movie" [isMovie]="true"></app-movie-card>
           </ng-template>
@@ -39,7 +39,7 @@
 
       <mat-tab *ngFor="let tab of tvShowsTabList" [label]="tab">
         <swiper [config]="config" style="display: flex; flex-direction: column-reverse;">
-          <ng-template swiperSlide *ngFor="let tvShow of tvShowsList | slice:0:15">
+          <ng-template swiperSlide *ngFor=" let tvShow of tvShowsList | slice:0:15">
             <app-movie-card [model]="tvShow"></app-movie-card>
           </ng-template>
         </swiper>
@@ -95,8 +95,7 @@
     <mat-tab-group (selectedTabChange)="tabActorChange($event)" [selectedIndex]="selectedActorTab" mat-align-tabs="end">
       <mat-tab *ngFor="let tab of actorsTabList" [label]="tab">
         <swiper [config]="config" style="display: flex; flex-direction: column-reverse;">
-          <ng-template swiperSlide
-            *ngFor="let actor of actorsList | slice:0:15 | popularitySort:sortActorOrder:sortActorBy">
+          <ng-template swiperSlide *ngFor="let actor of actorsList | slice:0:15 | actorSort:sortActorOrder:sortActorBy">
             <app-actor-card [model]="actor"></app-actor-card>
           </ng-template>
         </swiper>

@@ -4,12 +4,26 @@
     <a routerLink="/" class="flex-start navbar__logo">
       <!-- <img [attr.Src]="'assets/logo.png'" alt="Movies + TV Shows by JancoBH" width="144" height="36"> -->
     </a>
+
     <div class="navbar__list">
       <a mat-button routerLink="" [routerLinkActive]="['activated-route']" [routerLinkActiveOptions]="{exact: true}"
         aria-label="Home">Home</a>
       <a mat-button routerLink="movies" [routerLinkActive]="['activated-route']" aria-label="Movies">Movies</a>
       <a mat-button routerLink="tv-shows" [routerLinkActive]="['activated-route']" aria-label="TV Shows">TV Shows</a>
       <a mat-button routerLink="actors" [routerLinkActive]="['activated-route']" aria-label="Actors">Actors</a>
+      <!-- <!-- <button mat-button (click)="signIn()" *ngIf="!isAuthenticated" aria-label="Sign In">Sign In</button> -->
+    </div>
+    <div class="navbar__buttons">
+      <button mat-raised-button (click)="openSignDialog()" aria-label="Sign In" class="btn--login"
+        [class.btn--unscrolled--color]="!isScrolled" [class.unscrolled--signin]="!isScrolled"
+        [class.scrolled--signin]="isScrolled">Sign In</button>
+      <button mat-raised-button (click)="openRegisterDialog()" aria-label="Register" class="btn--signup"
+        [class.btn--unscrolled--color]="!isScrolled" [class.unscrolled--signup]="!isScrolled"
+        [class.scrolled--signup]="isScrolled">Register</button>
+      <button mat-raised-button (click)="signOut()" aria-label="Sign Out" class="btn--logout"
+        [class.btn--unscrolled--color]="!isScrolled" [class.unscrolled--logout]="!isScrolled"
+        [class.scrolled--logout]="isScrolled">Sign
+        Out</button>
     </div>
   </nav>
 

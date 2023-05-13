@@ -2,15 +2,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { ContentComponent } from './content.component';
 import { DetailComponent } from './components/detail/detail.component';
-import { MovieDetailsComponent } from './components/movie-views/movie-details/movie-details.component';
+import { MovieDetailsForUserComponent } from './components/movie-views/movie-details-for-user/movie-details-for-user.component';
 
 const contentRoutes: Routes = [
     {
         path: '',
         children: [
             { path: '', component: ContentComponent },
-            { path: ':url', component: DetailComponent },
-            { path: ':id', component: MovieDetailsComponent }
+            { path: ':id', component: DetailComponent }
         ]
     },
 ];

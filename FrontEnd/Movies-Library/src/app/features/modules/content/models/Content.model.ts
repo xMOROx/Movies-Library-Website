@@ -1,4 +1,4 @@
-export interface Content {
+export interface ContentModel {
     id: number;
     results: Array<any>;
     name: string;
