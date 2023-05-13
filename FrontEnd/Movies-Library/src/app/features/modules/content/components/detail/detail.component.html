@@ -82,8 +82,11 @@
         <div class="rating" (click)="openRatingDialog()">
           <mat-icon>star_outlined</mat-icon>
         </div>
-        <div class="trash" >
-          <mat-icon color="primary" (click)="addMovieToTrash()">delete_outlined</mat-icon>
+        <div *ngIf="!isInTrash" class="trash" >
+          <mat-icon (click)="addMovieToTrash()">delete_outlined</mat-icon>
+        </div>
+        <div *ngIf="isInTrash" class="trash" >
+          <mat-icon color="primary" (click)="deleteMovieFromTrash()">delete_outlined</mat-icon>
         </div>
       </div>
 

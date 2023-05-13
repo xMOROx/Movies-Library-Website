@@ -71,6 +71,10 @@
       justify-content: space-between;
     }
 
+    mat-icon:hover {
+      transform: scale(1.5);
+    }
+
     &--categories {
       display: flex;
       gap: 6px;
