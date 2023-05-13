@@ -22,6 +22,17 @@
             <div *ngIf="!is_favorite" class="favorite">
               <mat-icon (click)="setFavorite(true)">favorite_outlined</mat-icon>
             </div>
+            <div class="rating" (click)="openRatingDialog()">
+              <mat-icon>star_outlined</mat-icon>
+            </div>
+          </div>
+          <div *ngIf="user != undefined" class="content__data--reactions">
+            <div *ngIf="is_favorite" class="favorite">
+              <mat-icon (click)="setFavorite(false)">favorite</mat-icon>
+            </div>
+            <div *ngIf="!is_favorite" class="favorite">
+              <mat-icon (click)="setFavorite(true)">favorite_outlined</mat-icon>
+            </div>
             <div class="rating">
               <mat-icon (click)="openRatingDialog()">star_outlined</mat-icon>
             </div>
@@ -72,6 +83,22 @@
   </section>
 
   <section class="content__data-mobile">
+      <div *ngIf="user != undefined" class="content__data-mobile--reactions">
+        <div *ngIf="is_favorite" class="favorite">
+          <mat-icon (click)="setFavorite(false)">favorite</mat-icon>
+        </div>
+        <div *ngIf="!is_favorite" class="favorite">
+          <mat-icon (click)="setFavorite(true)">favorite_outlined</mat-icon>
+        </div>
+        <div class="rating" (click)="openRatingDialog()">
+          <mat-icon>star_outlined</mat-icon>
+        </div>
+      </div>
+
+    <h2>{{content?.['title'] ?? content?.['name']}}
+      ({{content?.['release_date'] ?? content?.['first_air_date'] | date:'YYYY' }})
+    </h2>
+    <h3>{{content?.['tagline']}}</h3>
       <div *ngIf="user != undefined" class="content__data-mobile--reactions">
         <div *ngIf="is_favorite" class="favorite">
           <mat-icon (click)="setFavorite(false)">favorite</mat-icon>

@@ -2,7 +2,7 @@
 
 .navbar__container {
   width: 100%;
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
   position: fixed;
   top: 0;
   left: 0;
@@ -44,6 +44,75 @@
   display: inline-flex;
   align-items: center;
   column-gap: .25rem;
+}
+
+.navbar__buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  @media (max-width: $breakpoint-xs) {
+    gap: 4px;
+  }
+
+  button {
+    transition: .3s;
+  }
+
+  .btn--unscrolled--color {
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary);
+  }
+
+  .btn--login {
+
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+
+    &.unscrolled--signin:hover {
+      background: hsla(100, 60%, 50%, 0.5);
+      border: 1px solid hsla(100, 60%, 50%, 0.5);
+    }
+
+    &.scrolled--signin:hover {
+      background: hsla(100, 60%, 50%, 0.9);
+      border: 1px solid hsla(100, 60%, 50%, 0.9);
+    }
+  }
+
+  .btn--signup {
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+
+    &.unscrolled--signup:hover {
+      background: hsla(100, 60%, 50%, 0.5);
+      border: 1px solid hsla(100, 60%, 50%, 0.5);
+    }
+
+    &.scrolled--signup:hover {
+      background: hsla(100, 60%, 50%, 0.9);
+      border: 1px solid hsla(100, 60%, 50%, 0.9);
+    }
+  }
+
+  .btn--logout {
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+
+    &.unscrolled--logout:hover {
+      background: hsla(0, 60%, 50%, 0.4);
+      border: 1px solid hsla(0, 60%, 50%, 0.4);
+    }
+
+    &.scrolled--logout:hover {
+      background: hsla(0, 60%, 50%, 0.9);
+      border: 1px solid hsla(0, 60%, 50%, 0.9);
+    }
+
+  }
 }
 
 .navbar__list {

@@ -2,6 +2,8 @@ import datetime
 from rest_framework import serializers
 from .models import User
 from .validators import validate_email
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,6 +18,8 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "first_name",
             "last_name",
+            "is_staff",
+            "is_superuser",
         )
         extra_kwargs = {
             "password": {"write_only": True},
@@ -81,3 +85,10 @@ class AdminUserSerializer(UserSerializer):
 
         instance.save()
         return instance
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        return token

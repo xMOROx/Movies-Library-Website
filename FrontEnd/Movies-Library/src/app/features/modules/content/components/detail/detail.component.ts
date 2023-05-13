@@ -12,6 +12,20 @@ import {User} from "../../../../../authentication/models/User";
 import {StorageService} from "../../../../../authentication/services/storage.service";
 import {catchError} from "rxjs/operators";
 import {RatingComponent} from "../../../../../shared/rating/rating.component";
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
+import {take, throwError} from 'rxjs';
+import { MoviesService } from 'src/app/features/services/movies.service';
+import { ContentModel } from '../../models/Content.model';
+import { MovieModel } from '../../models/Movie.model';
+import { PaginationModel } from '../../models/pagination.model';
+import { TvModel } from '../../models/Tv.model';
+import {User} from "../../../../../authentication/models/User";
+import {StorageService} from "../../../../../authentication/services/storage.service";
+import {catchError} from "rxjs/operators";
+import {RatingComponent} from "../../../../../shared/rating/rating.component";
 import {TrashService} from "../../../../services/trash.service";
 
 @Component({

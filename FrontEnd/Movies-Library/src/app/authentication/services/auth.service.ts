@@ -34,25 +34,33 @@ export class AuthService {
 
   public singUp(user: User): Observable<any> {
     let url = `${this.endpoint}/register-user`;
-    return this.http.post<any>(url, user).pipe(catchError(this.handleError));
+    return this.http.post<any>(url, user);
   }
 
   public signIn(user: User): any {
     return this.http.post<any>(`${this.endpoint}/signin`, user)
-      .subscribe((res: any) => {
-        if (res.access == null) {
-          alert("Invalid credentials");
-          return;
+      .subscribe(
+        {
+          next: (res: any) => {
+            if (res.access == null) {
+              alert("Invalid credentials");
+              return;
+            }
+            let decode_token = this.tokenService.getDecodedAccessToken(res.access);
+
+            this.tokenService.createToken(res.access, res.refresh);
+
+            this.getUserProfile(decode_token.user_id).subscribe((res) => {
+              this.storageService.saveUser(res);
+              this.router.navigate(['user-profile/' + res.id]);
+            });
+          },
+          error: (_: HttpErrorResponse) => {
+            alert("Invalid credentials");
+          }
         }
-        let decode_token = this.tokenService.getDecodedAccessToken(res.access);
 
-        this.tokenService.createToken(res.access, res.refresh);
-
-        this.getUserProfile(decode_token.user_id).subscribe((res) => {
-          this.storageService.saveUser(res);
-          this.router.navigate(['user-profile/' + res.id]);
-        });
-      });
+      );
   }
 
 
@@ -69,11 +77,23 @@ export class AuthService {
     };
 
     return this.http.get(api, this.httpOptions).pipe(
-      map((res) => {
-        return res || {}
+      map((res:any) => {
+        return this.parseRoles(res) || {}
       }),
       catchError(this.handleError)
     )
+  }
+
+  public parseRoles(res: any): any {
+    res['roles'] = {
+      admin: res.is_superuser,
+      user: true,
+      staff: res.is_staff
+    };
+
+    delete res['is_superuser'];
+    delete res['is_staff'];
+    return res;
   }
 
   public isLoggedIn(): boolean {
@@ -83,7 +103,7 @@ export class AuthService {
   public logout(): void {
     if (this.tokenService.removeAccessToken()) {
       this.storageService.clean();
-      this.router.navigate(['login']);
+      this.router.navigate(['home']);
     }
   }
 

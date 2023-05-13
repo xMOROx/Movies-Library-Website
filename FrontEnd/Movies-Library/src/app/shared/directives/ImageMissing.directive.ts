@@ -1,7 +1,7 @@
 import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[appImageMissing]'
+  selector: 'img[appImageMissing]'
 })
 export class ImageMissingDirective {
 

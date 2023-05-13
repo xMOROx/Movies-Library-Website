@@ -9,4 +9,5 @@ urlpatterns = [
     ),
     re_path(r"^actors/(?P<actor_id>\d+)/cast$", actors_views.get_actor_cast),
     re_path(r"^actors/trending/$", actors_views.get_trending_actors),
+    re_path(r"^actors/$", actors_views.get_actors),
 ]

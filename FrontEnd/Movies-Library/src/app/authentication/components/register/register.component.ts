@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/authentication/services/auth.service';
+import { ValidateService } from "src/app/core/services/validate.service";
+import { MatDialogRef } from '@angular/material/dialog';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +16,10 @@ export class RegisterComponent implements OnInit {
 
   constructor(public fb: FormBuilder,
     public authService: AuthService,
-    public router: Router) {
+    public router: Router,
+    private validateService: ValidateService,
+    public dialogRef: MatDialogRef<RegisterComponent>
+  ) {
     this.signupForm = this.fb.group({
       email: [''],
       password: [''],
@@ -25,13 +31,35 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  registerUser() {
-    this.authService.singUp(this.signupForm.value).subscribe((res) => {
-      if (res.status == 201) {
-        this.signupForm.reset();
-        this.router.navigate(['login']);
-      }
-    });
+  public registerUser(): void {
+    if (this.validateService.validateEmail(this.signupForm.value.email)) {
+      this.authService.singUp(this.signupForm.value)
+        .subscribe(
+          {
+            next: (res) => {
+              if (res.status == 201) {
+                this.signupForm.reset();
+                this.router.navigate(['/']);
+                this.dialogRef.close();
+              } else if (res.status == 409) {
+
+              }
+            },
+            error: (err) => {
+              this.handleError(err);
+            }
+          }
+
+        );
+    } else {
+      this.signupForm.controls['email'].setErrors({ 'incorrect': true });
+    }
+  }
+
+  public handleError(error: HttpErrorResponse): any {
+    if (error.status === 409) {
+      this.signupForm.controls['email'].setErrors({ 'conflict': true });
+    }
   }
 
 }
