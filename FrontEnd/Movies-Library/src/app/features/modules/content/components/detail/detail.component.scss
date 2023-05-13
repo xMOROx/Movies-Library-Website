@@ -64,9 +64,22 @@
     h3 {font-weight: 500; color: #fff; font-size: 1.1em; font-style: italic; opacity: 0.8; margin: 0;}
     h4 {margin: 15px 0;}
 
+    &--reactions {
+      width: 8%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
     &--categories {
       display: flex;
       gap: 6px;
+    }
+
+    &--form {
+      margin-top: 2%;
+      display: flex;
+      justify-content: space-between;
     }
 
     // xs media query
@@ -84,6 +97,13 @@
 
   &__data-mobile {
     display: none;
+
+    &--reactions {
+      width: 12%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
 
     // xs media query
     @media (max-width: $breakpoint-xs) {
