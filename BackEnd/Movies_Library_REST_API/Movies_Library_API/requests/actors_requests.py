@@ -6,6 +6,16 @@ import Movies_Library_API.config as config
 class ActorsRequest:
     _URL = settings.API_URL
 
+    def get_actors(self, language: str = "en-US", page: int = 1) -> dict | None:
+        response = requests.get(
+            url=self._URL + "person/popular",
+            params={"api_key": config.api_key, "language": language, "page": page},
+        )
+        if response.status_code == 200:
+            return response.json()
+
+        return None
+
     def get_actor_details(self, actor_id: int, language: str = "en-US") -> dict | None:
         response = requests.get(
             url=self._URL + "person/" + str(actor_id),
