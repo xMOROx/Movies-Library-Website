@@ -12,12 +12,19 @@
   font-size: 4rem;
 }
 
-.movies__container, .shows__container {
+.movies__container, .shows__container, .actors__container {
   margin: 2rem 0;
   position: relative;
 }
 
-.movies__title, .shows__title {
+.actors__sort-button {
+  position: absolute;
+  left: 10%;
+  top: 0;
+  z-index: 10;
+}
+
+.movies__title, .shows__title, .actors__title {
   position: absolute;
   margin: 12px 0;
 

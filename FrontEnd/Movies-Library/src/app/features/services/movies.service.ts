@@ -1,18 +1,21 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ModuleWithProviders } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AuthService } from "src/app/authentication/services/auth.service";
-import { User } from "src/app/authentication/models/User";
 import { environment } from "src/environments/environment";
-import { MovieModel } from "src/app/features/content/models/Movie.model";
+import { MovieModel } from "src/app/features/modules/content/models/Movie.model";
 import { Observable, of, tap } from "rxjs";
-import { AggregatedMovieModel } from "src/app/features/content/models/AggregatedMovie.model";
+import { AggregatedMovieModel } from "src/app/features/modules/content/models/AggregatedMovie.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MoviesService {
   private movieList?: Array<AggregatedMovieModel>;
+
   private endpoint: string = `${environment.backEnd}api/v1/`;
+  private language: string = "en-US";
+  private region: string = "US";
+
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -54,25 +57,80 @@ export class MoviesService {
   public getUserMovies(id: any): Observable<Array<AggregatedMovieModel>> {
     if (this.movieList) {
       return of(this.movieList);
-    } else {
-      return this.http.get<Array<AggregatedMovieModel>>(`${this.endpoint}users/${id}/movies/details`, this.httpOptions).pipe(
-        tap((movies: Array<AggregatedMovieModel>) => {
-          this.movieList = movies;
-        })
-      );
     }
+
+    return this.http.get<Array<AggregatedMovieModel>>(`${this.endpoint}users/${id}/movies/details`, this.httpOptions).pipe(
+      tap((movies: Array<AggregatedMovieModel>) => {
+        this.movieList = movies;
+      })
+    );
+
   }
 
-  public getMovieById(id: any) {
-    return this.http.get(`${this.endpoint}movies/${id}`, this.httpOptions);
-  }
-
-  public getMovieDetailsForUser(movie_id: any, user_id: any) {
+  public getMovieDetailsForUser(movie_id: any, user_id: any): Observable<any> {
     return this.http.get(`${this.endpoint}users/${user_id}/movies/${movie_id}/details`, this.httpOptions);
   }
 
-  public addMovieToUser(movie_id: any, user_id: any, body: any) {
+  public addMovieToUser(movie_id: any, user_id: any, body: any): Observable<any> {
     return this.http.put(`${this.endpoint}users/${user_id}/movies/${movie_id}`, body, this.httpOptions);
   }
+
+  // general movies
+  public getMovieById(id: any): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/${id}?language=${this.language}&region=${this.region}`, this.httpOptions);
+  }
+
+  public getPopularMovies(page: number): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/popular?page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
+  }
+
+  public getUpcomingMovies(page: number, timeWindow: string): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/upcoming?page=${page}&language=${this.language}&region=${this.region}&time_window=${timeWindow}`, this.httpOptions);
+  }
+
+  public getLatestMovies(page: number): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/latest?page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
+  }
+
+  public getTrendingMovies(page: number, mediaType: string, timeWindow: string): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/trending?page=${page}&language=${this.language}&region=${this.region}&media=${mediaType}&time_window=${timeWindow}`, this.httpOptions);
+  }
+
+  public getNowPlayingMovies(page: number): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/now_playing?page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
+  }
+
+  public searchMovies(searchQuery: string, page: number): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/search?query=${searchQuery}&page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
+  }
+
+  public getGenres(): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/genres?language=${this.language}`, this.httpOptions);
+  }
+
+  public getMoviesByGenreId(id: string, page: number): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/genres/${id}?language=${this.language}&page=${page}`, this.httpOptions);
+  }
+
+  public getMovieCredits(id: string): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/${id}/credits?language=${this.language}&region=${this.region}`, this.httpOptions);
+  }
+
+  public getMovieVideos(id: string): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/${id}/videos?language=${this.language}&region=${this.region}`, this.httpOptions);
+  }
+
+  public getRecommendedMovies(id: string, page: number): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/${id}/recommendations?language=${this.language}&region=${this.region}&page=${page}`, this.httpOptions);
+  }
+
+  public getSimilarMovies(id: string, page: number): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/${id}/similar?language=${this.language}&region=${this.region}&page=${page}`, this.httpOptions);
+  }
+
+  public getMovieProviders(id: string): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/${id}/providers?language=${this.language}&region=${this.region}`, this.httpOptions);
+  }
+
 
 }
