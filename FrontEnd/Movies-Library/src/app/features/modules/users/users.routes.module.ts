@@ -7,8 +7,8 @@ const usersRoutes: Routes = [
     {
         path: '',
         children: [
-            { path: ':id', component: ProfileComponent },
-            { path: ':id/movies', component: UserMoviesComponent },
+            { path: ':userId', component: ProfileComponent },
+            { path: ':userId/movies', component: UserMoviesComponent },
         ]
     },
 ];

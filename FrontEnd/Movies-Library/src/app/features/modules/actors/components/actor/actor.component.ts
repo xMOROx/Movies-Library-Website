@@ -20,7 +20,7 @@ export class ActorComponent implements OnInit {
 
   ngOnInit() {
     this.router.params.subscribe(params => {
-      const id = params['id'];
+      const id = params['actorId'];
       this.actorsService.getActorDetails(id).subscribe((data: ActorModel) => {
         this.actor = data;
       });

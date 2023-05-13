@@ -1,14 +1,35 @@
 <div class="auth-wrapper">
   <form class="form-signin" [formGroup]="signInForm" (ngSubmit)="signIn()">
-    <h3 class="h3 mb-3 font-weight-normal text-center">Please sign in</h3>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" class="form-control" formControlName="email" placeholder="Enter email" required />
+    <div class="header__container">
+      <h1 class="h3 mb-3 font-weight-normal text-center">Please sign in</h1>
     </div>
     <div class="form-group">
-      <label>Password</label>
-      <input type="password" class="form-control" formControlName="password" placeholder="Password" />
+      <mat-icon>email</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Email" formControlName="email" required type="email" />
+      </mat-form-field>
     </div>
-    <button type="submit" class="btn btn-block btn-primary">Sign in</button>
+    <div class="form-group">
+      <mat-icon>lock</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Password" formControlName="password" required type="password" />
+      </mat-form-field>
+    </div>
+    <button mat-raised-button type="submit" class="btn btn-block btn-primary">Sign in</button>
+    <div class="error__container" *ngIf="
+      (signInForm.controls['email'].hasError('required') && signInForm.controls['email'].dirty) ||
+      (signInForm.controls['password'].hasError('required') && signInForm.controls['password'].dirty) ||
+      signInForm.controls['email'].hasError('incorrect')
+    ">
+      <mat-error *ngIf="signInForm.controls['email'].hasError('required') && signInForm.controls['email'].dirty">
+        Email is required
+      </mat-error>
+      <mat-error *ngIf="signInForm.controls['password'].hasError('required') && signInForm.controls['password'].dirty">
+        Password is required
+      </mat-error>
+      <mat-error *ngIf="signInForm.controls['email'].hasError('incorrect')">
+        Email is invalid
+      </mat-error>
+    </div>
   </form>
 </div>
