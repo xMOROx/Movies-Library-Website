@@ -8,7 +8,7 @@ const actorRoutes: Routes = [
         path: '',
         children: [
             { path: '', component: ActorsComponent },
-            { path: ':id', component: ActorComponent },
+            { path: ':actorId', component: ActorComponent },
         ]
     },
 ];

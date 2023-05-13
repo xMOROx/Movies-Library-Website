@@ -9,7 +9,7 @@ import { ContentRoutesModule } from './content.routes.module';
 import { LatestMoviesComponent } from './components/movie-views/latest-movies/latest-movies.component';
 import { PopularMoviesComponent } from './components/movie-views/popular-movies/popular-movies.component';
 import { UpcomingMoviesComponent } from './components/movie-views/upcoming-movies/upcoming-movies.component';
-import { MovieDetailsComponent } from './components/movie-views/movie-details/movie-details.component';
+import { MovieDetailsForUserComponent } from './components/movie-views/movie-details-for-user/movie-details-for-user.component';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -27,7 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
     LatestMoviesComponent,
     PopularMoviesComponent,
     UpcomingMoviesComponent,
-    MovieDetailsComponent
+    MovieDetailsForUserComponent
   ],
   declarations: [
     ContentComponent,
@@ -37,7 +37,7 @@ import { HttpClientModule } from '@angular/common/http';
     LatestMoviesComponent,
     PopularMoviesComponent,
     UpcomingMoviesComponent,
-    MovieDetailsComponent
+    MovieDetailsForUserComponent
   ]
 })
 export class ContentModule { }

@@ -8,11 +8,11 @@ import { throwError } from "rxjs";
 import { StorageService } from 'src/app/authentication/services/storage.service';
 
 @Component({
-  selector: 'app-movie-details',
-  templateUrl: './movie-details.component.html',
-  styleUrls: ['./movie-details.component.scss']
+  selector: 'app-movie-details-for-user',
+  templateUrl: './movie-details-for-user.component.html',
+  styleUrls: ['./movie-details-for-user.component.scss']
 })
-export class MovieDetailsComponent implements OnInit {
+export class MovieDetailsForUserComponent implements OnInit {
   public movie?: MovieModel;
   public status?: string;
   public rating?: any;
@@ -30,6 +30,7 @@ export class MovieDetailsComponent implements OnInit {
     }
 
     this.moviesService.getMovieById(this.route.snapshot.paramMap.get('id')).subscribe((res: any) => {
+
       this.movie = this.moviesService.parseMovie(res);
       this.moviesService.getMovieDetailsForUser(this.movie?.id, this.user!.id)?.pipe(catchError(err => {
         this.status = "Not watched";

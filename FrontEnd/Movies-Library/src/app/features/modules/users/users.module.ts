@@ -12,9 +12,10 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     CommonModule,
     SharedModule,
-    ContentModule,
     UsersRoutesModule,
-    HttpClientModule
+    HttpClientModule,
+    ContentModule,
+
   ],
   exports: [UsersComponent, ProfileComponent, UserMoviesComponent],
   declarations: [UsersComponent, ProfileComponent, UserMoviesComponent]
