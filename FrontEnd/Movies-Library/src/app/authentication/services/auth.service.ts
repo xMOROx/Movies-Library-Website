@@ -77,11 +77,23 @@ export class AuthService {
     };
 
     return this.http.get(api, this.httpOptions).pipe(
-      map((res) => {
-        return res || {}
+      map((res:any) => {
+        return this.parseRoles(res) || {}
       }),
       catchError(this.handleError)
     )
+  }
+
+  public parseRoles(res: any): any {
+    res['roles'] = {
+      admin: res.is_superuser,
+      user: true,
+      staff: res.is_staff
+    };
+
+    delete res['is_superuser'];
+    delete res['is_staff'];
+    return res;
   }
 
   public isLoggedIn(): boolean {
