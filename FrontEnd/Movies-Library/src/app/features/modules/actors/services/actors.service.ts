@@ -11,6 +11,10 @@ export class ActorsService {
   private language = 'en-US';
   constructor(private httpClient: HttpClient) { }
 
+  public getActors(page: number = 1): Observable<any> {
+    return this.httpClient.get(`${this.base_url}/?page=${page}&language=${this.language}`);
+  }
+
   public getActorDetails(id: number): Observable<any> {
     return this.httpClient.get(`${this.base_url}/${id}`);
   }
