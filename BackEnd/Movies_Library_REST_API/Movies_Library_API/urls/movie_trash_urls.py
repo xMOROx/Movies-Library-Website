@@ -13,12 +13,12 @@ urlpatterns = [
         name="get movie from trash",
     ),
     re_path(
-        r"^trash/user/(?P<user_id>[0-9]+)/movies/(?P<movie_id>[0-9]+)$",
+        r"^trash/user/(?P<user_id>[0-9]+)/movies/(?P<movie_id>[0-9]+)/add$",
         movie_trash_views.add_movie_to_trash,
         name="add movie to trash",
     ),
     re_path(
-        r"^trash/user/(?P<user_id>[0-9]+)/movies/(?P<movie_id>[0-9]+)$",
+        r"^trash/user/(?P<user_id>[0-9]+)/movies/(?P<movie_id>[0-9]+)/delete$",
         movie_trash_views.delete_movie_from_trash,
         name="delete movie from trash",
     ),
