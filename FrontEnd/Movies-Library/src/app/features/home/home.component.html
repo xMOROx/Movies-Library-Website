@@ -1,3 +1,106 @@
-<p>
-  home works!
-</p>
+<section class="home-main-content">
+  Welcome
+</section>
+
+<div class="container">
+
+  <section class="movies__container">
+
+    <h2 class="movies__title" title="Go to Movies">
+      <a routerLink="/movies" class="colored-background-before">
+        <mat-icon>movie</mat-icon>
+        Movies
+      </a>
+    </h2>
+
+    <mat-tab-group (selectedTabChange)="tabMovieChange($event)" [selectedIndex]="selectedMovieTab" mat-align-tabs="end">
+
+      <mat-tab *ngFor="let tab of movieTabList" [label]="tab">
+        <swiper [config]="config" style="display: flex; flex-direction: column-reverse;" [autoplay]="true" #MovieSwiper>
+          <ng-template swiperSlide *ngFor="let movie of moviesList | slice:0:15">
+            <app-movie-card [model]="movie" [isMovie]="true"></app-movie-card>
+          </ng-template>
+        </swiper>
+      </mat-tab>
+
+    </mat-tab-group>
+  </section>
+
+  <section class="shows__container">
+
+    <h2 class="shows__title" title="Go to TV Shows">
+      <a routerLink="/tv-shows" class="colored-background-before">
+        <mat-icon>tv_gen</mat-icon>
+        TV Shows
+      </a>
+    </h2>
+
+    <mat-tab-group (selectedTabChange)="tabTVChange($event)" [selectedIndex]="selectedTVTab" mat-align-tabs="end">
+
+      <mat-tab *ngFor="let tab of tvShowsTabList" [label]="tab">
+        <swiper [config]="config" style="display: flex; flex-direction: column-reverse;">
+          <ng-template swiperSlide *ngFor=" let tvShow of tvShowsList | slice:0:15">
+            <app-movie-card [model]="tvShow"></app-movie-card>
+          </ng-template>
+        </swiper>
+      </mat-tab>
+
+    </mat-tab-group>
+  </section>
+  <section class="actors__container">
+    <h2 class="actors__title" title="Go to Actors">
+      <a routerLink="/actors" class="colored-background-before">
+        <mat-icon>people</mat-icon>
+        Actors
+      </a>
+    </h2>
+
+    <button mat-icon-button class="actors__sort-button" [matMenuTriggerFor]="sortMenu">
+      <mat-icon>sort</mat-icon>
+    </button>
+
+    <mat-menu #sortMenu="matMenu">
+      <button mat-menu-item [matMenuTriggerFor]="popularityOrder">
+        <mat-icon>star</mat-icon>
+        Popularity
+      </button>
+      <button mat-menu-item [matMenuTriggerFor]="nameOrder">
+        <mat-icon>sort_by_alpha</mat-icon>
+        Name
+      </button>
+    </mat-menu>
+
+    <mat-menu #popularityOrder="matMenu">
+      <button mat-menu-item (click)="actorSortingChange('popularity','asc')">
+        <mat-icon>arrow_upward</mat-icon>
+        Ascending
+      </button>
+      <button mat-menu-item (click)="actorSortingChange('popularity','desc')">
+        <mat-icon>arrow_downward</mat-icon>
+        Descending
+      </button>
+    </mat-menu>
+
+    <mat-menu #nameOrder="matMenu">
+      <button mat-menu-item (click)="actorSortingChange('name','asc')">
+        <mat-icon>arrow_upward</mat-icon>
+        Ascending
+      </button>
+      <button mat-menu-item (click)="actorSortingChange('name','desc')">
+        <mat-icon>arrow_downward</mat-icon>
+        Descending
+      </button>
+    </mat-menu>
+
+    <mat-tab-group (selectedTabChange)="tabActorChange($event)" [selectedIndex]="selectedActorTab" mat-align-tabs="end">
+      <mat-tab *ngFor="let tab of actorsTabList" [label]="tab">
+        <swiper [config]="config" style="display: flex; flex-direction: column-reverse;">
+          <ng-template swiperSlide *ngFor="let actor of actorsList | slice:0:15 | actorSort:sortActorOrder:sortActorBy">
+            <app-actor-card [model]="actor"></app-actor-card>
+          </ng-template>
+        </swiper>
+      </mat-tab>
+    </mat-tab-group>
+
+  </section>
+</div>

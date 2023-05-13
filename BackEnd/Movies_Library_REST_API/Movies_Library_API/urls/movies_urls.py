@@ -41,7 +41,7 @@ urlpatterns = [
         name="movies by genre",
     ),
     re_path(
-        r"^movies/videos/(?P<movie_id>[0-9]+)$",
+        r"^movies/(?P<movie_id>[0-9]+)/videos$",
         movies_views.movie_videos,
         name="movie videos",
     ),

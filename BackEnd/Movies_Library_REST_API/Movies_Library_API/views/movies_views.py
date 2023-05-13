@@ -121,7 +121,7 @@ def trending_movies(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        data = MovieRequests().get_treding_movie_by_media_and_time(
+        data = MovieRequests().get_trending_movie_by_media_and_time(
             media_type, time_window, page, language, region
         )
 

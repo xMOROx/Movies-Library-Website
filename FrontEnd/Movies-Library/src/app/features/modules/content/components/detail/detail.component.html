@@ -1,0 +1,145 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+<main class="content">
+
+  <section class="content__main" [style]="'background-image: url(' + content?.['backdrop_path'] + ');'">
+
+    <div class="content__container">
+
+      <div class="content__info container">
+
+        <img src="https://image.tmdb.org/t/p/w300_and_h450_bestv2/{{content?.['poster_path']}}"
+             data-src="https://image.tmdb.org/t/p/w300_and_h450_bestv2/{{content?.['poster_path']}}"
+             data-srcset="https://image.tmdb.org/t/p/w300_and_h450_bestv2/{{content?.['poster_path']}} 1x, https://image.tmdb.org/t/p/w600_and_h900_bestv2/{{content?.['poster_path']}} 2x"
+             srcset="https://image.tmdb.org/t/p/w300_and_h450_bestv2/{{content?.['poster_path']}} 1x, https://image.tmdb.org/t/p/w600_and_h900_bestv2/{{content?.['poster_path']}} 2x"
+             data-loaded="true" [alt]="content?.['title'] ?? content?.['name']" appImgMissingDirective>
+
+        <div class="content__data">
+          <div *ngIf="user != undefined" class="content__data--reactions">
+            <div *ngIf="is_favorite" class="favorite">
+              <mat-icon (click)="setFavorite(false)">favorite</mat-icon>
+            </div>
+            <div *ngIf="!is_favorite" class="favorite">
+              <mat-icon (click)="setFavorite(true)">favorite_outlined</mat-icon>
+            </div>
+            <div class="rating" (click)="openRatingDialog()">
+              <mat-icon>star_outlined</mat-icon>
+            </div>
+          </div>
+
+          <h2>{{content?.['title'] ?? content?.['name']}}
+            ({{content?.['release_date'] ?? content?.['first_air_date'] | date:'YYYY' }})
+          </h2>
+          <h3>{{content?.['tagline']}}</h3>
+
+          <h4>Overview</h4>
+          <p>{{content?.['overview']}}</p>
+
+          <button *ngIf="video" mat-raised-button color="primary" aria-label="Trailer" (click)="openDialog()"
+                  class="play-trailer">
+            <mat-icon>play_arrow</mat-icon>
+            Play Trailer
+          </button>
+
+          <h4>Categories</h4>
+
+          <div class="content__data--categories">
+            <button *ngFor="let genre of content?.['genres']" mat-raised-button color="primary" aria-label="Genres"
+                    disabled>{{genre.name}}</button>
+          </div>
+          <div *ngIf="user != undefined " class="content__data--form">
+            <mat-form-field appearance="fill" color="primary">
+              <mat-select (selectionChange)="addMovie()" [(value)]="status">
+                <mat-option value="Not watched">Not watched</mat-option>
+                <mat-option value="Plan to watch">Plan to watch</mat-option>
+                <mat-option value="Watched">Watched</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="content__data-mobile">
+      <div *ngIf="user != undefined" class="content__data-mobile--reactions">
+        <div *ngIf="is_favorite" class="favorite">
+          <mat-icon (click)="setFavorite(false)">favorite</mat-icon>
+        </div>
+        <div *ngIf="!is_favorite" class="favorite">
+          <mat-icon (click)="setFavorite(true)">favorite_outlined</mat-icon>
+        </div>
+        <div class="rating" (click)="openRatingDialog()">
+          <mat-icon>star_outlined</mat-icon>
+        </div>
+      </div>
+
+    <h2>{{content?.['title'] ?? content?.['name']}}
+      ({{content?.['release_date'] ?? content?.['first_air_date'] | date:'YYYY' }})
+    </h2>
+    <h3>{{content?.['tagline']}}</h3>
+
+    <h4>Overview</h4>
+    <p>{{content?.['overview']}}</p>
+    <div *ngIf="user != undefined " class="content__data-mobile--form">
+      <mat-form-field appearance="fill" color="primary">
+        <mat-select (selectionChange)="addMovie()" [(value)]="status">
+          <mat-option value="Not watched">Not watched</mat-option>
+          <mat-option value="Plan to watch">Plan to watch</mat-option>
+          <mat-option value="Watched">Watched</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <button *ngIf="video" mat-raised-button color="primary" aria-label="Trailer" (click)="openDialog()"
+            class="play-trailer">
+      <mat-icon>play_arrow</mat-icon>
+      Play Trailer
+    </button>
+  </section>
+
+  <section class="content__recommendations container">
+
+    <h2>Recommended Movies</h2>
+
+    <div class="content__recommendations--cards" *ngIf="recomendedContentList.length > 0; else noRecomendedMovies">
+      <div *ngFor="let content of recomendedContentList;">
+        <app-movie-card [model]="content" [isMovie]="contentType === 'movies'"></app-movie-card>
+      </div>
+    </div>
+
+    <ng-template #noRecomendedMovies>
+      <div class="content__no-recomended">
+        <mat-icon [inline]="true">sentiment_dissatisfied</mat-icon>
+        <span>No recommended movies</span>
+      </div>
+    </ng-template>
+
+  </section>
+</main>
+
+
+<ng-template #matTrailerDialog>
+  <div cdkDragBoundary=".cdk-overlay-container" cdkDrag cdkDragRootElement=".cdk-overlay-pane"
+       style="background: black;">
+    <div class="dialog-title-container" cdkDragHandle>
+      <a href="javascript:void(0);" (click)="trailerDialog.closeAll()">
+        <mat-icon aria-label="cerrar dialogo cambiar imagen Cabecera">close</mat-icon>
+      </a>
+      <h2 matDialogTitle>Play Trailer</h2>
+    </div>
+
+    <mat-dialog-content class="header-content-dialog">
+
+      <div *ngIf="video" class="video-movie-main">
+        <iframe [src]="video['url']" allowfullscreen></iframe>
+      </div>
+
+    </mat-dialog-content>
+
+  </div>
+</ng-template>
