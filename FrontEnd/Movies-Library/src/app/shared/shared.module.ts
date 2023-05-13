@@ -4,7 +4,7 @@ import { MaterialModule } from './material/material.module';
 import { RouterModule } from '@angular/router';
 import { MovieCardComponent } from './movie-card/movie-card.component';
 import { ImageMissingDirective } from './directives/ImageMissing.directive';
-import { PopularitySortPipe } from './pipes/popularitySort.pipe';
+import { ActorSortPipe } from './pipes/actorSort.pipe';
 
 @NgModule({
   imports: [
@@ -17,12 +17,12 @@ import { PopularitySortPipe } from './pipes/popularitySort.pipe';
     CommonModule,
     MovieCardComponent,
     ImageMissingDirective,
-    PopularitySortPipe
+    ActorSortPipe
   ],
   declarations: [
     MovieCardComponent,
     ImageMissingDirective,
-    PopularitySortPipe
+    ActorSortPipe
   ]
 })
 export class SharedModule { }
