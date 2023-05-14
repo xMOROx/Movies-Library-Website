@@ -1,6 +1,6 @@
 
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import {take, throwError} from 'rxjs';
