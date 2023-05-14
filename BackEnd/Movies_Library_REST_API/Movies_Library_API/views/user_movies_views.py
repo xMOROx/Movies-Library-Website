@@ -10,6 +10,8 @@ from rest_framework import views
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.serializers import ValidationError as DRFValidationError
+from django.core.exceptions import ValidationError as DjangoValidationError, ObjectDoesNotExist, MultipleObjectsReturned
 
 from ..models.movie_lib_models import Movie, Movie_User
 from ..requests.movie_db_requests import MovieRequests
@@ -18,10 +20,11 @@ from Authentication.models import User
 from Authentication.permissions import IsOwner
 
 
-class AddMovieToUserView(views.APIView):
-    permission_classes = [IsAuthenticated & IsOwner]
-
-    def put(self, request, user_id, movie_id):
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated & IsOwner])
+@authentication_classes([JWTAuthentication])
+def add_movie_to_user(request, user_id, movie_id):
+    if request.method == "PUT":
         movie_user = Movie_User.objects.filter(user=user_id, movie=movie_id).first()
 
         try:
@@ -87,7 +90,7 @@ class AddMovieToUserView(views.APIView):
                     poster_url=movie_api["poster_path"],
                     runtime=movie_api["runtime"],
                 )
-            except:
+            except (DRFValidationError, DjangoValidationError) as e:
                 return JsonResponse(
                     {"message": "The movie could not be added"},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -149,10 +152,15 @@ def details_of_movie_for_user(request, user_id, movie_id):
 
         try:
             data = Movie.users.through.objects.get(user_id=user_id, movie_id=movie_id)
-        except Exception:
+        except ObjectDoesNotExist:
             return JsonResponse(
                 {"message": "The movie does not exist"},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+        except MultipleObjectsReturned:
+            return JsonResponse(
+                {"message": "Something went wrong"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
         serializer_movie_user = Movie_UserSerializer(data)
