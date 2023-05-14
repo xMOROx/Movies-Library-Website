@@ -1,0 +1,20 @@
+<div class="poster">
+
+  <a [routerLink]="isMovie ? '/movies/' + model['movie'].id : '/tv-shows/' + model['movie'].id"
+     [title]="'Go to ' + model.title ?? model.name">
+    <img class="poster__image" loading="lazy"
+         [src]="'https://image.tmdb.org/t/p/w220_and_h330_face/' + model['movie']['poster_url']" srcset="https://image.tmdb.org/t/p/w220_and_h330_face/{{model['movie']['poster_url']}} 1x,
+         https://image.tmdb.org/t/p/w440_and_h660_face/{{model['movie']['poster_url']}} 2x" [alt]="model['movie'].title ?? model['movie'].name" appImageMissing>
+  </a>
+
+  <div class="poster__content">
+    <a *ngIf="model['movie'].title ?? model['movie'].name" [routerLink]="isMovie ? '/movies/' + model['movie'].id : '/tv-shows/' + model['movie'].id"
+       [title]="model['movie'].title ?? model['movie'].name" class="poster__title colored-hover">
+      {{model['movie'].title ?? model['movie'].name}}
+    </a>
+    <p *ngIf="apiModel?.['release_date'] ?? apiModel?.['first_air_date']">
+      {{(apiModel?.['release_date'] ?? apiModel?.['first_air_date']) | date}}
+    </p>
+  </div>
+
+</div>
