@@ -3,7 +3,7 @@ from ..views import user_movies_views
 
 urlpatterns = [
     re_path(
-        r"^users/(?P<user_id>[0-9]+)/movies/details$",
+        r"^users/(?P<user_id>[0-9]+)/movies",
         user_movies_views.list_of_details_for_movies_per_user,
         name="details of user movies",
     ),
