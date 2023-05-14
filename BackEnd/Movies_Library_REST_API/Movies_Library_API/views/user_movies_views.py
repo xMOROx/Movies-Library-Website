@@ -128,7 +128,7 @@ def list_of_details_for_movies_per_user(request, user_id):
             return JsonResponse(
                 {"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND
             )
-
+        page = request.GET.get("page", 1)
         data = Movie_User.objects.select_related("movie").filter(user_id=user_id)
 
         serializer = Movie_UserSerializer(data, many=True)

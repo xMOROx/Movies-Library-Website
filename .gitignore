@@ -18,3 +18,10 @@ BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/users_urls.c
 BackEnd/Movies_Library_REST_API/Movies_Library_API/requests/__pycache__/movie_db_requests.cpython-310.pyc
 BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/admin_urls.cpython-310.pyc
 BackEnd/Movies_Library_REST_API/Movies_Library_API/requests/__pycache__/actors_requests.cpython-310.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/requests/__pycache__/actors_requests.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/requests/__pycache__/movie_db_requests.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/actors_urls.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/admin_urls.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/movie_trash_urls.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/movies_urls.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/users_urls.cpython-311.pyc
