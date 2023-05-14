@@ -144,8 +144,8 @@
 
     <h2>Recommended Movies</h2>
 
-    <div class="content__recommendations--cards" *ngIf="recomendedContentList.length > 0; else noRecomendedMovies">
-      <div *ngFor="let content of recomendedContentList;">
+    <div class="content__recommendations--cards" *ngIf="recommendedContentList.length > 0; else noRecomendedMovies">
+      <div *ngFor="let content of recommendedContentList;">
         <app-movie-card [model]="content" [isMovie]="contentType === 'movies'"></app-movie-card>
       </div>
     </div>

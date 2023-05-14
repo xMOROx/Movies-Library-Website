@@ -1,6 +1,6 @@
 import {Component, Inject, Input} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {MoviesService} from "../../features/services/movies.service";
+import {MoviesService} from "../../../features/services/movies.service";
 
 @Component({
   selector: 'app-rating',
