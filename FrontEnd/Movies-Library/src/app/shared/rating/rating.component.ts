@@ -36,7 +36,10 @@ export class RatingComponent {
         this.moviesService.addMovieToUser(this.data.movieId, this.data.userId, body).subscribe(() => {
           this.dialog.close(index + 1);
         });
+        return;
       }
+      alert("You have to watch the movie first!");
+
     }
   }
 

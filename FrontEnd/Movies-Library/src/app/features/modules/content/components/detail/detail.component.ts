@@ -57,6 +57,7 @@ export class DetailComponent implements OnInit {
         this.getMovieById(id);
         this.getMovieVideoById(id);
         this.getMovieRecommendationsById(id);
+
         if (this.user != null) {
           this.getMovieDetailsForUsers(id, this.user.id);
           this.getMovieFromTrash(id);
@@ -130,7 +131,9 @@ export class DetailComponent implements OnInit {
     if (this.status === "Watched") {
       this.is_favorite = value;
       this.addMovie();
+      return;
     }
+    alert("You can't set favorite to a movie you haven't watched yet");
   }
 
   public openRatingDialog() {
