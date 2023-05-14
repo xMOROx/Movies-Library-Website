@@ -9,18 +9,8 @@ urlpatterns = [
     ),
     re_path(
         r"^trash/users/(?P<user_id>[0-9]+)/movies/(?P<movie_id>[0-9]+)$",
-        movie_trash_views.get_movie_by_id,
+        movie_trash_views.crud_for_movie_inside_trash,
         name="get movie from trash",
-    ),
-    re_path(
-        r"^trash/users/(?P<user_id>[0-9]+)/movies/(?P<movie_id>[0-9]+)/add$",
-        movie_trash_views.add_movie_to_trash,
-        name="add movie to trash",
-    ),
-    re_path(
-        r"^trash/users/(?P<user_id>[0-9]+)/movies/(?P<movie_id>[0-9]+)/delete$",
-        movie_trash_views.delete_movie_from_trash,
-        name="delete movie from trash",
-    ),
+    )
 
 ]
