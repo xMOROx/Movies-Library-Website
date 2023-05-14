@@ -18,7 +18,7 @@ import { StorageService } from './storage.service';
 })
 export class AuthService {
   private endpoint: string = `${environment.backEnd}api/v1/auth`;
-  private isAuth: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private isAuth: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(!!this.storageService.getUser());
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'

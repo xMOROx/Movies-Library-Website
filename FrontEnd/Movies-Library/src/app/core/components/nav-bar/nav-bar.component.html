@@ -22,6 +22,7 @@
         [class.btn--unscrolled--color]="!isScrolled" [class.unscrolled--logout]="!isScrolled"
         [class.scrolled--logout]="isScrolled">Sign
         Out</button>
+      <a mat-raised-button routerLink="dashboard" aria-label="Dashboard" *ngIf="isAuth">Dashboard</a>
     </div>
   </nav>
 

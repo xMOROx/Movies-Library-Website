@@ -5,7 +5,6 @@ import { RegisterComponent } from 'src/app/authentication/components/register/re
 import { AuthService } from 'src/app/authentication/services/auth.service';
 import {User} from "../../../authentication/models/User";
 import {StorageService} from "../../../authentication/services/storage.service";
-import {take, takeLast} from "rxjs";
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
