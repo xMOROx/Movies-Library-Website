@@ -106,9 +106,16 @@ export class DetailComponent implements OnInit {
 
   private getMovieFromTrash(movie_id: any) {
     if (this.user !== undefined) {
-      this.trashService.getMovieById(this.user.id, movie_id).subscribe((r) => {
-        this.isInTrash = !!r;
-      });
+      this.trashService.getMovieById(this.user.id, movie_id).subscribe(
+        {
+          next: (r) => {
+            this.isInTrash = !!r;
+          },
+          error: (err) => {
+
+          }
+        }
+      );
     }
 
   }
