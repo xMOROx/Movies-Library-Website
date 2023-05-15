@@ -5,12 +5,12 @@ from rest_framework import serializers
 from .models import User
 from .validators import validate_email
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     email = serializers.EmailField(required=True, validators=[validate_email])
+
 
     class Meta:
         model = User
