@@ -28,7 +28,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.storageService.getUser();
-    this.moviesService.getUserMovies(this.currentUser.id).subscribe((movies: Array<AggregatedMovieModel>) => {
+    this.moviesService.getUserMovies(this.currentUser.id, true).subscribe((movies: Array<AggregatedMovieModel>) => {
       this.movieList = movies;
     });
   }

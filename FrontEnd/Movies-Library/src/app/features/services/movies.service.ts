@@ -54,7 +54,7 @@ export class MoviesService {
 
   constructor(private http: HttpClient, private auth: AuthService) { }
 
-  public getUserMovies(id: any, page:any = 1): Observable<any> {
+  public getUserMovies(id: any, all: boolean = false, page: any = 1): Observable<any> {
     if (!this.auth.isAuthenticated().subscribe((res: any) => res)) {
       return of(null);
     }
@@ -63,11 +63,14 @@ export class MoviesService {
       return of(this.movieList);
     }
 
-    return this.http.get<Array<AggregatedMovieModel>>(`${this.endpoint}users/${id}/movies?page=${page}`, this.httpOptions).pipe(
-      tap((movies: Array<AggregatedMovieModel>) => {
-        this.movieList = movies;
-      })
-    );
+    return this.http.get(`${this.endpoint}users/${id}/movies?all=${all}&page=${page}`, this.httpOptions);
+  // .pipe(
+  //     tap((response: any) => {
+  //       if (all) {
+  //         this.movieList = response;
+  //       }
+  //     })
+  //   )
 
   }
 
