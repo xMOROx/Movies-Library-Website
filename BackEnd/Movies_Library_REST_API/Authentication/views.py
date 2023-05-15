@@ -86,19 +86,17 @@ class ChangePasswordView(UpdateAPIView):
     JSON FORMAT:
     For example:
     {
-      "user": {
-        "id": 1
-      },
-          "old_password":"old_password
+          "old_password":"old_password",
           "new_password1":"new_password",
           "new_password2":"new_password"
-      }
+    }
     """
 
     serializer_class = ChangePasswordSerializer
     model = User
     permission_classes = (permissions.IsAuthenticated, IsOwner)
     authentication_classes = [JWTAuthentication]
+    lookup_field = "user_id"
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -115,7 +113,7 @@ class ChangePasswordView(UpdateAPIView):
                 status=HTTP_400_BAD_REQUEST,
             )
 
-        user = serializer.save()
+        serializer.save()
 
         return response.Response(
             status=HTTP_204_NO_CONTENT,

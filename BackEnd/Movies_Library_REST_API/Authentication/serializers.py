@@ -11,7 +11,6 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     email = serializers.EmailField(required=True, validators=[validate_email])
 
-
     class Meta:
         model = User
         fields = (
@@ -97,8 +96,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    # model = User
-
     """
     Serializer for password change endpoint.
     """
@@ -123,6 +120,25 @@ class ChangePasswordSerializer(serializers.Serializer):
     def save(self, **kwargs):
         password = self.validated_data['new_password1']
         user = self.context['request'].user
+        user.set_password(password)
+        user.save()
+        return user
+
+
+class AdminChangePasswordSerializer(serializers.Serializer):
+    """
+    Serializer for password change endpoint.
+    """
+    new_password = serializers.CharField(max_length=128, write_only=True, required=True)
+
+    def validate(self, data):
+        password_validation.validate_password(data['new_password'], self.context['request'].user)
+        return data
+
+    def save(self, **kwargs):
+        password = self.validated_data['new_password']
+        user = self.context['request'].user
+        print("user", user)
         user.set_password(password)
         user.save()
         return user

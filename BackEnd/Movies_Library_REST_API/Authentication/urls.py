@@ -16,5 +16,7 @@ urlpatterns = [
     re_path(r"^token/refresh$", TokenRefreshView.as_view(), name="token_refresh"),
 
     re_path(r"^admin/users$", admin_views.UserListView.as_view(), name="admin users"),
-    re_path(r"^admin/users/(?P<id>[0-9]+)$", admin_views.UpdateUser.as_view(), name="admin update user"),
+    re_path(r"^admin/users/(?P<id>[0-9]+)$", admin_views.UpdateUserView.as_view(), name="admin update user"),
+    re_path(r"^admin/users/(?P<id>[0-9]+)/change-password$", admin_views.ChangePasswordForUserView.as_view(),
+            name="admin change password"),
 ]
