@@ -121,8 +121,14 @@ export class MoviesService {
     return this.http.get(`${this.endpoint}movies/genres?language=${this.language}`, this.httpOptions);
   }
 
-  public getMoviesByGenreId(id: string, page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}movies/genres/${id}?language=${this.language}&page=${page}`, this.httpOptions);
+  public getMoviesByGenreId(id: string[], page: any = 1): Observable<any> {
+    let genres = '';
+    id.forEach((genre_id) => {
+      genres += genre_id + ','
+    });
+    genres = genres.slice(0, -1);
+
+    return this.http.get(`${this.endpoint}movies/genres/test?language=${this.language}&page=${page}&genres=${genres}`, this.httpOptions);
   }
 
   public getMovieCredits(id: string): Observable<any> {
