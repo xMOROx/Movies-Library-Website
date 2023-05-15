@@ -5,6 +5,12 @@
   <div class="contents__container">
 
     <mat-card class="contents__filter">
+      <mat-form-field>
+        <mat-label>Search movies</mat-label>
+        <input type="text" #box matInput (keyup.enter)="search(box.value)">
+        <mat-icon class="contents__filter__search_button" (click)="search(box.value)">search</mat-icon>
+      </mat-form-field>
+
       <div>Filter by</div>
       <button mat-raised-button color="primary" aria-label="Set Now Playing filter" (click)="applyFilter('Now Playing')">Now Playing</button>
       <button mat-raised-button color="primary" aria-label="Set Upcoming filter" (click)="applyFilter('Upcoming')">Upcoming</button>
