@@ -237,8 +237,10 @@ def movie_genres(request):
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
-def movies_by_genre(request, genre_id):
+def movies_by_genre(request):
     if request.method == "GET":
+        print(request.GET.get("genres"))
+        genre_id = request.GET.get("genres")
         page = request.GET.get("page")
         language = request.GET.get("language", "en-US")
         data = MovieRequests().get_movies_by_genre(genre_id, page, language)
