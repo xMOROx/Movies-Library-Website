@@ -1,12 +1,16 @@
 from rest_framework import views, response, exceptions, permissions
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView
 from rest_framework.status import (
     HTTP_201_CREATED,
     HTTP_409_CONFLICT,
     HTTP_204_NO_CONTENT,
-    HTTP_200_OK,
+    HTTP_400_BAD_REQUEST, HTTP_200_OK,
+
 )
-from .serializers import UserSerializer
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from .permissions import IsOwner
+from .serializers import UserSerializer, ChangePasswordSerializer
 from .models import User
 
 from rest_framework.exceptions import ValidationError
@@ -74,3 +78,45 @@ class UserView(views.APIView):
         user.delete()
 
         return response.Response(status=HTTP_204_NO_CONTENT)
+
+
+class ChangePasswordView(UpdateAPIView):
+    """
+    An endpoint for changing password.
+    JSON FORMAT:
+    For example:
+    {
+      "user": {
+        "id": 1
+      },
+          "old_password":"old_password
+          "new_password1":"new_password",
+          "new_password2":"new_password"
+      }
+    """
+
+    serializer_class = ChangePasswordSerializer
+    model = User
+    permission_classes = (permissions.IsAuthenticated, IsOwner)
+    authentication_classes = [JWTAuthentication]
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError:
+            return response.Response(
+                {"message": "Invalid data", "status": HTTP_400_BAD_REQUEST, "errors": serializer.errors},
+                status=HTTP_400_BAD_REQUEST,
+            )
+
+        user = serializer.save()
+
+        return response.Response(
+            status=HTTP_204_NO_CONTENT,
+        )

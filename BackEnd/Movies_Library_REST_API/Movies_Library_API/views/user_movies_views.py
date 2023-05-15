@@ -35,9 +35,6 @@ def add_movie_to_user(request, user_id, movie_id):
                 {"message": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST
             )
 
-        # TODO if status "Not watched" delete record from Movie_User
-        # TODO if status not "Watched" cannot set is_favorite = True and give rating
-
         if movie_user is not None:
             try:
                 if "rating" in movie_user_serializer.validated_data:
@@ -57,7 +54,7 @@ def add_movie_to_user(request, user_id, movie_id):
                     movie_user.save()
 
                 return JsonResponse(None, status=status.HTTP_204_NO_CONTENT, safe=False)
-            except:
+            except (DRFValidationError, DjangoValidationError) as e:
                 return JsonResponse(
                     {"message": "The movie could not be updated"},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -112,6 +109,7 @@ def add_movie_to_user(request, user_id, movie_id):
             is_favorite=movie_user_serializer.validated_data["is_favorite"],
             status=movie_user_serializer.validated_data["status"],
         )
+
 
         movie_user.save()
 
