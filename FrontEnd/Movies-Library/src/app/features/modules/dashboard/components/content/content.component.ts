@@ -39,16 +39,17 @@ export class ContentComponent implements OnInit {
   }
 
   public getMoviesForUser(filter:string = "all") {
-    this.moviesService.getUserMovies(this.userId).subscribe(
+    this.moviesService.getUserMovies(this.userId, false).subscribe(
       {
         next: (response: any) => {
           if (!response) {
             this.router.navigate(['/']);
           }
-          this.content = response;
+          this.content = response.results;
           //TODO: total results
+          this.totalResults = response.count;
           this.content =  this.filterMoviesByType(this.content, filter);
-          console.log(this.content)
+          // console.log(this.content)
         },
         error: (_: any) => {
         }
@@ -67,7 +68,8 @@ export class ContentComponent implements OnInit {
           if (!response) {
             this.router.navigate(['/']);
           }
-          this.content = response;
+          this.content = response.results;
+          this.totalResults = response.count;
         },
         error: (_: any) => {
         }
@@ -87,12 +89,17 @@ export class ContentComponent implements OnInit {
 
   private filterMoviesByType(movies: Array<PaginationModel>, filter: string) {
     if (filter.toLowerCase() === 'all') {
+      this.totalResults = movies.length;
       return movies;
     }
     if (filter.toLowerCase() === 'favorite') {
-      return movies.filter((movie: any) => movie.is_favorite);
+      let filteredMovies = movies.filter((movie: any) => movie.is_favorite);
+      this.totalResults = filteredMovies.length;
+      return filteredMovies;
     } else {
-      return movies.filter((movie: any) => movie.status.toLowerCase() === filter.toLowerCase());
+      let filteredMovies = movies.filter((movie: any) => movie.status.toLowerCase() === filter.toLowerCase());
+      this.totalResults = filteredMovies.length;
+      return filteredMovies;
     }
   }
 

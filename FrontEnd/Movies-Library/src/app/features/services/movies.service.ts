@@ -63,7 +63,7 @@ export class MoviesService {
       return of(this.movieList);
     }
 
-    return this.http.get(`${this.endpoint}users/${id}/movies/details?all=${all}&page=${page}`, this.httpOptions);
+    return this.http.get(`${this.endpoint}users/${id}/movies?all=${all}&page=${page}`, this.httpOptions);
   // .pipe(
   //     tap((response: any) => {
   //       if (all) {
