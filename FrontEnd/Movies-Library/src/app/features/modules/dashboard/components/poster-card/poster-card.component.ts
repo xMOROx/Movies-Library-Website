@@ -11,9 +11,11 @@ export class PosterCardComponent implements OnInit {
   public apiModel: any;
   @Input() public contentType: string = "";
   public isMovie: boolean = true;
+  public numberOfStars: Array<number> = [];
   constructor(
     private moviesService: MoviesService,
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     if (this.contentType === 'movies' || this.contentType === 'trash') {
@@ -22,7 +24,7 @@ export class PosterCardComponent implements OnInit {
         {
           next: (response: any) => {
             this.apiModel = response;
-
+            console.log(this.model)
           },
           error: (_: any) => {
 
@@ -33,6 +35,8 @@ export class PosterCardComponent implements OnInit {
     } else if (this.contentType === "TV-shows") {
       this.isMovie = false;
     }
+    this.numberOfStars = Array(this.model.rating).fill(0).map((x, i) => i);
+
   }
 
 }

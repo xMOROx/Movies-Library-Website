@@ -16,10 +16,11 @@ import { AuthenticationRoutesModule } from './authentication.routes.module';
     LoginComponent,
     RegisterComponent,
     AuthenticationRoutesModule
+
   ],
   declarations: [
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
   ]
 })
 export class AuthenticationModule { }

@@ -33,6 +33,14 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  &__rating {
+    display: inherit;
+    font-weight: 700;
+    color: #f5c518;
+    & .none__rating {
+      color: #ccc;
+    }
+  }
 
 }
 
