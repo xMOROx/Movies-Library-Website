@@ -20,15 +20,24 @@ export class UserMoviesComponent implements OnInit {
     password: '',
   };
   public filter = "all";
+  private count?: number;
+  public page: number;
 
   constructor(private moviesService: MoviesService, private storageService: StorageService) {
+    this.page = 1;
   }
 
   ngOnInit(): void {
     this.currentUser = this.storageService.getUser();
-    this.moviesService.getUserMovies(this.currentUser.id).subscribe((movies: Array<AggregatedMovieModel>) => {
-      this.movieList = movies;
-      this.movieList.forEach((movie: AggregatedMovieModel) => {
+    this.getMovies(1);
+
+  }
+
+  public getMovies(page: any) {
+    this.moviesService.getUserMovies(this.currentUser.id, false, page).subscribe((response: any) => {
+      this.count = response.count;
+      this.movieList = response.results;
+      this.movieList?.forEach((movie: AggregatedMovieModel) => {
         movie.movie.poster_url = environment.posterPath + movie.movie.poster_url;
       });
     });
