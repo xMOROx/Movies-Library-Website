@@ -3,6 +3,8 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dial
 import { LoginComponent } from 'src/app/authentication/components/login/login.component';
 import { RegisterComponent } from 'src/app/authentication/components/register/register.component';
 import { AuthService } from 'src/app/authentication/services/auth.service';
+import {User} from "../../../authentication/models/User";
+import {StorageService} from "../../../authentication/services/storage.service";
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
@@ -12,14 +14,22 @@ export class NavBarComponent implements OnInit {
   public isScrolled: boolean = false;
   public dialogSignIn!: MatDialogRef<LoginComponent>;
   public dialogRegister!: MatDialogRef<RegisterComponent>;
+  public user?: User;
+  public isAuth: boolean = false;
 
   @HostListener('window:scroll')
   scrollEvent() {
     this.isScrolled = window.scrollY >= 30;
   }
-  constructor(public dialog: MatDialog, public authService: AuthService) { }
+  constructor(public dialog: MatDialog,
+              public authService: AuthService,
+              private storage: StorageService,) { }
 
   ngOnInit() {
+    this.user = this.storage.getUser();
+    this.authService.isAuthenticated().subscribe((isAuth: boolean) => {
+      this.isAuth = isAuth;
+    });
   }
 
   public openSignDialog() {

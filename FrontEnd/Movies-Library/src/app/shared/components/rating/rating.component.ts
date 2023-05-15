@@ -1,6 +1,6 @@
 import {Component, Inject, Input} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {MoviesService} from "../../features/services/movies.service";
+import {MoviesService} from "../../../features/services/movies.service";
 
 @Component({
   selector: 'app-rating',
@@ -36,7 +36,10 @@ export class RatingComponent {
         this.moviesService.addMovieToUser(this.data.movieId, this.data.userId, body).subscribe(() => {
           this.dialog.close(index + 1);
         });
+        return;
       }
+      alert("You have to watch the movie first!");
+
     }
   }
 

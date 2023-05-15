@@ -55,9 +55,13 @@ export class MoviesService {
   constructor(private http: HttpClient, private auth: AuthService) { }
 
   public getUserMovies(id: any, all: boolean = false, page: any = 1): Observable<any> {
-    // if (this.movieList) {
-    //   return of(this.movieList);
-    // }
+    if (!this.auth.isAuthenticated().subscribe((res: any) => res)) {
+      return of(null);
+    }
+
+    if (this.movieList) {
+      return of(this.movieList);
+    }
 
     return this.http.get(`${this.endpoint}users/${id}/movies/details?all=${all}&page=${page}`, this.httpOptions);
   // .pipe(
@@ -71,10 +75,16 @@ export class MoviesService {
   }
 
   public getMovieDetailsForUser(movie_id: any, user_id: any): Observable<any> {
+    if (!this.auth.isAuthenticated().subscribe((res: any) => res)) {
+      return of(null);
+    }
     return this.http.get(`${this.endpoint}users/${user_id}/movies/${movie_id}/details`, this.httpOptions);
   }
 
   public addMovieToUser(movie_id: any, user_id: any, body: any): Observable<any> {
+    if (!this.auth.isAuthenticated().subscribe((res: any) => res)) {
+      return of(null);
+    }
     return this.http.put(`${this.endpoint}users/${user_id}/movies/${movie_id}`, body, this.httpOptions);
   }
 

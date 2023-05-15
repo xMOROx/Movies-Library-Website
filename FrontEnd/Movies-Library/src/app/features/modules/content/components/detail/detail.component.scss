@@ -59,7 +59,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-
     p {margin-top: 0;}
     h3 {font-weight: 500; color: #fff; font-size: 1.1em; font-style: italic; opacity: 0.8; margin: 0;}
     h4 {margin: 15px 0;}
@@ -78,7 +77,23 @@
       justify-content: space-between;
     }
 
+    & .rating {
+      &.unrated {color: #fff;}
+      &.rated  {color: #FFD700;}
+    }
+
+    & .favorite {
+      &--checked {color: #df1a54;}
+      &--unchecked {color: #fff;}
+    }
+
+    & .trash{
+      &--checked {color: #666666;}
+      &--unchecked {color: #fff;}
+    }
+
     mat-icon:hover {
+      transition: transform 0.2s ease-in-out;
       transform: scale(1.5);
     }
 

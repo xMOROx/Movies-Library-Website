@@ -16,20 +16,24 @@
 
         <div class="content__data">
           <div *ngIf="user != undefined" class="content__data--reactions">
-            <div *ngIf="is_favorite" class="favorite">
-              <mat-icon (click)="setFavorite(false)">favorite</mat-icon>
-            </div>
-            <div *ngIf="!is_favorite" class="favorite">
+            <div *ngIf="!is_favorite" class="favorite--unchecked">
               <mat-icon (click)="setFavorite(true)">favorite_outlined</mat-icon>
             </div>
-            <div class="rating">
+            <div *ngIf="is_favorite" class="favorite--checked">
+              <mat-icon (click)="setFavorite(false)">favorite</mat-icon>
+            </div>
+            <div *ngIf="rating == undefined || rating == 0" class="rating unrated">
               <mat-icon (click)="openRatingDialog()">star_outlined</mat-icon>
             </div>
-            <div *ngIf="!isInTrash" class="trash" >
+            <div *ngIf="rating != undefined && rating > 0" class="rating rated">
+              <mat-icon (click)="openRatingDialog()">star</mat-icon>
+            </div>
+
+            <div *ngIf="!isInTrash" class="trash--unchecked">
               <mat-icon (click)="addMovieToTrash()">delete_outlined</mat-icon>
             </div>
-            <div *ngIf="isInTrash" class="trash" >
-              <mat-icon color="primary" (click)="deleteMovieFromTrash()">delete_outlined</mat-icon>
+            <div *ngIf="isInTrash" class="trash--checked">
+              <mat-icon (click)="deleteMovieFromTrash()">delete_outlined</mat-icon>
             </div>
           </div>
 
@@ -72,45 +76,45 @@
   </section>
 
   <section class="content__data-mobile">
-      <div *ngIf="user != undefined" class="content__data-mobile--reactions">
-        <div *ngIf="is_favorite" class="favorite">
-          <mat-icon (click)="setFavorite(false)">favorite</mat-icon>
-        </div>
-        <div *ngIf="!is_favorite" class="favorite">
-          <mat-icon (click)="setFavorite(true)">favorite_outlined</mat-icon>
-        </div>
-        <div class="rating" (click)="openRatingDialog()">
-          <mat-icon>star_outlined</mat-icon>
-        </div>
-        <div *ngIf="!isInTrash" class="trash" >
-          <mat-icon (click)="addMovieToTrash()">delete_outlined</mat-icon>
-        </div>
-        <div *ngIf="isInTrash" class="trash" >
-          <mat-icon color="primary" (click)="deleteMovieFromTrash()">delete_outlined</mat-icon>
-        </div>
+    <div *ngIf="user != undefined" class="content__data-mobile--reactions">
+      <div *ngIf="is_favorite" class="favorite">
+        <mat-icon (click)="setFavorite(false)">favorite</mat-icon>
       </div>
+      <div *ngIf="!is_favorite" class="favorite">
+        <mat-icon (click)="setFavorite(true)">favorite_outlined</mat-icon>
+      </div>
+      <div class="rating" (click)="openRatingDialog()">
+        <mat-icon>star_outlined</mat-icon>
+      </div>
+      <div *ngIf="!isInTrash" class="trash">
+        <mat-icon (click)="addMovieToTrash()">delete_outlined</mat-icon>
+      </div>
+      <div *ngIf="isInTrash" class="trash">
+        <mat-icon color="primary" (click)="deleteMovieFromTrash()">delete_outlined</mat-icon>
+      </div>
+    </div>
 
     <h2>{{content?.['title'] ?? content?.['name']}}
       ({{content?.['release_date'] ?? content?.['first_air_date'] | date:'YYYY' }})
     </h2>
     <h3>{{content?.['tagline']}}</h3>
-      <div *ngIf="user != undefined" class="content__data-mobile--reactions">
-        <div *ngIf="is_favorite" class="favorite">
-          <mat-icon (click)="setFavorite(false)">favorite</mat-icon>
-        </div>
-        <div *ngIf="!is_favorite" class="favorite">
-          <mat-icon (click)="setFavorite(true)">favorite_outlined</mat-icon>
-        </div>
-        <div class="rating" (click)="openRatingDialog()">
-          <mat-icon>star_outlined</mat-icon>
-        </div>
-        <div *ngIf="!isInTrash" class="trash" >
-          <mat-icon (click)="addMovieToTrash()">delete_outlined</mat-icon>
-        </div>
-        <div *ngIf="isInTrash" class="trash" >
-          <mat-icon color="primary" (click)="deleteMovieFromTrash()">delete_outlined</mat-icon>
-        </div>
+    <div *ngIf="user != undefined" class="content__data-mobile--reactions">
+      <div *ngIf="is_favorite" class="favorite">
+        <mat-icon (click)="setFavorite(false)">favorite</mat-icon>
       </div>
+      <div *ngIf="!is_favorite" class="favorite">
+        <mat-icon (click)="setFavorite(true)">favorite_outlined</mat-icon>
+      </div>
+      <div class="rating" (click)="openRatingDialog()">
+        <mat-icon>star_outlined</mat-icon>
+      </div>
+      <div *ngIf="!isInTrash" class="trash">
+        <mat-icon (click)="addMovieToTrash()">delete_outlined</mat-icon>
+      </div>
+      <div *ngIf="isInTrash" class="trash">
+        <mat-icon color="primary" (click)="deleteMovieFromTrash()">delete_outlined</mat-icon>
+      </div>
+    </div>
 
     <h2>{{content?.['title'] ?? content?.['name']}}
       ({{content?.['release_date'] ?? content?.['first_air_date'] | date:'YYYY' }})
@@ -140,8 +144,8 @@
 
     <h2>Recommended Movies</h2>
 
-    <div class="content__recommendations--cards" *ngIf="recomendedContentList.length > 0; else noRecomendedMovies">
-      <div *ngFor="let content of recomendedContentList;">
+    <div class="content__recommendations--cards" *ngIf="recommendedContentList.length > 0; else noRecomendedMovies">
+      <div *ngFor="let content of recommendedContentList;">
         <app-movie-card [model]="content" [isMovie]="contentType === 'movies'"></app-movie-card>
       </div>
     </div>

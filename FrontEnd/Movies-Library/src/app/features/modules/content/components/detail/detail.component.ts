@@ -1,6 +1,6 @@
 
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import {take, throwError} from 'rxjs';
@@ -12,7 +12,7 @@ import { TvModel } from '../../models/Tv.model';
 import {User} from "../../../../../authentication/models/User";
 import {StorageService} from "../../../../../authentication/services/storage.service";
 import {catchError} from "rxjs/operators";
-import {RatingComponent} from "../../../../../shared/rating/rating.component";
+import {RatingComponent} from "../../../../../shared/components/rating/rating.component";
 import {TrashService} from "../../../../services/trash.service";
 
 @Component({
@@ -23,7 +23,7 @@ import {TrashService} from "../../../../services/trash.service";
 export class DetailComponent implements OnInit {
   public contentType: string = '';
   public content?: Partial<MovieModel | TvModel | any>;
-  public recomendedContentList: Array<PaginationModel> = [];
+  public recommendedContentList: Array<PaginationModel> = [];
   public video?: ContentModel;
   public isLoading: boolean = true;
   public movie?: MovieModel;
@@ -57,6 +57,7 @@ export class DetailComponent implements OnInit {
         this.getMovieById(id);
         this.getMovieVideoById(id);
         this.getMovieRecommendationsById(id);
+
         if (this.user != null) {
           this.getMovieDetailsForUsers(id, this.user.id);
           this.getMovieFromTrash(id);
@@ -99,15 +100,22 @@ export class DetailComponent implements OnInit {
 
   private getMovieRecommendationsById(id: string) {
     this.moviesService.getRecommendedMovies(id, 1).pipe(take(1)).subscribe((res: any) => {
-      this.recomendedContentList = res.results.slice(0, 12);
+      this.recommendedContentList = res.results.slice(0, 12);
     });
   }
 
   private getMovieFromTrash(movie_id: any) {
     if (this.user !== undefined) {
-      this.trashService.getMovieById(this.user.id, movie_id).subscribe((r) => {
-        this.isInTrash = !!r;
-      });
+      this.trashService.getMovieById(this.user.id, movie_id).subscribe(
+        {
+          next: (r) => {
+            this.isInTrash = !!r;
+          },
+          error: (err) => {
+
+          }
+        }
+      );
     }
 
   }
@@ -130,7 +138,9 @@ export class DetailComponent implements OnInit {
     if (this.status === "Watched") {
       this.is_favorite = value;
       this.addMovie();
+      return;
     }
+    alert("You can't set favorite to a movie you haven't watched yet");
   }
 
   public openRatingDialog() {

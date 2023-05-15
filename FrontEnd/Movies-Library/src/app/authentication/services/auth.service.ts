@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {
   HttpClient,
@@ -18,6 +18,7 @@ import { StorageService } from './storage.service';
 })
 export class AuthService {
   private endpoint: string = `${environment.backEnd}api/v1/auth`;
+  private isAuth: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(!!this.storageService.getUser());
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -52,7 +53,8 @@ export class AuthService {
 
             this.getUserProfile(decode_token.user_id).subscribe((res) => {
               this.storageService.saveUser(res);
-              this.router.navigate(['user-profile/' + res.id]);
+              this.isAuth.next(true);
+              this.router.navigate(['dashboard/' + res.id]);
             });
           },
           error: (_: HttpErrorResponse) => {
@@ -97,13 +99,17 @@ export class AuthService {
   }
 
   public isLoggedIn(): boolean {
-    return !!this.tokenService.getAccessToken();
+    let value = !!this.tokenService.getAccessToken();
+
+    this.isAuth.next(value);
+    return value;
   }
 
   public logout(): void {
     if (this.tokenService.removeAccessToken()) {
       this.storageService.clean();
-      this.router.navigate(['home']);
+      this.isAuth.next(false);
+      this.router.navigate(['/']);
     }
   }
 
@@ -119,5 +125,9 @@ export class AuthService {
 
   public refreshToken(refresh: string) {
     return this.http.post(`${this.endpoint}/token/refresh`, { "refresh": refresh });
+  }
+
+  public isAuthenticated(): Observable<boolean> {
+    return this.isAuth.asObservable();
   }
 }

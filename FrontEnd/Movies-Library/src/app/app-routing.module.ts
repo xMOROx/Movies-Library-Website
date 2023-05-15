@@ -12,7 +12,8 @@ const routes: Routes = [
   { path: 'movies', loadChildren: () => import('./features/modules/content/content.module').then(m => m.ContentModule) },
   { path: 'tv-shows', loadChildren: () => import('./features/modules/content/content.module').then(m => m.ContentModule) },
   { path: 'actors', loadChildren: () => import('./features/modules/actors/actors.module').then(m => m.ActorsModule) },
-  { path: 'user-profile', loadChildren: () => import('./features/modules/users/users.module').then(m => m.UsersModule) },
+  // { path: 'user-profile', loadChildren: () => import('./features/modules/users/users.module').then(m => m.UsersModule) },
+  { path: 'dashboard', loadChildren: () => import('./features/modules/dashboard/dashboard.module').then(m => m.DashboardModule) },
 
   { path: '**', redirectTo: '404' }
 ];

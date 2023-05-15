@@ -18,7 +18,7 @@ import { SwiperModule } from "swiper/angular";
 import { UsersModule } from './features/modules/users/users.module';
 import { MoviesService } from './features/services/movies.service';
 import { ActorsModule } from './features/modules/actors/actors.module';
-import { RatingComponent } from './shared/rating/rating.component';
+import { RatingComponent } from './shared/components/rating/rating.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +35,7 @@ import { RatingComponent } from './shared/rating/rating.component';
     HttpClientModule,
     BrowserAnimationsModule,
     SharedModule,
-    // ContentModule,
+    ContentModule,
     AuthenticationModule,
     SwiperModule,
     UsersModule,

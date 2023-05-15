@@ -1,14 +1,14 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { ProfileComponent } from './components/profile/profile.component';
-import { UserMoviesComponent } from './components/user-movies/user-movies.component';
+import {IsLoggedGuard} from "../../../authentication/guards/is-logged.guard";
 
 const usersRoutes: Routes = [
     {
         path: '',
+        canActivateChild: [IsLoggedGuard],
         children: [
             { path: ':userId', component: ProfileComponent },
-            { path: ':userId/movies', component: UserMoviesComponent },
         ]
     },
 ];

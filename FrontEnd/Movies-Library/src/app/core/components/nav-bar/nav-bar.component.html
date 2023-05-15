@@ -12,16 +12,17 @@
       <a mat-button routerLink="actors" [routerLinkActive]="['activated-route']" aria-label="Actors">Actors</a>
     </div>
     <div class="navbar__buttons">
-      <button mat-raised-button (click)="openSignDialog()" aria-label="Sign In" class="btn--login"
+      <button mat-raised-button (click)="openSignDialog()" aria-label="Sign In" class="btn--login" *ngIf="!isAuth"
         [class.btn--unscrolled--color]="!isScrolled" [class.unscrolled--signin]="!isScrolled"
         [class.scrolled--signin]="isScrolled">Sign In</button>
-      <button mat-raised-button (click)="openRegisterDialog()" aria-label="Register" class="btn--signup"
+      <button mat-raised-button (click)="openRegisterDialog()" aria-label="Register" class="btn--signup" *ngIf="!isAuth"
         [class.btn--unscrolled--color]="!isScrolled" [class.unscrolled--signup]="!isScrolled"
         [class.scrolled--signup]="isScrolled">Register</button>
-      <button mat-raised-button (click)="signOut()" aria-label="Sign Out" class="btn--logout"
+      <button mat-raised-button (click)="signOut()" aria-label="Sign Out" class="btn--logout" *ngIf="isAuth"
         [class.btn--unscrolled--color]="!isScrolled" [class.unscrolled--logout]="!isScrolled"
         [class.scrolled--logout]="isScrolled">Sign
         Out</button>
+      <a mat-raised-button routerLink="dashboard" aria-label="Dashboard" *ngIf="isAuth">Dashboard</a>
     </div>
   </nav>
 
