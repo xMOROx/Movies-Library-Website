@@ -8,6 +8,7 @@ from rest_framework.decorators import (
 )
 from rest_framework import views
 from rest_framework.exceptions import ValidationError
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -128,8 +129,13 @@ def list_of_details_for_movies_per_user(request, user_id):
             return JsonResponse(
                 {"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND
             )
-        page = request.GET.get("page", 1)
-        data = Movie_User.objects.select_related("movie").filter(user_id=user_id)
+        show_all = "true" == request.GET.get("all", 1)
+        data = Movie_User.objects.select_related("movie").filter(user_id=user_id).order_by("-movie__title")
+        pagination = PageNumberPagination()
+        page = pagination.paginate_queryset(data, request)
+        if page is not None and not show_all:
+            serializer = Movie_UserSerializer(page, many=True)
+            return pagination.get_paginated_response(serializer.data)
 
         serializer = Movie_UserSerializer(data, many=True)
         return JsonResponse(serializer.data, safe=False)
