@@ -25,7 +25,7 @@ def movie_detail(request, movie_id):
 
     if request.method == "GET":
         serializer = MovieSerializer(data, context={"request": request})
-        return JsonResponse(serializer.data)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
@@ -37,7 +37,7 @@ def movie_details_api(request, movie_id):
         data = MovieRequests().get_movie_details(movie_id, language, region)
 
         if data is not None:
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
@@ -55,7 +55,7 @@ def popular_movies(request):
         data = MovieRequests().get_popular_movies(page, language, region)
 
         if data is not None:
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
@@ -74,7 +74,7 @@ def upcoming_movies(request):
         data = MovieRequests().get_upcoming_movies(page, time_window, language, region)
 
         if data is not None:
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
@@ -91,7 +91,7 @@ def latest_movies(request):
         data = MovieRequests().get_latest_movies(page, language, region)
 
         if data is not None:
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
@@ -144,7 +144,7 @@ def now_playing_movies(request):
         data = MovieRequests().get_now_playing_movies(page, language, region)
 
         if data is not None:
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
@@ -160,7 +160,7 @@ def movie_credits(request, movie_id):
         data = MovieRequests().get_movie_credits(movie_id, language, region)
 
         if data is not None:
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
@@ -179,7 +179,7 @@ def movie_recommendations(request, movie_id):
         )
 
         if data is not None:
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
@@ -197,7 +197,7 @@ def similar_movies(request, movie_id):
         data = MovieRequests().get_similar_movies(movie_id, page, language, region)
 
         if data is not None:
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
@@ -213,7 +213,7 @@ def movie_provider(request, movie_id):
         data = MovieRequests().get_movie_provider(movie_id, country_code, language)
 
         if data is not None:
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
@@ -228,7 +228,7 @@ def movie_genres(request):
         data = MovieRequests().get_genres(language)
 
         if data is not None:
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The genres does not exist"}, status=status.HTTP_404_NOT_FOUND
@@ -244,7 +244,7 @@ def movies_by_genre(request, genre_id):
         data = MovieRequests().get_movies_by_genre(genre_id, page, language)
 
         if data is not None:
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The movies does not exist"}, status=status.HTTP_404_NOT_FOUND
@@ -259,7 +259,7 @@ def movie_videos(request, movie_id):
         data = MovieRequests().get_movie_videos(movie_id, language)
 
         if data is not None:
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The videos does not exist"}, status=status.HTTP_404_NOT_FOUND
@@ -284,7 +284,7 @@ def search_movies(request):
         data = MovieRequests().search_movie(query, page, language, region)
 
         if data is not None:
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The movies does not exist"}, status=status.HTTP_404_NOT_FOUND
