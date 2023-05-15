@@ -54,7 +54,7 @@ export class AuthService {
             this.getUserProfile(decode_token.user_id).subscribe((res) => {
               this.storageService.saveUser(res);
               this.isAuth.next(true);
-              this.router.navigate(['user-profile/' + res.id]);
+              this.router.navigate(['dashboard/' + res.id]);
             });
           },
           error: (_: HttpErrorResponse) => {
