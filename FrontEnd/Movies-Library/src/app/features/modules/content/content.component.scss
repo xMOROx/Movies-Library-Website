@@ -28,6 +28,16 @@
     padding: 16px;
     width: 25%;
 
+    &__search_button {
+      position: absolute;
+      top: 30%;
+      right: -1%;
+    }
+
+    &__search_button:hover {
+      transform: scale(1.2);
+    }
+
     // xs media query
     @media (max-width: $breakpoint-xs) {
       width: 100%;
