@@ -32,7 +32,12 @@
   }
 
   &__right-side {
-    width: 75%;
+    &-trash-view {
+      width: 100%;
+    }
+    &-normal-view {
+      width: 75%;
+    }
 
     // xs media query
     @media (max-width: $breakpoint-xs) {

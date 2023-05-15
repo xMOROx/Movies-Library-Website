@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {StorageService} from "../../../../../authentication/services/storage.service";
 import {AuthService} from "../../../../../authentication/services/auth.service";
 import {TrashService} from "../../../../services/trash.service";
+import {filter} from "rxjs/operators";
 
 @Component({
   selector: 'app-content',
@@ -15,6 +16,7 @@ export class ContentComponent implements OnInit {
   public contentType: string = '';
   public content: Array<PaginationModel> = [];
   public totalResults: any;
+  public filterType: string = 'all';
   private userId: any;
   constructor(    private moviesService: MoviesService,
                   private storage: StorageService,
@@ -36,7 +38,7 @@ export class ContentComponent implements OnInit {
     }
   }
 
-  public getMoviesForUser() {
+  public getMoviesForUser(filter:string = "all") {
     this.moviesService.getUserMovies(this.userId).subscribe(
       {
         next: (response: any) => {
@@ -44,6 +46,9 @@ export class ContentComponent implements OnInit {
             this.router.navigate(['/']);
           }
           this.content = response;
+          //TODO: total results
+          this.content =  this.filterMoviesByType(this.content, filter);
+          console.log(this.content)
         },
         error: (_: any) => {
         }
@@ -76,6 +81,28 @@ export class ContentComponent implements OnInit {
     } else if (this.contentType === 'trash') {
       this.getMoviesFromTrash();
     } else if (this.contentType === "TV-shows") {
+      this.getTVShowsForUser();
+    }
+  }
+
+  private filterMoviesByType(movies: Array<PaginationModel>, filter: string) {
+    if (filter.toLowerCase() === 'all') {
+      return movies;
+    }
+    if (filter.toLowerCase() === 'favorite') {
+      return movies.filter((movie: any) => movie.is_favorite);
+    } else {
+      return movies.filter((movie: any) => movie.status.toLowerCase() === filter.toLowerCase());
+    }
+  }
+
+  public applyFilter(filter: string) {
+    this.filterType = filter;
+    if (this.contentType.toLowerCase() === 'movies') {
+      this.getMoviesForUser(this.filterType);
+    } else if (this.contentType.toLowerCase() === 'trash') {
+      this.getMoviesFromTrash();
+    } else if (this.contentType.toLowerCase() === "TV-shows".toLowerCase()) {
       this.getTVShowsForUser();
     }
   }
