@@ -133,7 +133,7 @@ def get_all_movies(request, user_id):
             )
 
         show_all = "true" == request.GET.get("all", 1)
-        data = get_list_or_404(MovieTrash, user=user_id).order_by("-movie__title")
+        data = get_list_or_404(MovieTrash.objects.order_by("-movie__title"), user=user_id)
         pagination = PageNumberPagination()
         page = pagination.paginate_queryset(data, request)
         if page is not None and not show_all:
