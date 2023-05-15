@@ -7,6 +7,7 @@ from rest_framework.decorators import (
     permission_classes,
     authentication_classes,
 )
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -45,6 +46,7 @@ def crud_for_movie_inside_trash(request, user_id, movie_id):
                 {"message": "This movie is not in trash"},
                 status=status.HTTP_404_NOT_FOUND
             )
+
         serializer = MovieTrashSerializer(data)
         return JsonResponse(serializer.data, safe=False)
     elif request.method == "POST":
@@ -129,8 +131,13 @@ def get_all_movies(request, user_id):
             return JsonResponse(
                 {"message": "This user does not exist"}, status=status.HTTP_404_NOT_FOUND
             )
-
-        data = get_list_or_404(MovieTrash, user=user_id)
+        show_all = "true" == request.GET.get("all", 1)
+        data = get_list_or_404(MovieTrash.objects.order_by("-movie__title"), user=user_id)
+        pagination = PageNumberPagination()
+        page = pagination.paginate_queryset(data, request)
+        if page is not None and not show_all:
+            serializer = MovieTrashSerializer(page, many=True)
+            return pagination.get_paginated_response(serializer.data)
 
         serializer = MovieTrashSerializer(data, many=True)
         return JsonResponse(serializer.data, safe=False)

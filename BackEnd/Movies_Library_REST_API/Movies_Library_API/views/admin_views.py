@@ -14,7 +14,7 @@ class AdminUserListView(views.APIView):
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
     def get(self, request):
-        users = self.queryset.all()
+        users = self.queryset.all().order_by("-id")
         serializer = self.serializer_class(users, many=True)
 
         return response.Response(serializer.data)
