@@ -131,7 +131,6 @@ def get_all_movies(request, user_id):
             return JsonResponse(
                 {"message": "This user does not exist"}, status=status.HTTP_404_NOT_FOUND
             )
-
         show_all = "true" == request.GET.get("all", 1)
         data = get_list_or_404(MovieTrash.objects.order_by("-movie__title"), user=user_id)
         pagination = PageNumberPagination()
