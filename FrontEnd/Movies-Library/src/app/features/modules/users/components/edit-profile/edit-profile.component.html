@@ -1,0 +1,43 @@
+<div class="auth-wrapper">
+  <form class="form-edit" [formGroup]="editForm" (ngSubmit)="submitData()">
+    <div class="header__container">
+      <h1 class="h3 mb-3 font-weight-normal text-center">Edit Profile</h1>
+    </div>
+    <div class="form-group">
+      <mat-icon>person</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Firstname" formControlName="first_name" type="text" />
+      </mat-form-field>
+    </div>
+    <div class="form-group">
+      <mat-icon>person</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Lastname" formControlName="last_name" type="text" />
+      </mat-form-field>
+    </div>
+    <div class="form-group">
+      <mat-icon>email</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Email" formControlName="email" type="email" />
+      </mat-form-field>
+    </div>
+
+    <div class="button__group">
+      <button mat-raised-button type="submit" class="btn btn-block btn-primary">Submit</button>
+      <button mat-raised-button type="button" class="btn btn-block btn-danger" (click)="cancel()">Cancel</button>
+    </div>
+
+    <div class="error__container" *ngIf="
+      editForm.controls['email'].hasError('incorrect') || editForm.controls['email'].hasError('conflict')
+    ">
+      <mat-error *ngIf="editForm.controls['email'].hasError('incorrect')">
+        <mat-icon>error</mat-icon>
+        Email is invalid
+      </mat-error>
+      <mat-error *ngIf="editForm.controls['email'].hasError('conflict')">
+        <mat-icon>error</mat-icon>
+        Email is already taken
+      </mat-error>
+    </div>
+  </form>
+</div>

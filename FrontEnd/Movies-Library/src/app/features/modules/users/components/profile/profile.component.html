@@ -1,12 +1,52 @@
-<div class="container">
-  <div class="row">
-    <div class="inner-main">
-      <h2 class="mb-4">User Profile</h2>
-      <p><strong>Name:</strong> {{ this.currentUser.first_name }}</p>
-      <p><strong>Lastname:</strong> {{ this.currentUser.last_name }}</p>
-      <p><strong>Email:</strong> {{ this.currentUser.email }}</p>
-    </div>
+
+
+
+<div class="padding-top-60 container" style=" display: flex; column-gap: 20px">
+  <div style="width: 25%">
+    <mat-card class="profile-card">
+      <mat-card-content>
+        <h1>Personal Info</h1>
+              <p><strong>Name:</strong> {{ this.currentUser.first_name }}</p>
+              <p><strong>Lastname:</strong> {{ this.currentUser.last_name }}</p>
+              <p><strong>Email:</strong> {{ this.currentUser.email }}</p>
+              <p><strong>Watch time:</strong> {{getWatchTime()}}</p>
+      </mat-card-content>
+      <button mat-raised-button color="primary" (click)="openEditDialog()" class="profile-edit-button">Edit</button>
+      <div class="button__group">
+        <button mat-raised-button color="primary" (click)="openChangePasswordDialog()" class="profile-change-password-button">Change password</button>
+      </div>
+    </mat-card>
   </div>
-  <p>Total watch time: {{getWatchTime()}}</p>
-  <button routerLink="movies">Movie list</button>
+
+  <div style="width: 70%">
+
+    <mat-card class="profile-card-bio" style="width: 100%; margin-bottom: 0;">
+      <mat-card-content>
+        <div class="profile-title" dir="auto">
+          <h2>{{this.currentUser.first_name}} {{this.currentUser.last_name}}</h2>
+        </div>
+        <div>
+          <h3 style="text-align: left">Biography</h3>
+          <div class="biography">
+            <p style="text-align: justify;">Empty</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="profile-card-bio" style="width: 100%; margin-bottom: 0;">
+      <mat-card-content>
+        <mat-tab-group>
+          <mat-tab [label]="'Images'">
+            Soon
+            <mat-card>
+            </mat-card>
+          </mat-tab>
+          <mat-tab [label]="'Extra Info'">
+            Soon
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
