@@ -14,7 +14,7 @@ export class ContentComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   public contentType: string = '';
-  public nowPlaying: Array<PaginationModel> = [];
+  public results: Array<PaginationModel> = [];
   public filterType: string = 'Now Playing';
   public totalResults: any;
   private query: string = '';
@@ -87,7 +87,7 @@ export class ContentComponent implements OnInit {
     this.moviesService.getNowPlayingMovies(page).pipe(take(1)).subscribe(
       {
         next: (response: any) => {
-          this.nowPlaying = response.results;
+          this.results = response.results;
           this.totalResults = response.total_results;
         },
         error: (_: any) => {
@@ -100,7 +100,7 @@ export class ContentComponent implements OnInit {
     this.moviesService.getUpcomingMovies(page, timeWindow).pipe(take(1)).subscribe(
       {
         next: (response: any) => {
-          this.nowPlaying = response.results;
+          this.results = response.results;
           this.totalResults = response.total_results;
         }, error: (_: any) => {
 
@@ -112,7 +112,7 @@ export class ContentComponent implements OnInit {
     this.moviesService.getPopularMovies(page).pipe(take(1)).subscribe(
       {
         next: (response: any) => {
-          this.nowPlaying = response.results;
+          this.results = response.results;
           this.totalResults = response.total_results;
         }, error: (_: any) => {
 
@@ -124,7 +124,7 @@ export class ContentComponent implements OnInit {
     this.moviesService.getTrendingMovies(page, mediaType, timeWindow).pipe(take(1)).subscribe(
       {
         next: (response: any) => {
-          this.nowPlaying = response.results;
+          this.results = response.results;
           this.totalResults = response.total_results;
         }, error: (_: any) => {
 
@@ -138,7 +138,7 @@ export class ContentComponent implements OnInit {
   private searchMovies(query: string, page: any = 1) {
     this.moviesService.searchMovies(query, page).pipe(take(1)).subscribe({
       next: (response: any) => {
-        this.nowPlaying = response.results;
+        this.results = response.results;
         this.totalResults = response.total_results;
       }, error: (_: any) => {
 

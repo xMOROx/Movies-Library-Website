@@ -11,7 +11,7 @@
         <mat-icon class="contents__filter__search_button" (click)="search(box.value)">search</mat-icon>
       </mat-form-field>
 
-      <div>Filter by</div>
+<!--      <div>Filter by</div>-->
       <button mat-raised-button color="primary" aria-label="Set Now Playing filter" (click)="applyFilter('Now Playing')">Now Playing</button>
       <button mat-raised-button color="primary" aria-label="Set Upcoming filter" (click)="applyFilter('Upcoming')">Upcoming</button>
       <button mat-raised-button color="primary" aria-label="Set Popular filter" (click)="applyFilter('Popular')">Popular</button>
@@ -22,7 +22,7 @@
     <div class="contents__right-side">
 
       <div class="contents__list">
-        <app-movie-card *ngFor="let content of nowPlaying" [model]="content" [isMovie]="contentType === 'movies'">
+        <app-movie-card *ngFor="let content of results" [model]="content" [isMovie]="contentType === 'movies'">
         </app-movie-card>
       </div>
 
