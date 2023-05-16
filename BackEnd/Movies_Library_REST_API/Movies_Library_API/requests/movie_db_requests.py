@@ -213,14 +213,15 @@ class MovieRequests:
         return None
 
     def get_movies_by_genre(
-        self, genre_id: int, page: int = 1, language: str = "en-US"
+        self, genre_ids: str, page: int = 1, language: str = "en-US"
     ) -> dict | None:
         response = requests.get(
-            url=self._URL + "genre" + str(genre_id) + "/movies",
+            url=self._URL + "discover/movie",
             params={
                 "api_key": config.api_key,
                 "language": language,
                 "page": page,
+                "with_genres": genre_ids,
             },
         )
         if response.status_code == 200:

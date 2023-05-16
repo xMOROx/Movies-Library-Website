@@ -237,11 +237,14 @@ def movie_genres(request):
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
-def movies_by_genre(request, genre_id):
+def movies_by_genre(request):
     if request.method == "GET":
+        genre_ids = request.GET.get("genres", "")
+        if genre_ids == "":
+            popular_movies(request)
         page = request.GET.get("page")
         language = request.GET.get("language", "en-US")
-        data = MovieRequests().get_movies_by_genre(genre_id, page, language)
+        data = MovieRequests().get_movies_by_genre(genre_ids, page, language)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)

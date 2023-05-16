@@ -4,6 +4,8 @@ import {PaginationModel} from './models/pagination.model';
 import {MoviesService} from 'src/app/features/services/movies.service';
 import {take} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
+import {FormControl} from "@angular/forms";
+import {Genre} from "./models/Genre.model";
 
 @Component({
   selector: 'app-content',
@@ -19,6 +21,10 @@ export class ContentComponent implements OnInit {
   public totalResults: any;
   private query: string = '';
 
+  categories = new FormControl('');
+  categoryList?: Array<Genre>;
+  private categoryDict: {[name: string]: string;} = {};
+
   constructor(
     private moviesService: MoviesService,
     private router: Router
@@ -28,14 +34,26 @@ export class ContentComponent implements OnInit {
 
   ngOnInit() {
     if (this.contentType === 'movies') {
+      this.moviesService.getGenres().pipe(take(1)).subscribe({
+        next: ((response: any) => {
+          this.categoryList = response.genres;
+          this.categoryList?.forEach(category => {
+            this.categoryDict[category.name] = category.id;
+          });
+      }),
+        error: (_: any) => {
+
+        }
+      });
       this.getMovies(1)
     } else {
       this.getNowPlayingTVShows(1);
     }
   }
 
-  public search(query: string) {
+  public searchByQuery(query: string) {
     if (query !== '') {
+      this.categories.reset();
       this.query = query;
       this.filterType = 'Search';
       this.paginator?.firstPage();
@@ -43,6 +61,18 @@ export class ContentComponent implements OnInit {
         this.searchMovies(this.query);
       } else {
         this.searchTVShows(this.query);
+      }
+    }
+  }
+
+  public searchByCategories() {
+    if(this.categories.value !== '') {
+      this.filterType = 'Search by categories';
+      this.paginator?.firstPage();
+      if (this.contentType === 'movies') {
+        this.searchMoviesByCategories();
+      } else {
+        this.searchTVShowsByCategories();
       }
     }
   }
@@ -56,6 +86,7 @@ export class ContentComponent implements OnInit {
   }
 
   public applyFilter(filterValue: string) {
+    this.categories.reset();
     this.filterType = filterValue;
     this.paginator?.firstPage();
     if (this.contentType === 'movies') {
@@ -64,7 +95,7 @@ export class ContentComponent implements OnInit {
   }
 
   private getMovies(page: number) {
-    switch(this.filterType) {
+    switch (this.filterType) {
       case 'Now Playing':
         this.getNowPlayingMovies(page);
         break;
@@ -79,6 +110,9 @@ export class ContentComponent implements OnInit {
         break;
       case 'Search':
         this.searchMovies(this.query, page);
+        break;
+      case 'Search by categories':
+        this.searchMoviesByCategories(page);
         break;
     }
   }
@@ -131,6 +165,7 @@ export class ContentComponent implements OnInit {
         }
       });
   }
+
   private getNowPlayingTVShows(param: any) {
     //TODO: implement
   }
@@ -150,7 +185,30 @@ export class ContentComponent implements OnInit {
     // TODO: implement
   }
 
+  private searchMoviesByCategories(page: any = 1) {
+    if (this.categories.value !== null) {
+      let ids: string[] = [];
+      let len = this.categories.value.length;
 
+      for( let category of this.categories.value) {
+        ids.push(this.categoryDict[category]);
+      }
+
+      this.moviesService.getMoviesByGenreId(ids, page).pipe(take(1)).subscribe({
+        next: (response) => {
+          this.results = response.results;
+          this.totalResults = response.total_results;
+        },
+        error: (_: any) => {
+
+        }
+      });
+    }
+  }
+
+  private searchTVShowsByCategories(page: any = 1) {
+    // TODO: implement
+  }
 
 
 }
