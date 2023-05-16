@@ -2,7 +2,7 @@ from rest_framework import views, response, exceptions, permissions
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_204_NO_CONTENT,
-    HTTP_200_OK,
+    HTTP_200_OK, HTTP_404_NOT_FOUND,
 )
 from Authentication.serializers import AdminUserSerializer
 from Authentication.models import User
@@ -17,7 +17,7 @@ class AdminUserListView(views.APIView):
         users = self.queryset.all().order_by("-id")
         serializer = self.serializer_class(users, many=True)
 
-        return response.Response(serializer.data)
+        return response.Response(serializer.data, status=HTTP_200_OK)
 
 
 class AdminUserUpdateView(views.APIView):
@@ -37,7 +37,10 @@ class AdminUserUpdateView(views.APIView):
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            raise exceptions.NotFound("User does not exist")
+            return response.Response(
+                {"message": "User does not exist", "status": HTTP_404_NOT_FOUND, "id": user_id},
+                status=HTTP_404_NOT_FOUND,
+            )
 
         serializer = self.serializer_class(user, data=request.data, partial=True)
 
@@ -86,7 +89,10 @@ class BanUserView(views.APIView):
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            raise exceptions.NotFound("User does not exist")
+            return response.Response(
+                {"message": "User does not exist", "status": HTTP_404_NOT_FOUND, "id": user_id},
+                status=HTTP_404_NOT_FOUND,
+            )
 
         if request.data["is_banned"] == user.is_banned:
             return response.Response(

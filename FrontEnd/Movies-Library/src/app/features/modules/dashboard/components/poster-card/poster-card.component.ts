@@ -24,7 +24,6 @@ export class PosterCardComponent implements OnInit {
         {
           next: (response: any) => {
             this.apiModel = response;
-            console.log(this.model)
           },
           error: (_: any) => {
 
