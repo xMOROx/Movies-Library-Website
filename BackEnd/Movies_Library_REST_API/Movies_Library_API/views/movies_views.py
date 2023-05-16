@@ -240,10 +240,13 @@ def movie_genres(request):
 def movies_by_genre(request):
     if request.method == "GET":
         genre_ids = request.GET.get("genres", "")
-        if genre_ids == "":
-            popular_movies(request)
-        page = request.GET.get("page")
+        page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
+
+        if genre_ids == "":
+            data = MovieRequests().get_popular_movies(page, language)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
+
         data = MovieRequests().get_movies_by_genre(genre_ids, page, language)
 
         if data is not None:
