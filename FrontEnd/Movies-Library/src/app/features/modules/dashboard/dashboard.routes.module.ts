@@ -4,11 +4,13 @@ import {SidebarComponent} from "./components/sidebar/sidebar.component";
 import {ContentComponent} from "./components/content/content.component";
 import {SettingsComponent} from "./components/settings/settings.component";
 import {DashboardComponent} from "./dashboard.component";
+import {IsLoggedGuard} from "../../../authentication/guards/is-logged.guard";
 
 const dashboardRoutes: Routes = [
   {
     path: '',
     component: SidebarComponent,
+    canActivateChild: [IsLoggedGuard],
     children: [
       {path: '', component: DashboardComponent},
       {path: 'movies', component: ContentComponent},

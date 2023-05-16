@@ -4,16 +4,20 @@ from rest_framework.status import (
     HTTP_201_CREATED,
     HTTP_409_CONFLICT,
     HTTP_204_NO_CONTENT,
-    HTTP_400_BAD_REQUEST, HTTP_200_OK,
+    HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_404_NOT_FOUND,
 
 )
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .permissions import IsOwner
-from .serializers import UserSerializer, ChangePasswordSerializer
+from .serializers import UserSerializer, ChangePasswordSerializer, UserUpdateSerializer
 from .models import User
 
 from rest_framework.exceptions import ValidationError
+from django.core.exceptions import ValidationError as DjangoValidationError
+
+
+from .validators import validate_email_for_other_users
 
 
 class UserRegisterView(CreateAPIView):
@@ -47,33 +51,62 @@ class UserRegisterView(CreateAPIView):
 
 
 class UserView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+    authentication_classes = [JWTAuthentication]
+    serializer_class = UserSerializer
+    lookup_field = "user_id"
+
     def get(self, request, user_id):
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            raise exceptions.NotFound("User does not exist")
+            return response.Response(
+                {"message": "User does not exist", "status": HTTP_404_NOT_FOUND, "id": user_id},
+                status=HTTP_404_NOT_FOUND,
+            )
 
-        serializer = UserSerializer(user)
+        serializer = self.serializer_class(user)
 
-        return response.Response(serializer.data)
+        return response.Response(serializer.data, status=HTTP_200_OK)
 
     def put(self, request, user_id):
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            raise exceptions.NotFound("User does not exist")
+            return response.Response(
+                {"message": "User does not exist", "status": HTTP_404_NOT_FOUND, "id": user_id},
+                status=HTTP_404_NOT_FOUND,
+            )
 
-        serializer = UserSerializer(user, data=request.data)
-        serializer.is_valid(raise_exception=True)
+        serializer = UserUpdateSerializer(user, data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError:
+            return response.Response(
+                {"message": "Error occur", "status": HTTP_400_BAD_REQUEST},
+                status=HTTP_400_BAD_REQUEST,
+            )
+        try:
+            validate_email_for_other_users(serializer.validated_data["email"], user_id)
+        except DjangoValidationError:
+            return response.Response(
+                {"message": "Email already exists", "status": HTTP_409_CONFLICT},
+                status=HTTP_409_CONFLICT,
+            )
+
         serializer.save()
 
-        return response.Response(serializer.data)
+        return response.Response(serializer.data, status=HTTP_204_NO_CONTENT)
 
     def delete(self, request, user_id):
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            raise exceptions.NotFound("User does not exist")
+            return response.Response(
+                {"message": "User does not exist", "status": HTTP_400_BAD_REQUEST, "id": user_id},
+                status=HTTP_400_BAD_REQUEST,
+            )
 
         user.delete()
 
@@ -86,9 +119,9 @@ class ChangePasswordView(UpdateAPIView):
     JSON FORMAT:
     For example:
     {
-          "old_password":"old_password",
-          "new_password1":"new_password",
-          "new_password2":"new_password"
+          "password":"old_password",
+          "new_password":"new_password",
+          "confirm_password":"new_password"
     }
     """
 
@@ -109,8 +142,8 @@ class ChangePasswordView(UpdateAPIView):
             serializer.is_valid(raise_exception=True)
         except ValidationError:
             return response.Response(
-                {"message": "Invalid data", "status": HTTP_400_BAD_REQUEST, "errors": serializer.errors},
-                status=HTTP_400_BAD_REQUEST,
+                {"message": "Passwords does not match!", "status": HTTP_409_CONFLICT, "errors": serializer.errors},
+                status=HTTP_409_CONFLICT,
             )
 
         serializer.save()

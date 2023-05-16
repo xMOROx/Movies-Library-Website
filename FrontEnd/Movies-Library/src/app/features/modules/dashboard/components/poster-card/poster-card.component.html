@@ -15,6 +15,12 @@
     <p *ngIf="apiModel?.['release_date'] ?? apiModel?.['first_air_date']">
       {{(apiModel?.['release_date'] ?? apiModel?.['first_air_date']) | date}}
     </p>
+    <p>
+      <span  class="poster__rating">
+        <mat-icon *ngFor="let star of numberOfStars"> star</mat-icon>
+        <mat-icon *ngIf="model.rating < 1" class="none__rating"> star_outlined</mat-icon>
+      </span>
+    </p>
   </div>
 
 </div>

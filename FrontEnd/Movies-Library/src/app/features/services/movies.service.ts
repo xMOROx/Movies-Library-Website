@@ -54,24 +54,37 @@ export class MoviesService {
 
   constructor(private http: HttpClient, private auth: AuthService) { }
 
-  public getUserMovies(id: any): Observable<Array<AggregatedMovieModel>> {
+  public getUserMovies(id: any, all: boolean = false, page: any = 1): Observable<any> {
+    if (!this.auth.isAuthenticated().subscribe((res: any) => res)) {
+      return of(null);
+    }
+
     if (this.movieList) {
       return of(this.movieList);
     }
 
-    return this.http.get<Array<AggregatedMovieModel>>(`${this.endpoint}users/${id}/movies/details`, this.httpOptions).pipe(
-      tap((movies: Array<AggregatedMovieModel>) => {
-        this.movieList = movies;
-      })
-    );
+    return this.http.get(`${this.endpoint}users/${id}/movies?all=${all}&page=${page}`, this.httpOptions);
+  // .pipe(
+  //     tap((response: any) => {
+  //       if (all) {
+  //         this.movieList = response;
+  //       }
+  //     })
+  //   )
 
   }
 
   public getMovieDetailsForUser(movie_id: any, user_id: any): Observable<any> {
+    if (!this.auth.isAuthenticated().subscribe((res: any) => res)) {
+      return of(null);
+    }
     return this.http.get(`${this.endpoint}users/${user_id}/movies/${movie_id}/details`, this.httpOptions);
   }
 
   public addMovieToUser(movie_id: any, user_id: any, body: any): Observable<any> {
+    if (!this.auth.isAuthenticated().subscribe((res: any) => res)) {
+      return of(null);
+    }
     return this.http.put(`${this.endpoint}users/${user_id}/movies/${movie_id}`, body, this.httpOptions);
   }
 

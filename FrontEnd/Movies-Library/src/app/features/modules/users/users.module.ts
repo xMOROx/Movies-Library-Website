@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { UsersComponent } from './users.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ProfileComponent } from './components/profile/profile.component';
-import { UserMoviesComponent } from './components/user-movies/user-movies.component';
 import { ContentModule } from '../content/content.module';
 import { UsersRoutesModule } from './users.routes.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -17,7 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
     ContentModule,
 
   ],
-  exports: [UsersComponent, ProfileComponent, UserMoviesComponent],
-  declarations: [UsersComponent, ProfileComponent, UserMoviesComponent]
+  exports: [UsersComponent, ProfileComponent],
+  declarations: [UsersComponent, ProfileComponent]
 })
 export class UsersModule { }

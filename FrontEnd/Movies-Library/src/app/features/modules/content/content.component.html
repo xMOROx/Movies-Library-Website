@@ -1,20 +1,28 @@
 <main class="contents container">
 
-  <h2>All {{contentType | titlecase}} #NowPlaying</h2>
+  <h2>All {{contentType | titlecase}} #{{filterType}}</h2>
 
   <div class="contents__container">
 
     <mat-card class="contents__filter">
-      <div>Filter by</div>
-      <button mat-raised-button color="primary" aria-label="Set Now Playing filter" disabled>Now Playing</button>
-      <button mat-raised-button color="primary" aria-label="Set Upcoming filter" disabled>Upcoming</button>
-      <button mat-raised-button color="primary" aria-label="Set Popular filter" disabled>Popular</button>
+      <mat-form-field>
+        <mat-label>Search movies</mat-label>
+        <input type="text" #box matInput (keyup.enter)="search(box.value)">
+        <mat-icon class="contents__filter__search_button" (click)="search(box.value)">search</mat-icon>
+      </mat-form-field>
+
+<!--      <div>Filter by</div>-->
+      <button mat-raised-button color="primary" aria-label="Set Now Playing filter" (click)="applyFilter('Now Playing')">Now Playing</button>
+      <button mat-raised-button color="primary" aria-label="Set Upcoming filter" (click)="applyFilter('Upcoming')">Upcoming</button>
+      <button mat-raised-button color="primary" aria-label="Set Popular filter" (click)="applyFilter('Popular')">Popular</button>
+      <button mat-raised-button color="primary" aria-label="Set Popular filter" (click)="applyFilter('Trending')">Trending</button>
+
     </mat-card>
 
     <div class="contents__right-side">
 
       <div class="contents__list">
-        <app-movie-card *ngFor="let content of nowPlaying" [model]="content" [isMovie]="contentType === 'movies'">
+        <app-movie-card *ngFor="let content of results" [model]="content" [isMovie]="contentType === 'movies'">
         </app-movie-card>
       </div>
 
