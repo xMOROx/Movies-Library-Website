@@ -20,6 +20,7 @@ from ..requests.movie_db_requests import MovieRequests
 from rest_framework.serializers import ValidationError as DRFValidationError
 from django.core.exceptions import ValidationError as DjangoValidationError
 
+
 @api_view(["GET", "POST", "DELETE"])
 @permission_classes([IsAuthenticated & IsOwner])
 @authentication_classes([JWTAuthentication])

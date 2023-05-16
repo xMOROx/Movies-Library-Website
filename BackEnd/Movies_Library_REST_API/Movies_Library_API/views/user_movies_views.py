@@ -139,7 +139,7 @@ def list_of_details_for_movies_per_user(request, user_id):
             return pagination.get_paginated_response(serializer.data)
 
         serializer = Movie_UserSerializer(data, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
@@ -168,4 +168,4 @@ def details_of_movie_for_user(request, user_id, movie_id):
             )
 
         serializer_movie_user = Movie_UserSerializer(data)
-        return JsonResponse(serializer_movie_user.data)
+        return JsonResponse(serializer_movie_user.data, safe=False, status=status.HTTP_200_OK)

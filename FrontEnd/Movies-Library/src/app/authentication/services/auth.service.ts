@@ -130,4 +130,34 @@ export class AuthService {
   public isAuthenticated(): Observable<boolean> {
     return this.isAuth.asObservable();
   }
+
+  public changePassword(id: number, body: any): any {
+    let api = `${this.endpoint}/users/${id}/change-password`;
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      "Authorization": "Bearer " + localStorage.getItem('access_token')
+    });
+
+    this.httpOptions = {
+      headers: headers
+    };
+
+    return this.http.put(api, body, this.httpOptions);
+  }
+
+  public updateProfile(id: number, body: any): any {
+    let api = `${this.endpoint}/users/${id}`;
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      "Authorization": "Bearer " + localStorage.getItem('access_token')
+    });
+
+    this.httpOptions = {
+      headers: headers
+    };
+
+    return this.http.put(api, body, this.httpOptions);
+  }
 }

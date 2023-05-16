@@ -34,33 +34,37 @@
       signupForm.controls['email'].hasError('incorrect') ||
       (signupForm.controls['last_name'].hasError('required') && signupForm.controls['last_name'].dirty) ||
       (signupForm.controls['first_name'].hasError('required') && signupForm.controls['first_name'].dirty)
-      || signupForm.controls['password'].hasError('minlength') || signupForm.controls['password'].hasError('maxlength') 
+      || signupForm.controls['password'].hasError('incorrect')
       || signupForm.controls['email'].hasError('conflict')
     ">
       <mat-error *ngIf="signupForm.controls['email'].hasError('required') && signupForm.controls['email'].dirty">
+        <mat-icon>error</mat-icon>
         Email is required
       </mat-error>
       <mat-error *ngIf="signupForm.controls['password'].hasError('required') && signupForm.controls['password'].dirty">
+        <mat-icon>error</mat-icon>
         Password is required
       </mat-error>
-      <mat-error *ngIf="signupForm.controls['password'].hasError('minlength')">
-        Password must be at least 8 characters long
-      </mat-error>
-      <mat-error *ngIf="signupForm.controls['password'].hasError('maxlength')">
-        Password cannot be more than 40 characters long
+      <mat-error *ngIf="signupForm.controls['password'].hasError('incorrect')">
+        <mat-icon>error</mat-icon>
+        Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, one special character.
       </mat-error>
       <mat-error *ngIf="signupForm.controls['email'].hasError('incorrect')">
+        <mat-icon>error</mat-icon>
         Email is invalid
       </mat-error>
       <mat-error *ngIf="signupForm.controls['email'].hasError('conflict')">
+        <mat-icon>error</mat-icon>
         Email already exists
       </mat-error>
       <mat-error
         *ngIf="signupForm.controls['first_name'].hasError('required') && signupForm.controls['first_name'].dirty">
+        <mat-icon>error</mat-icon>
         First name is required
       </mat-error>
       <mat-error
         *ngIf="signupForm.controls['last_name'].hasError('required') && signupForm.controls['last_name'].dirty">
+        <mat-icon>error</mat-icon>
         Last name is required
       </mat-error>
     </div>

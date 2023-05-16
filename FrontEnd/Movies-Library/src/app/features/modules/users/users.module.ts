@@ -6,6 +6,9 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ContentModule } from '../content/content.module';
 import { UsersRoutesModule } from './users.routes.module';
 import { HttpClientModule } from '@angular/common/http';
+import { EditProfileComponent } from "./components/edit-profile/edit-profile.component";
+import { ReactiveFormsModule } from "@angular/forms";
+import { ChangePasswordComponent } from './components/ChangePassword/ChangePassword.component';
 
 @NgModule({
   imports: [
@@ -14,9 +17,10 @@ import { HttpClientModule } from '@angular/common/http';
     UsersRoutesModule,
     HttpClientModule,
     ContentModule,
+    ReactiveFormsModule,
 
   ],
   exports: [UsersComponent, ProfileComponent],
-  declarations: [UsersComponent, ProfileComponent]
+  declarations: [UsersComponent, ProfileComponent, EditProfileComponent, ChangePasswordComponent]
 })
 export class UsersModule { }

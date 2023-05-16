@@ -32,28 +32,32 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void { }
 
   public registerUser(): void {
-    if (this.validateService.validateEmail(this.signupForm.value.email)) {
-      this.authService.singUp(this.signupForm.value)
-        .subscribe(
-          {
-            next: (res) => {
-              if (res.status == 201) {
-                this.signupForm.reset();
-                this.router.navigate(['/']);
-                this.dialogRef.close();
-              } else if (res.status == 409) {
-
-              }
-            },
-            error: (err) => {
-              this.handleError(err);
-            }
-          }
-
-        );
-    } else {
-      this.signupForm.controls['email'].setErrors({ 'incorrect': true });
+    if(!this.validateService.validatePassword(this.signupForm.value.password)) {
+      this.signupForm.controls['password'].setErrors({ 'incorrect': true });
+      return;
     }
+
+    if (!this.validateService.validateEmail(this.signupForm.value.email)) {
+      this.signupForm.controls['email'].setErrors({ 'incorrect': true });
+      return;
+    }
+
+    this.authService.singUp(this.signupForm.value)
+      .subscribe(
+        {
+          next: (res) => {
+            if (res.status == 201) {
+              this.signupForm.reset();
+              this.router.navigate(['/']);
+              this.dialogRef.close();
+            }
+          },
+          error: (err) => {
+            this.handleError(err);
+          }
+        }
+
+      );
   }
 
   public handleError(error: HttpErrorResponse): any {
