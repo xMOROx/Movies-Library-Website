@@ -23,12 +23,12 @@ export class TrashService {
     return this.http.get(`${this.endpoint}users/${user_id}/movies/${movie_id}` ,this.httpOptions);
   }
 
-  public getMoviesForUser(user_id: any): Observable<any> {
+  public getMoviesForUser(user_id: any, page: any = 1, all:  boolean = false): Observable<any> {
     if (this.movies) {
       return of(this.movies);
     }
 
-    return this.http.get<Array<number>>(`${this.endpoint}users/${user_id}/movies`, this.httpOptions).pipe(
+    return this.http.get<Array<number>>(`${this.endpoint}users/${user_id}/movies?all=${all}&page=${page}`, this.httpOptions).pipe(
       tap(movies => {
         this.movies = movies;
       })

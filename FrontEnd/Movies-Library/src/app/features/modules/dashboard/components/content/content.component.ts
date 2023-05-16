@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {PaginationModel} from "../../../content/models/pagination.model";
 import {MoviesService} from "../../../../services/movies.service";
 import {Router} from "@angular/router";
@@ -13,16 +13,17 @@ import {filter} from "rxjs/operators";
   styleUrls: ['./content.component.scss']
 })
 export class ContentComponent implements OnInit {
-  public contentType: string = '';
+  public contentType: string = "";
   public content: Array<PaginationModel> = [];
   public totalResults: any;
   public filterType: string = 'all';
   private userId: any;
-  constructor(    private moviesService: MoviesService,
-                  private storage: StorageService,
-                  private auth: AuthService,
-                  private trashService: TrashService,
-                  private router: Router) {
+
+  constructor(private moviesService: MoviesService,
+              private storage: StorageService,
+              private auth: AuthService,
+              private trashService: TrashService,
+              private router: Router) {
     this.contentType = this.router.url.split('/')[2];
   }
 
@@ -38,7 +39,7 @@ export class ContentComponent implements OnInit {
     }
   }
 
-  public getMoviesForUser(filter:string = "all") {
+  public getMoviesForUser(filter: string = "all") {
     this.moviesService.getUserMovies(this.userId, false).subscribe(
       {
         next: (response: any) => {
@@ -48,7 +49,7 @@ export class ContentComponent implements OnInit {
           this.content = response.results;
           //TODO: total results
           this.totalResults = response.count;
-          this.content =  this.filterMoviesByType(this.content, filter);
+          this.content = this.filterMoviesByType(this.content, filter);
           // console.log(this.content)
         },
         error: (_: any) => {

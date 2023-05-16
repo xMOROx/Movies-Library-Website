@@ -22,12 +22,15 @@
       signInForm.controls['email'].hasError('incorrect')
     ">
       <mat-error *ngIf="signInForm.controls['email'].hasError('required') && signInForm.controls['email'].dirty">
+        <mat-icon>error</mat-icon>
         Email is required
       </mat-error>
       <mat-error *ngIf="signInForm.controls['password'].hasError('required') && signInForm.controls['password'].dirty">
+        <mat-icon>error</mat-icon>
         Password is required
       </mat-error>
       <mat-error *ngIf="signInForm.controls['email'].hasError('incorrect')">
+        <mat-icon>error</mat-icon>
         Email is invalid
       </mat-error>
     </div>
