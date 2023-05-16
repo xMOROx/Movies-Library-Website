@@ -128,7 +128,7 @@ export class MoviesService {
     });
     genres = genres.slice(0, -1);
 
-    return this.http.get(`${this.endpoint}movies/genres/test?language=${this.language}&page=${page}&genres=${genres}`, this.httpOptions);
+    return this.http.get(`${this.endpoint}movies/with?genres=${genres}&page=${page}&language=${this.language}`, this.httpOptions);
   }
 
   public getMovieCredits(id: string): Observable<any> {
