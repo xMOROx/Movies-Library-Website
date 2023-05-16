@@ -12,7 +12,7 @@ import { ActorsService } from '../../services/actors.service';
 export class ActorComponent implements OnInit {
   public actor: ActorModel | null = null;
   public movies: Array<MovieModel> = [];
-  public externalIds: Array<any> = [];
+  public externalIds: any;
   constructor(
     private router: ActivatedRoute,
     private actorsService: ActorsService
