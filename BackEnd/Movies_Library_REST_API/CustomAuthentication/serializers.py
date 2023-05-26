@@ -2,8 +2,8 @@ import datetime
 
 from django.contrib.auth import password_validation
 from rest_framework import serializers
-from .models import User
-from .validators import validate_email, validate_email_for_other_users
+from CustomAuthentication.models import User
+from CustomAuthentication.validators import validate_email, validate_email_for_other_users
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
@@ -83,6 +83,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
 class AdminUserSerializer(UserSerializer):
     class Meta:
         model = User
@@ -134,13 +135,14 @@ class ChangePasswordSerializer(serializers.Serializer):
         user = self.context['request'].user
         if not user.check_password(value):
             raise serializers.ValidationError(
-                'Your old password was entered incorrectly. Please enter it again.'
+                {'message': 'Your old password was entered incorrectly. Please enter it again.'}
             )
         return value
 
     def validate(self, data):
+        self.validate_old_password(data['password'])
         if data['new_password'] != data['confirm_password']:
-            raise serializers.ValidationError({'confirm_password': "The two password fields didn't match."})
+            raise serializers.ValidationError({'message': "The two password fields didn't match."})
         password_validation.validate_password(data['new_password'], self.context['request'].user)
         return data
 
