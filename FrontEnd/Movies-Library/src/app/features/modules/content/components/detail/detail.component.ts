@@ -121,7 +121,9 @@ export class DetailComponent implements OnInit {
   }
 
   public openDialog(): void {
-    const dialogRef = this.trailerDialog.open(this.matTrailerDialog, {});
+    const dialogRef = this.trailerDialog.open(this.matTrailerDialog, {
+      backdropClass: 'backdropBackground',
+    });
     dialogRef.disableClose = false;
   }
 
