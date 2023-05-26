@@ -1,6 +1,9 @@
+from CustomAuthentication.models import User
+from CustomAuthentication.permissions import IsOwner
+from Movies_Library_API.serializers import MovieTrashSerializer
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.http.response import JsonResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
-
 from rest_framework import status
 from rest_framework.decorators import (
     api_view,
@@ -9,16 +12,11 @@ from rest_framework.decorators import (
 )
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.serializers import ValidationError as DRFValidationError
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from ..models.movie_lib_models import Movie, MovieTrash
-from Movies_Library_API.serializers import MovieTrashSerializer
-from CustomAuthentication.models import User
-from CustomAuthentication.permissions import IsOwner
-
-from ..requests.movie_requests import MovieRequests
-from rest_framework.serializers import ValidationError as DRFValidationError
-from django.core.exceptions import ValidationError as DjangoValidationError
+from ..requests.movie_db_requests import MovieRequests
 
 
 @api_view(["GET", "POST", "DELETE"])
@@ -30,7 +28,8 @@ def crud_for_movie_inside_trash(request, user_id, movie_id):
             _ = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-                {"message": "This user does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "This user does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         try:
@@ -38,14 +37,14 @@ def crud_for_movie_inside_trash(request, user_id, movie_id):
         except Movie.DoesNotExist:
             return JsonResponse(
                 {"message": "This movie does not exist"},
-                status=status.HTTP_404_NOT_FOUND
+                status=status.HTTP_404_NOT_FOUND,
             )
         try:
             data = MovieTrash.objects.get(user=user_id, movie=movie_id)
         except MovieTrash.DoesNotExist:
             return JsonResponse(
                 {"message": "This movie is not in trash"},
-                status=status.HTTP_404_NOT_FOUND
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         serializer = MovieTrashSerializer(data)
@@ -55,7 +54,8 @@ def crud_for_movie_inside_trash(request, user_id, movie_id):
             user = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-                {"message": "This user does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "This user does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         movie_requests = MovieRequests()
@@ -67,7 +67,7 @@ def crud_for_movie_inside_trash(request, user_id, movie_id):
             if movie_api is None:
                 return JsonResponse(
                     {"message": "This movie does not exist"},
-                    status=status.HTTP_404_NOT_FOUND
+                    status=status.HTTP_404_NOT_FOUND,
                 )
             try:
                 movie = Movie.objects.create(
@@ -86,13 +86,10 @@ def crud_for_movie_inside_trash(request, user_id, movie_id):
             _ = MovieTrash.objects.get(user=user_id, movie=movie_id)
             return JsonResponse(
                 {"message": "Movie already in trash"},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
         except MovieTrash.DoesNotExist:
-            movie_trash = MovieTrash.objects.create(
-                user=user,
-                movie=movie
-            )
+            movie_trash = MovieTrash.objects.create(user=user, movie=movie)
             movie_trash.save()
 
             serializer = MovieTrashSerializer(movie_trash)
@@ -105,20 +102,20 @@ def crud_for_movie_inside_trash(request, user_id, movie_id):
             _ = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-                {"message": "This user does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "This user does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
             )
         try:
             _ = Movie.objects.get(pk=movie_id)
         except Movie.DoesNotExist:
             return JsonResponse(
-                {"message": "This movie does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "This movie does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         movie_trash = get_object_or_404(MovieTrash, user=user_id, movie=movie_id)
         movie_trash.delete()
-        return JsonResponse(
-            None, status=status.HTTP_204_NO_CONTENT, safe=False
-        )
+        return JsonResponse(None, status=status.HTTP_204_NO_CONTENT, safe=False)
 
 
 @api_view(["GET"])
@@ -130,12 +127,17 @@ def get_all_movies(request, user_id):
             _ = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-                {"message": "This user does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "This user does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
             )
+
         show_all = "true" == request.GET.get("all", 1)
-        data = get_list_or_404(MovieTrash.objects.order_by("-movie__title"), user=user_id)
+        data = get_list_or_404(
+            MovieTrash.objects.order_by("-movie__title"), user=user_id
+        )
         pagination = PageNumberPagination()
         page = pagination.paginate_queryset(data, request)
+
         if page is not None and not show_all:
             serializer = MovieTrashSerializer(page, many=True)
             return pagination.get_paginated_response(serializer.data)

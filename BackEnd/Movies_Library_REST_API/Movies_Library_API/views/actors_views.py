@@ -15,7 +15,7 @@ def get_actor_details(_, actor_id):
     actor_details = actor_request.get_actor_details(actor_id)
     if actor_details is None:
         return JsonResponse(
-            {"message": "Actor not found"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "Actor not found."}, status=status.HTTP_404_NOT_FOUND
         )
     return JsonResponse(actor_details, status=status.HTTP_200_OK)
 
@@ -27,7 +27,7 @@ def get_actor_external_data(_, actor_id):
     actor_external_data = actor_request.get_actor_external_data(actor_id)
     if actor_external_data is None:
         return JsonResponse(
-            {"message": "Actor not found"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "Actor not found."}, status=status.HTTP_404_NOT_FOUND
         )
     return JsonResponse(actor_external_data, status=status.HTTP_200_OK)
 
@@ -39,7 +39,7 @@ def get_actor_cast(_, actor_id):
     actor_cast = actor_request.get_person_cast(actor_id)
     if actor_cast is None:
         return JsonResponse(
-            {"message": "Actor not found"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "Actor not found."}, status=status.HTTP_404_NOT_FOUND
         )
     return JsonResponse(actor_cast, status=status.HTTP_200_OK)
 
@@ -58,7 +58,7 @@ def get_trending_actors(request):
 
     if trending_actors is None:
         return JsonResponse(
-            {"message": "Trending actors not found"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "Trending actors not found."}, status=status.HTTP_404_NOT_FOUND
         )
     return JsonResponse(trending_actors, status=status.HTTP_200_OK)
 
@@ -74,6 +74,6 @@ def get_actors(request):
 
     if actors is None:
         return JsonResponse(
-            {"message": "Actors not found"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "Actors not found."}, status=status.HTTP_404_NOT_FOUND
         )
     return JsonResponse(actors, status=status.HTTP_200_OK)
