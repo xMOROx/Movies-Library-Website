@@ -13,8 +13,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from ..models.movie_lib_models import Movie, MovieTrash
 from Movies_Library_API.serializers import MovieTrashSerializer
-from Authentication.models import User
-from Authentication.permissions import IsOwner
+from CustomAuthentication.models import User
+from CustomAuthentication.permissions import IsOwner
 
 from ..requests.movie_db_requests import MovieRequests
 from rest_framework.serializers import ValidationError as DRFValidationError

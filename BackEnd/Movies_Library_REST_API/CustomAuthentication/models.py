@@ -1,19 +1,18 @@
 from django.db import models
 
-
 from django.contrib.auth import models as auth_models
 
 
 class UserManager(auth_models.BaseUserManager):
     def create_user(
-        self,
-        email: str,
-        first_name: str,
-        last_name: str,
-        password: str = None,
-        is_active: bool = True,
-        is_staff: bool = False,
-        is_superuser: bool = False,
+            self,
+            email: str,
+            first_name: str,
+            last_name: str,
+            password: str = None,
+            is_active: bool = True,
+            is_staff: bool = False,
+            is_superuser: bool = False,
     ) -> "User":
         if not email:
             raise ValueError("Users must have an email address")
@@ -39,7 +38,7 @@ class UserManager(auth_models.BaseUserManager):
         return user
 
     def create_superuser(
-        self, email: str, first_name: str, last_name: str, password: str = None
+            self, email: str, first_name: str, last_name: str, password: str = None
     ) -> "User":
         user = self.create_user(
             email,
@@ -55,7 +54,7 @@ class UserManager(auth_models.BaseUserManager):
         return user
 
     def create_staffuser(
-        self, email: str, first_name: str, last_name: str, password: str = None
+            self, email: str, first_name: str, last_name: str, password: str = None
     ) -> "User":
         user = self.create_user(
             email,
@@ -70,6 +69,9 @@ class UserManager(auth_models.BaseUserManager):
 
         return user
 
+    class Meta:
+        app_label = 'CustomAuthentication'
+
 
 class User(auth_models.AbstractUser):
     first_name = models.CharField(verbose_name="First Name", max_length=255)
@@ -78,7 +80,6 @@ class User(auth_models.AbstractUser):
     password = models.CharField(max_length=255)
     is_banned = models.BooleanField(default=False)
     username = None
-
     objects = UserManager()
 
     USERNAME_FIELD = "email"
@@ -86,3 +87,6 @@ class User(auth_models.AbstractUser):
 
     def __str__(self):
         return self.email
+
+    class Meta:
+        app_label = 'CustomAuthentication'
