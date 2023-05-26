@@ -1,4 +1,10 @@
-from rest_framework import views, response, exceptions, permissions
+from CustomAuthentication.models import User
+from CustomAuthentication.permissions import IsOwner
+from CustomAuthentication.serializers import UserSerializer, ChangePasswordSerializer, UserUpdateSerializer
+from CustomAuthentication.validators import validate_email_for_other_users
+from django.core.exceptions import ValidationError as DjangoValidationError
+from rest_framework import views, response, permissions
+from rest_framework.exceptions import ValidationError
 from rest_framework.generics import CreateAPIView, UpdateAPIView
 from rest_framework.status import (
     HTTP_201_CREATED,
@@ -8,16 +14,6 @@ from rest_framework.status import (
 
 )
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-from .permissions import IsOwner
-from .serializers import UserSerializer, ChangePasswordSerializer, UserUpdateSerializer
-from .models import User
-
-from rest_framework.exceptions import ValidationError
-from django.core.exceptions import ValidationError as DjangoValidationError
-
-
-from .validators import validate_email_for_other_users
 
 
 class UserRegisterView(CreateAPIView):
@@ -140,9 +136,9 @@ class ChangePasswordView(UpdateAPIView):
 
         try:
             serializer.is_valid(raise_exception=True)
-        except ValidationError:
+        except ValidationError as e:
             return response.Response(
-                {"message": "Passwords does not match!", "status": HTTP_409_CONFLICT, "errors": serializer.errors},
+                {"message": e.detail["message"][0], "status": HTTP_409_CONFLICT, "errors": serializer.errors},
                 status=HTTP_409_CONFLICT,
             )
 

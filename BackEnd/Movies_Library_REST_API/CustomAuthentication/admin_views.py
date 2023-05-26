@@ -1,18 +1,15 @@
-from rest_framework import views, response, exceptions, permissions
-from rest_framework.generics import CreateAPIView, UpdateAPIView
+from CustomAuthentication.models import User
+from CustomAuthentication.serializers import AdminUserSerializer, AdminChangePasswordSerializer
+from rest_framework import views, response, permissions
+from rest_framework.exceptions import ValidationError
+from rest_framework.generics import UpdateAPIView
 from rest_framework.status import (
-    HTTP_201_CREATED,
     HTTP_409_CONFLICT,
     HTTP_204_NO_CONTENT,
     HTTP_400_BAD_REQUEST, HTTP_200_OK,
 
 )
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-from .serializers import AdminUserSerializer, AdminChangePasswordSerializer
-from .models import User
-
-from rest_framework.exceptions import ValidationError
 
 
 class UserListView(views.APIView):

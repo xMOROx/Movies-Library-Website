@@ -1,15 +1,13 @@
+from Movies_Library_API.serializers import MovieSerializer
 from django.http.response import JsonResponse
 from rest_framework import status
-
-from ..models.movie_lib_models import Movie
-from Movies_Library_API.serializers import MovieSerializer
 from rest_framework.decorators import (
     api_view,
     permission_classes,
-    authentication_classes,
 )
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
+
+from ..models.movie_lib_models import Movie
 from ..requests.movie_db_requests import MovieRequests
 
 

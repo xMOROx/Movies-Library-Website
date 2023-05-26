@@ -1,12 +1,10 @@
-from . import views
-from . import admin_views
+from CustomAuthentication import admin_views
+from CustomAuthentication import views
 from django.urls import re_path
-
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-
 
 urlpatterns = [
     re_path(r"^register-user$", views.UserRegisterView.as_view(), name="register"),
