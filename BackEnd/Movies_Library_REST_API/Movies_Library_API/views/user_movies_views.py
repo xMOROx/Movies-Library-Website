@@ -1,24 +1,23 @@
+from CustomAuthentication.models import User
+from CustomAuthentication.permissions import IsOwner
+from Movies_Library_API.serializers import Movie_UserSerializer
+from django.core.exceptions import ValidationError as DjangoValidationError, ObjectDoesNotExist, MultipleObjectsReturned
 from django.http.response import JsonResponse
-
 from rest_framework import status
 from rest_framework.decorators import (
     api_view,
     permission_classes,
     authentication_classes,
 )
-from rest_framework import views
 from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.serializers import ValidationError as DRFValidationError
-from django.core.exceptions import ValidationError as DjangoValidationError, ObjectDoesNotExist, MultipleObjectsReturned
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from ..models.movie_lib_models import Movie, Movie_User
+from ..recommendations_algorithm import collaborative_filtering_recommendation
 from ..requests.movie_db_requests import MovieRequests
-from Movies_Library_API.serializers import Movie_UserSerializer
-from Authentication.models import User
-from Authentication.permissions import IsOwner
 
 
 @api_view(["PUT"])
@@ -111,7 +110,6 @@ def add_movie_to_user(request, user_id, movie_id):
             status=movie_user_serializer.validated_data["status"],
         )
 
-
         movie_user.save()
 
         return JsonResponse(
@@ -169,3 +167,21 @@ def details_of_movie_for_user(request, user_id, movie_id):
 
         serializer_movie_user = Movie_UserSerializer(data)
         return JsonResponse(serializer_movie_user.data, safe=False, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated & IsOwner])
+@authentication_classes([JWTAuthentication])
+def recommendations(request, user_id):
+    if request.method == "GET":
+        try:
+            _ = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return JsonResponse(
+                {"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        movies = collaborative_filtering_recommendation(user_id)
+        movies_serialized = Movie_UserSerializer(movies, many=True)
+        data = {"movies": movies_serialized.data}
+        return JsonResponse(data, safe=False, status=status.HTTP_200_OK)

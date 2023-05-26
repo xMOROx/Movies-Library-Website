@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from Authentication.models import User
+from CustomAuthentication.models import User
 
 
 class Movie(models.Model):

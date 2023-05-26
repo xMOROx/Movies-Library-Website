@@ -4,8 +4,8 @@ from rest_framework.status import (
     HTTP_204_NO_CONTENT,
     HTTP_200_OK, HTTP_404_NOT_FOUND,
 )
-from Authentication.serializers import AdminUserSerializer
-from Authentication.models import User
+from CustomAuthentication.serializers import AdminUserSerializer
+from CustomAuthentication.models import User
 
 
 class AdminUserListView(views.APIView):

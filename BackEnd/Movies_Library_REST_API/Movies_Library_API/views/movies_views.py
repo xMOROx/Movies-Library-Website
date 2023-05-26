@@ -1,15 +1,13 @@
+from Movies_Library_API.serializers import MovieSerializer
 from django.http.response import JsonResponse
 from rest_framework import status
-
-from ..models.movie_lib_models import Movie
-from Movies_Library_API.serializers import MovieSerializer
 from rest_framework.decorators import (
     api_view,
     permission_classes,
-    authentication_classes,
 )
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
+
+from ..models.movie_lib_models import Movie
 from ..requests.movie_db_requests import MovieRequests
 
 
@@ -240,10 +238,13 @@ def movie_genres(request):
 def movies_by_genre(request):
     if request.method == "GET":
         genre_ids = request.GET.get("genres", "")
-        if genre_ids == "":
-            popular_movies(request)
-        page = request.GET.get("page")
+        page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
+
+        if genre_ids == "":
+            data = MovieRequests().get_popular_movies(page, language)
+            return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
+
         data = MovieRequests().get_movies_by_genre(genre_ids, page, language)
 
         if data is not None:
