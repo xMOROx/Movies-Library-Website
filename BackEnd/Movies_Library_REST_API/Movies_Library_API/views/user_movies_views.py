@@ -16,10 +16,8 @@ from rest_framework.serializers import ValidationError as DRFValidationError
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from ..models.movie_lib_models import Movie, Movie_User
+from ..recommendations_algorithm import collaborative_filtering_recommendation
 from ..requests.movie_requests import MovieRequests
-from Movies_Library_API.serializers import Movie_UserSerializer
-from Authentication.models import User
-from Authentication.permissions import IsOwner
 
 
 @api_view(["PUT"])
