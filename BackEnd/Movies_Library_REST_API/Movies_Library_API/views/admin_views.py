@@ -25,11 +25,11 @@ class AdminUserUpdateView(views.APIView):
     serializer_class = AdminUserSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
-    def patch(self, request, user_id, format=None):
+    def patch(self, request, user_id):
         if "is_banned" in request.data:
             return response.Response(
                 {
-                    "message": "You can't change is_banned field from here. Use /api/v1/auth/users/{id}/ban/ endpoint"
+                    "message": "You can't change is_banned field from here. Use /api/v1/auth/users/{id}/ban/ endpoint."
                 },
                 status=HTTP_400_BAD_REQUEST,
             )
@@ -38,7 +38,7 @@ class AdminUserUpdateView(views.APIView):
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
             return response.Response(
-                {"message": "User does not exist", "status": HTTP_404_NOT_FOUND, "id": user_id},
+                {"message": "User does not exist.", "status": HTTP_404_NOT_FOUND, "id": user_id},
                 status=HTTP_404_NOT_FOUND,
             )
 
@@ -53,7 +53,10 @@ class AdminUserUpdateView(views.APIView):
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            raise exceptions.NotFound("User does not exist")
+            return response.Response(
+                {"message": "User does not exist.", "status": HTTP_404_NOT_FOUND, "id": user_id},
+                status=HTTP_404_NOT_FOUND,
+            )
 
         user.delete()
 
@@ -68,20 +71,14 @@ class BanUserView(views.APIView):
     def patch(self, request, user_id):
         if "is_banned" not in request.data:
             return response.Response(
-                {"message": "You should provide is_banned field"},
-                status=HTTP_400_BAD_REQUEST,
-            )
-
-        if not isinstance(request.data["is_banned"], bool):
-            return response.Response(
-                {"message": "is_banned field should be boolean"},
+                {"message": "You should provide is_banned field."},
                 status=HTTP_400_BAD_REQUEST,
             )
 
         if len(request.data) > 1:
             return response.Response(
                 {
-                    "message": "You can't change other fields from here. Use /api/v1/auth/users/{id}/ endpoint"
+                    "message": "You can't change other fields from here. Use /api/v1/auth/users/{id}/ endpoint."
                 },
                 status=HTTP_400_BAD_REQUEST,
             )
@@ -90,16 +87,18 @@ class BanUserView(views.APIView):
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
             return response.Response(
-                {"message": "User does not exist", "status": HTTP_404_NOT_FOUND, "id": user_id},
+                {"message": "User does not exist.", "status": HTTP_404_NOT_FOUND, "id": user_id},
                 status=HTTP_404_NOT_FOUND,
             )
 
-        if request.data["is_banned"] == user.is_banned:
+        is_banned = False if request.data["is_banned"] == 'False' else bool(request.data["is_banned"])
+
+        if is_banned == user.is_banned:
             return response.Response(
                 {
-                    "message": "User is already banned"
-                    if request.data["is_banned"]
-                    else "User is already unbanned"
+                    "message": "User is already banned."
+                    if is_banned
+                    else "User is already unbanned."
                 },
                 status=HTTP_400_BAD_REQUEST,
             )

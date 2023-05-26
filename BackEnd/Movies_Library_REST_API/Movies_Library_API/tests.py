@@ -1,10 +1,8 @@
+from CustomAuthentication.models import User
 from django.db import transaction
-from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
-from rest_framework_simplejwt.tokens import AccessToken
 
 
 # ===================================== Actors =========================================
@@ -337,3 +335,197 @@ class SearchMoviesViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         response_data = response.json()
         self.assertEqual(response_data["message"], "The query is required.")
+
+
+# ======================== Admin view ========================
+class AdminUserListViewTests(APITestCase):
+    def setUp(self):
+        self.superuser = User.objects.create_superuser(
+            email="admin@localhost",
+            password="admin123",
+            first_name="Admin",
+            last_name="Admin",
+        )
+        self.client.login(email="admin@localhost", password="admin123")
+
+    @transaction.atomic
+    def test_admin_user_list_view(self):
+        self.client.force_authenticate(user=self.superuser)
+        url = reverse("admin users")
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_admin_user_list_view_unauthorized(self):
+        self.client.logout()
+        url = reverse("admin users")
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class AdminUserUpdateViewTests(APITestCase):
+    def setUp(self):
+        self.superuser = User.objects.create_superuser(
+            email="admin@localhost",
+            password="admin123",
+            first_name="Admin",
+            last_name="Admin",
+        )
+        self.user = User.objects.create_user(
+            email="user@localhost",
+            password="user123",
+            first_name="User",
+            last_name="User",
+        )
+        self.client.login(email="admin@localhost", password="admin123")
+        self.client.force_authenticate(user=self.superuser)
+
+    @transaction.atomic
+    def test_admin_user_update_view(self):
+        user_id = self.user.id
+        url = reverse("admin update user", kwargs={"user_id": user_id})
+
+        response = self.client.patch(url, {"email": "new_email@example.com"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_admin_user_update_view_not_found(self):
+        user_id = 123456
+        url = reverse("admin update user", kwargs={"user_id": user_id})
+
+        response = self.client.patch(url, {"email": "new_email@example.com"})
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response_data = response.json()
+        self.assertEqual(response_data["message"], "User does not exist.")
+
+    @transaction.atomic
+    def test_admin_user_update_view_unauthorized(self):
+        self.client.logout()
+        user_id = self.user.id
+        url = reverse("admin update user", kwargs={"user_id": user_id})
+
+        response = self.client.patch(url, {"email": "new_email@example.com"})
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    @transaction.atomic
+    def test_admin_user_delete_view(self):
+        user_id = self.user.id
+        url = reverse("admin update user", kwargs={"user_id": user_id})
+
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    @transaction.atomic
+    def test_admin_user_delete_view_not_found(self):
+        user_id = 123456
+        url = reverse("admin update user", kwargs={"user_id": user_id})
+
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response_data = response.json()
+        self.assertEqual(response_data["message"], "User does not exist.")
+
+
+class BanUserViewTests(APITestCase):
+    def setUp(self):
+        self.admin = User.objects.create_superuser(
+            email="admin@localhost",
+            password="admin123",
+            first_name="Admin",
+            last_name="Admin",
+        )
+
+        self.unbanned_user = User.objects.create_user(
+            email="user@localhost",
+            password="user123",
+            first_name="User",
+            last_name="User",
+        )
+
+        self.banned_user = User.objects.create_user(
+            email="banned_user@localhost",
+            password="user123",
+            first_name="Banned",
+            last_name="User",
+            is_banned=True,
+        )
+
+        self.client.login(email="admin@localhost", password="admin123")
+        self.client.force_authenticate(user=self.admin)
+
+    @transaction.atomic
+    def test_ban_user_view(self):
+        user_id = self.unbanned_user.id
+        url = reverse("admin ban user", kwargs={"user_id": user_id})
+
+        response = self.client.patch(url, {"is_banned": True})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_ban_user_view_not_found(self):
+        user_id = 123456
+        url = reverse("admin ban user", kwargs={"user_id": user_id})
+
+        response = self.client.patch(url, {"is_banned": True})
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response_data = response.json()
+        self.assertEqual(response_data["message"], "User does not exist.")
+
+    @transaction.atomic
+    def test_ban_user_view_multiple_fields(self):
+        user_id = self.unbanned_user.id
+        url = reverse("admin ban user", kwargs={"user_id": user_id})
+
+        response = self.client.patch(url, {"is_banned": True, "email": "new_email@example.com"})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_data = response.json()
+        self.assertEqual(response_data["message"],
+                         "You can't change other fields from here. Use /api/v1/auth/users/{id}/ endpoint.")
+
+    @transaction.atomic
+    def test_ban_user_view_already_banned(self):
+        user_id = self.banned_user.id
+        url = reverse("admin ban user", kwargs={"user_id": user_id})
+
+        response = self.client.patch(url, {"is_banned": True})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response_data = response.json()
+        self.assertEqual(response_data["message"], "User is already banned.")
+
+    @transaction.atomic
+    def test_unban_user_view(self):
+        user_id = self.banned_user.id
+        url = reverse("admin ban user", kwargs={"user_id": user_id})
+
+        response = self.client.patch(url, {"is_banned": False})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_unban_user_view_already_unbanned(self):
+        user_id = self.unbanned_user.id
+        url = reverse("admin ban user", kwargs={"user_id": user_id})
+
+        response = self.client.patch(url, {"is_banned": False})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_data = response.json()
+        self.assertEqual(response_data["message"], "User is already unbanned.")
+
+# =============================================== Users views ==============================================================
+# =============================================== Movies trash views ==============================================================
