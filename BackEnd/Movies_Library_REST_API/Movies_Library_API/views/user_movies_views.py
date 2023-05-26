@@ -15,7 +15,7 @@ from rest_framework.serializers import ValidationError as DRFValidationError
 from django.core.exceptions import ValidationError as DjangoValidationError, ObjectDoesNotExist, MultipleObjectsReturned
 
 from ..models.movie_lib_models import Movie, Movie_User
-from ..requests.movie_db_requests import MovieRequests
+from ..requests.movie_requests import MovieRequests
 from Movies_Library_API.serializers import Movie_UserSerializer
 from Authentication.models import User
 from Authentication.permissions import IsOwner
@@ -73,7 +73,7 @@ def add_movie_to_user(request, user_id, movie_id):
         try:
             movie = Movie.objects.get(pk=movie_id)
         except Movie.DoesNotExist:
-            movie_api = movie_requests.get_movie_details(movie_id)
+            movie_api = movie_requests.get_details(movie_id)
 
             if movie_api is None:
                 return JsonResponse(

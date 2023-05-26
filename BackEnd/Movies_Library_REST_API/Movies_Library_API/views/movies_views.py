@@ -10,7 +10,7 @@ from rest_framework.decorators import (
 )
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from ..requests.movie_db_requests import MovieRequests
+from ..requests.movie_requests import MovieRequests
 
 
 @api_view(["GET"])
@@ -34,7 +34,7 @@ def movie_details_api(request, movie_id):
     if request.method == "GET":
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
-        data = MovieRequests().get_movie_details(movie_id, language, region)
+        data = MovieRequests().get_details(movie_id, language, region)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -52,7 +52,7 @@ def popular_movies(request):
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
 
-        data = MovieRequests().get_popular_movies(page, language, region)
+        data = MovieRequests().get_popular(page, language, region)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -71,7 +71,7 @@ def upcoming_movies(request):
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
 
-        data = MovieRequests().get_upcoming_movies(page, time_window, language, region)
+        data = MovieRequests().get_upcoming(page, time_window, language, region)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -88,7 +88,7 @@ def latest_movies(request):
         language = request.GET.get("language", "en-US")
         page = request.GET.get("page", 1)
         region = request.GET.get("region", "US")
-        data = MovieRequests().get_latest_movies(page, language, region)
+        data = MovieRequests().get_latest(page, language, region)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -121,8 +121,8 @@ def trending_movies(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        data = MovieRequests().get_trending_movie_by_media_and_time(
-            media_type, time_window, page, language, region
+        data = MovieRequests().get_trending_by_time(
+            time_window, page, language, region
         )
 
         if data is not None:
@@ -141,7 +141,7 @@ def now_playing_movies(request):
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
 
-        data = MovieRequests().get_now_playing_movies(page, language, region)
+        data = MovieRequests().get_now_playing(page, language, region)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -157,7 +157,7 @@ def movie_credits(request, movie_id):
     if request.method == "GET":
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
-        data = MovieRequests().get_movie_credits(movie_id, language, region)
+        data = MovieRequests().get_credits(movie_id, language, region)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -174,9 +174,7 @@ def movie_recommendations(request, movie_id):
         page = request.GET.get("page")
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
-        data = MovieRequests().get_movie_recommendations(
-            movie_id, page, language, region
-        )
+        data = MovieRequests().get_recommendations(movie_id, page, language, region)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -194,7 +192,7 @@ def similar_movies(request, movie_id):
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
 
-        data = MovieRequests().get_similar_movies(movie_id, page, language, region)
+        data = MovieRequests().get_similar(movie_id, page, language, region)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -210,7 +208,7 @@ def movie_provider(request, movie_id):
     if request.method == "GET":
         country_code = request.GET.get("CC", "US")
         language = request.GET.get("language", "en-US")
-        data = MovieRequests().get_movie_provider(movie_id, country_code, language)
+        data = MovieRequests().get_provider(movie_id, country_code, language)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -244,10 +242,10 @@ def movies_by_genre(request):
         language = request.GET.get("language", "en-US")
 
         if genre_ids == "":
-            data = MovieRequests().get_popular_movies(page, language)
+            data = MovieRequests().get_popular(page, language)
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
-        data = MovieRequests().get_movies_by_genre(genre_ids, page, language)
+        data = MovieRequests().get_content_by_genre(genre_ids, page, language)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -262,7 +260,7 @@ def movies_by_genre(request):
 def movie_videos(request, movie_id):
     if request.method == "GET":
         language = request.GET.get("language", "en-US")
-        data = MovieRequests().get_movie_videos(movie_id, language)
+        data = MovieRequests().get_videos(movie_id, language)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -287,7 +285,7 @@ def search_movies(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        data = MovieRequests().search_movie(query, page, language, region)
+        data = MovieRequests().search(query, page, language, region)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
