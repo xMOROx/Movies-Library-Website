@@ -9,7 +9,7 @@ import { LatestMoviesComponent } from './components/movie-views/latest-movies/la
 import { PopularMoviesComponent } from './components/movie-views/popular-movies/popular-movies.component';
 import { UpcomingMoviesComponent } from './components/movie-views/upcoming-movies/upcoming-movies.component';
 import { HttpClientModule } from '@angular/common/http';
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   imports: [
@@ -17,7 +17,8 @@ import {ReactiveFormsModule} from "@angular/forms";
     SharedModule,
     ContentRoutesModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule,
   ],
   exports: [
     ContentComponent,

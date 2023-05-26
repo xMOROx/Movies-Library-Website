@@ -19,7 +19,7 @@ export class ContentComponent implements OnInit {
   public results: Array<PaginationModel> = [];
   public filterType: string = 'Now Playing';
   public totalResults: any;
-  private query: string = '';
+  public query: string = '';
 
   categories = new FormControl('');
   categoryList?: Array<Genre>;
@@ -51,10 +51,9 @@ export class ContentComponent implements OnInit {
     }
   }
 
-  public searchByQuery(query: string) {
-    if (query !== '') {
+  public searchByQuery() {
+    if (this.query !== '') {
       this.categories.reset();
-      this.query = query;
       this.filterType = 'Search';
       this.paginator?.firstPage();
       if (this.contentType === 'movies') {
@@ -65,8 +64,10 @@ export class ContentComponent implements OnInit {
     }
   }
 
-  public searchByCategories() {
+  public searchByCategories(event: any) {
+    event.stopPropagation();
     if(this.categories.value !== '') {
+      this.query = '';
       this.filterType = 'Search by categories';
       this.paginator?.firstPage();
       if (this.contentType === 'movies') {
@@ -86,6 +87,7 @@ export class ContentComponent implements OnInit {
   }
 
   public applyFilter(filterValue: string) {
+    this.query = '';
     this.categories.reset();
     this.filterType = filterValue;
     this.paginator?.firstPage();
