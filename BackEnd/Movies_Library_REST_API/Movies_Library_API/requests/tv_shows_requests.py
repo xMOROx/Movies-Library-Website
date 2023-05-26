@@ -7,7 +7,7 @@ from .generic_requests import GenericRequests
 
 class TVShowsRequests(GenericRequests):
     _URL = settings.API_URL
-    media_type = 'TV'
+    media_type = 'tv'
 
     def get_airing_today(
             self, page: int = 1, language: str = "en-US", region: str = "US"
