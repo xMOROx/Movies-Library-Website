@@ -1,3 +1,4 @@
+from Movies_Library_API.requests.actors_requests import ActorsRequest
 from django.http.response import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import (
@@ -5,7 +6,6 @@ from rest_framework.decorators import (
     permission_classes,
 )
 from rest_framework.permissions import AllowAny
-from Movies_Library_API.requests.actors_requests import ActorsRequest
 
 
 @api_view(["GET"])
