@@ -63,7 +63,7 @@ export class ContentComponent implements OnInit {
   }
 
   public getMoviesFromTrash() {
-    this.trashService.getMoviesForUser(this.storage.getUser().id).subscribe(
+    this.trashService.getTrashForUser(this.storage.getUser().id, "movies").subscribe(
       {
         next: (response: any) => {
           if (!response) {

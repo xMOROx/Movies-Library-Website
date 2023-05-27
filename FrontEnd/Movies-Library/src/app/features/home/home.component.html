@@ -38,9 +38,9 @@
     <mat-tab-group (selectedTabChange)="tabTVChange($event)" [selectedIndex]="selectedTVTab" mat-align-tabs="end">
 
       <mat-tab *ngFor="let tab of tvShowsTabList" [label]="tab">
-        <swiper [config]="config" style="display: flex; flex-direction: column-reverse;">
+        <swiper [config]="config" style="display: flex; flex-direction: column-reverse;" [autoplay]="true">
           <ng-template swiperSlide *ngFor=" let tvShow of tvShowsList | slice:0:15">
-            <app-movie-card [model]="tvShow"></app-movie-card>
+            <app-movie-card [model]="tvShow" [isMovie]="false"></app-movie-card>
           </ng-template>
         </swiper>
       </mat-tab>

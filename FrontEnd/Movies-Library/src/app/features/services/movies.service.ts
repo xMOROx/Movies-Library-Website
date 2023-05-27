@@ -59,9 +59,9 @@ export class MoviesService {
       return of(null);
     }
 
-    if (this.movieList) {
-      return of(this.movieList);
-    }
+    // if (this.movieList) {
+    //   return of(this.movieList);
+    // }
 
     return this.http.get(`${this.endpoint}users/${id}/movies?all=${all}&page=${page}`, this.httpOptions);
   // .pipe(
@@ -105,8 +105,8 @@ export class MoviesService {
     return this.http.get(`${this.endpoint}movies/latest?page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
   }
 
-  public getTrendingMovies(page: number, mediaType: string, timeWindow: string): Observable<any> {
-    return this.http.get(`${this.endpoint}movies/trending?page=${page}&language=${this.language}&region=${this.region}&media=${mediaType}&time_window=${timeWindow}`, this.httpOptions);
+  public getTrendingMovies(page: number, timeWindow: string): Observable<any> {
+    return this.http.get(`${this.endpoint}movies/trending?page=${page}&language=${this.language}&region=${this.region}&time_window=${timeWindow}`, this.httpOptions);
   }
 
   public getNowPlayingMovies(page: number): Observable<any> {
