@@ -53,6 +53,19 @@
 
   }
 
+  &__seasons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 55%;
+  }
+
+  &__seasons div {
+    min-width: 20%;
+    margin: 1%;
+  }
+
+
   &__data, &__data-mobile {
 
     display: flex;
