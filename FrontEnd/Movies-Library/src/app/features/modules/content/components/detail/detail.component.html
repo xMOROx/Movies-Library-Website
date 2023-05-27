@@ -30,10 +30,10 @@
             </div>
 
             <div *ngIf="!isInTrash" class="trash--unchecked">
-              <mat-icon (click)="addMovieToTrash()">delete_outlined</mat-icon>
+              <mat-icon (click)="addContentToTrash()">delete_outlined</mat-icon>
             </div>
             <div *ngIf="isInTrash" class="trash--checked">
-              <mat-icon (click)="deleteMovieFromTrash()">delete_outlined</mat-icon>
+              <mat-icon (click)="deleteContentFromTrash()">delete_outlined</mat-icon>
             </div>
           </div>
 
@@ -59,7 +59,7 @@
           </div>
           <div *ngIf="user != undefined " class="content__data--form">
             <mat-form-field appearance="fill" color="primary">
-              <mat-select (selectionChange)="addMovie()" [(value)]="status">
+              <mat-select (selectionChange)="addContent()" [(value)]="status">
                 <mat-option value="Not watched">Not watched</mat-option>
                 <mat-option value="Plan to watch">Plan to watch</mat-option>
                 <mat-option value="Watched">Watched</mat-option>
@@ -91,10 +91,10 @@
       </div>
 
       <div *ngIf="!isInTrash" class="trash--unchecked">
-        <mat-icon (click)="addMovieToTrash()">delete_outlined</mat-icon>
+        <mat-icon (click)="addContentToTrash()">delete_outlined</mat-icon>
       </div>
       <div *ngIf="isInTrash" class="trash--checked">
-        <mat-icon (click)="deleteMovieFromTrash()">delete_outlined</mat-icon>
+        <mat-icon (click)="deleteContentFromTrash()">delete_outlined</mat-icon>
       </div>
     </div>
 
@@ -107,7 +107,7 @@
     <p>{{content?.['overview']}}</p>
     <div *ngIf="user != undefined " class="content__data-mobile--form">
       <mat-form-field appearance="fill" color="primary">
-        <mat-select (selectionChange)="addMovie()" [(value)]="status">
+        <mat-select (selectionChange)="addContent()" [(value)]="status">
           <mat-option value="Not watched">Not watched</mat-option>
           <mat-option value="Plan to watch">Plan to watch</mat-option>
           <mat-option value="Watched">Watched</mat-option>

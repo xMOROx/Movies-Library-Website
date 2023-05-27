@@ -6,6 +6,7 @@ import {take} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {FormControl} from "@angular/forms";
 import {Genre} from "./models/Genre.model";
+import {TvShowsService} from "../../services/tv-shows.service";
 
 @Component({
   selector: 'app-content',
@@ -27,7 +28,8 @@ export class ContentComponent implements OnInit {
 
   constructor(
     private moviesService: MoviesService,
-    private router: Router
+    private router: Router,
+    private tvService: TvShowsService
   ) {
     this.contentType = this.router.url.split('/')[1];
   }
@@ -47,7 +49,18 @@ export class ContentComponent implements OnInit {
       });
       this.getMovies(1)
     } else {
-      this.getNowPlayingTVShows(1);
+      this.tvService.getGenres().pipe(take(1)).subscribe({
+        next: ((response: any) => {
+          this.categoryList = response.genres;
+          this.categoryList?.forEach(category => {
+            this.categoryDict[category.name] = category.id;
+          });
+        }),
+        error: (_: any) => {
+
+        }
+      });
+      this.getTvAiringToday(1);
     }
   }
 
@@ -82,7 +95,7 @@ export class ContentComponent implements OnInit {
     if (this.contentType === 'movies') {
       this.getMovies(event.pageIndex + 1);
     } else {
-      this.getNowPlayingTVShows(event.pageIndex + 1);
+      this.getTvAiringToday(event.pageIndex + 1);
     }
   }
 
@@ -93,6 +106,8 @@ export class ContentComponent implements OnInit {
     this.paginator?.firstPage();
     if (this.contentType === 'movies') {
       this.getMovies(1);
+    } else {
+      this.getTv(1);
     }
   }
 
@@ -109,6 +124,32 @@ export class ContentComponent implements OnInit {
         break;
       case 'Trending':
         this.getTrendingMovies(page);
+        break;
+      case 'Search':
+        this.searchMovies(this.query, page);
+        break;
+      case 'Search by categories':
+        this.searchMoviesByCategories(page);
+        break;
+    }
+  }
+
+  private getTv(page: number) {
+    switch (this.filterType) {
+      case 'Airing today':
+        this.getTvAiringToday(page);
+        break;
+      case 'Airing this week':
+        this.getTvAiringThisWeek(page);
+        break;
+      case 'Popular':
+        this.getPopularTv(page);
+        break;
+      case 'Trending':
+        this.getTrendingTv(page);
+        break;
+      case 'Upcoming':
+        this.getUpcomingTv(page);
         break;
       case 'Search':
         this.searchMovies(this.query, page);
@@ -156,8 +197,8 @@ export class ContentComponent implements OnInit {
       });
   }
 
-  private getTrendingMovies(page: any = 1, mediaType: string = 'movie', timeWindow: string = 'week') {
-    this.moviesService.getTrendingMovies(page, mediaType, timeWindow).pipe(take(1)).subscribe(
+  private getTrendingMovies(page: any = 1, timeWindow: string = 'week') {
+    this.moviesService.getTrendingMovies(page, timeWindow).pipe(take(1)).subscribe(
       {
         next: (response: any) => {
           this.results = response.results;
@@ -168,8 +209,64 @@ export class ContentComponent implements OnInit {
       });
   }
 
-  private getNowPlayingTVShows(param: any) {
-    //TODO: implement
+  private getTvAiringToday(page: any = 1) {
+    this.tvService.getAiringToday(page).pipe(take(1)).subscribe(
+      {
+        next: (response: any) => {
+          this.results = response.results;
+          this.totalResults = response.total_results;
+        }, error: (_: any) => {
+
+        }
+      });
+  }
+
+  private getTvAiringThisWeek(page: any) {
+    this.tvService.getAiringThisWeek(page).pipe(take(1)).subscribe(
+      {
+        next: (response: any) => {
+          this.results = response.results;
+          this.totalResults = response.total_results;
+        }, error: (_: any) => {
+
+        }
+      });
+  }
+
+  private getTrendingTv(page: any = 1, timeWindow: string = 'week') {
+    this.tvService.getTrendingTv(page, timeWindow).pipe(take(1)).subscribe(
+      {
+        next: (response: any) => {
+          this.results = response.results;
+          this.totalResults = response.total_results;
+        }, error: (_: any) => {
+
+        }
+      });
+  }
+
+  private getPopularTv(page: any = 1) {
+    this.tvService.getPopularTv(page).pipe(take(1)).subscribe(
+      {
+        next: (response: any) => {
+          this.results = response.results;
+          this.totalResults = response.total_results;
+        }, error: (_: any) => {
+
+        }
+      });
+  }
+
+  private getUpcomingTv(page: any = 1, timeWindow: string = 'week') {
+    this.tvService.getUpcomingTv(page, timeWindow).pipe(take(1)).subscribe(
+      {
+        next: (response: any) => {
+          this.results = response.results;
+          this.totalResults = response.total_results;
+        }, error: (_: any) => {
+
+        }
+      });
   }
 
   private searchMovies(query: string, page: any = 1) {
@@ -184,7 +281,14 @@ export class ContentComponent implements OnInit {
   }
 
   private searchTVShows(query: string, page: any = 1) {
-    // TODO: implement
+    this.tvService.searchTv(query, page).pipe(take(1)).subscribe({
+      next: (response: any) => {
+        this.results = response.results;
+        this.totalResults = response.total_results;
+      }, error: (_: any) => {
+
+      }
+    });
   }
 
   private searchMoviesByCategories(page: any = 1) {
@@ -209,7 +313,24 @@ export class ContentComponent implements OnInit {
   }
 
   private searchTVShowsByCategories(page: any = 1) {
-    // TODO: implement
+    if (this.categories.value !== null) {
+      let ids: string[] = [];
+      let len = this.categories.value.length;
+
+      for( let category of this.categories.value) {
+        ids.push(this.categoryDict[category]);
+      }
+
+      this.tvService.getTvByGenreId(ids, page).pipe(take(1)).subscribe({
+        next: (response) => {
+          this.results = response.results;
+          this.totalResults = response.total_results;
+        },
+        error: (_: any) => {
+
+        }
+      });
+    }
   }
 
 

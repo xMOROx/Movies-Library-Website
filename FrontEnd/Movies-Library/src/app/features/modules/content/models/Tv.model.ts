@@ -2,13 +2,12 @@ import { Genre } from "./Genre.model";
 
 export interface TvModel {
     original_name: string;
-    genre_ids: Array<number>;
     name: string;
     tagline: string;
     popularity: number;
     origin_country: Array<string>;
     vote_count: number;
-    first_air_date: Date;
+    first_air_date: string;
     backdrop_path: string;
     original_language: string;
     id: number;

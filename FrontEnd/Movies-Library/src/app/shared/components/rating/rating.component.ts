@@ -1,6 +1,7 @@
 import {Component, Inject, Input} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {MoviesService} from "../../../features/services/movies.service";
+import {TvShowsService} from "../../../features/services/tv-shows.service";
 
 @Component({
   selector: 'app-rating',
@@ -14,6 +15,7 @@ export class RatingComponent {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private moviesService: MoviesService,
+              private tvService: TvShowsService,
               private dialog: MatDialogRef<RatingComponent>) {
     this.maxRatingArray = Array(this.maxRating).fill(0);
     this.selectedStars = data.rating;
@@ -28,19 +30,26 @@ export class RatingComponent {
   }
 
   rate(index: number) {
-    if (this.data.contentType === "movies") {
-      let body = {
-        "rating": index + 1
-      };
-      if (this.data.status === "Watched") {
-        this.moviesService.addMovieToUser(this.data.movieId, this.data.userId, body).subscribe(() => {
+    let body = {
+      "rating": index + 1
+    };
+    if (this.data.status === "Watched") {
+      if (this.data.contentType === "movies") {
+        this.moviesService.addMovieToUser(this.data.contentId, this.data.userId, body).subscribe(() => {
           this.dialog.close(index + 1);
+          return;
         });
-        return;
-      }
-      alert("You have to watch the movie first!");
 
+      } else {
+        this.tvService.addTvToUser(this.data.contentId, this.data.userId, body).subscribe(() => {
+          this.dialog.close(index + 1);
+          return;
+        });
+      }
+    } else {
+      alert(`You have to watch the content first!`);
     }
+
   }
 
   close() {
