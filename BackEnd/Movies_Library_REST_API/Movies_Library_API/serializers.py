@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models.movie_lib_models import Movie, Movie_User, MovieTrash, TVShow_User, TVShowTrash
+from .models.movie_lib_models import Movie, Movie_User, MovieTrash, TVShow_User, TVShowTrash, TVShow
 
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -10,7 +10,7 @@ class MovieSerializer(serializers.ModelSerializer):
 
 class TVShowSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Movie
+        model = TVShow
         exclude = ("users",)
 
 

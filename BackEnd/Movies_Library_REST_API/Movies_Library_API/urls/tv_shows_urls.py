@@ -8,7 +8,7 @@ urlpatterns = [
         name="tv show details api",
     ),
     re_path(r"^tv/popular$", tv_shows_views.popular_tv_shows, name="popular tv shows"),
-    re_path(r"^yv/upcoming$", tv_shows_views.upcoming_tv_shows, name="upcoming tv shows"),
+    re_path(r"^tv/upcoming$", tv_shows_views.upcoming_tv_shows, name="upcoming tv shows"),
     re_path(r"^tv/latest$", tv_shows_views.latest_tv_shows, name="latest tv shows"),
     re_path(r"^tv/trending", tv_shows_views.trending_tv_shows, name="trending tv shows"),
     re_path(
