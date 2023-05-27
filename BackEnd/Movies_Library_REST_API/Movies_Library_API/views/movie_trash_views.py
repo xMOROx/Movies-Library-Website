@@ -16,7 +16,7 @@ from Movies_Library_API.serializers import MovieTrashSerializer
 from CustomAuthentication.models import User
 from CustomAuthentication.permissions import IsOwner
 
-from ..requests.movie_db_requests import MovieRequests
+from ..requests.movie_requests import MovieRequests
 from rest_framework.serializers import ValidationError as DRFValidationError
 from django.core.exceptions import ValidationError as DjangoValidationError
 
@@ -63,7 +63,7 @@ def crud_for_movie_inside_trash(request, user_id, movie_id):
         try:
             movie = Movie.objects.get(pk=movie_id)
         except Movie.DoesNotExist:
-            movie_api = movie_requests.get_movie_details(movie_id)
+            movie_api = movie_requests.get_details(movie_id)
             if movie_api is None:
                 return JsonResponse(
                     {"message": "This movie does not exist"},

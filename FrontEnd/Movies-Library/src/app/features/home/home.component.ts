@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit {
     }
   };
 
-  public movieTabList = ['Now playing', 'Upcoming', 'Popular', "Latest", "Trending"];
+  public movieTabList = ['Now playing', 'Upcoming', 'Popular', "Trending"];
   public moviesList: Array<MovieModel> = [];
   public selectedMovieTab = 0;
 
