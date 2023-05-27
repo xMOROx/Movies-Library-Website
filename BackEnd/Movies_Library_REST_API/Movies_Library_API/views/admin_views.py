@@ -1,6 +1,6 @@
 from CustomAuthentication.models import User
 from CustomAuthentication.serializers import AdminUserSerializer
-from rest_framework import views, response, exceptions, permissions
+from rest_framework import views, response, permissions
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_204_NO_CONTENT,

@@ -1,6 +1,5 @@
+from Movies_Library_API.views import user_movies_views
 from django.urls import re_path
-from ..views import user_movies_views
-from ..views import user_tv_show_views
 
 urlpatterns = [
     re_path(
@@ -18,7 +17,11 @@ urlpatterns = [
         user_movies_views.add_movie_to_user,
         name="add movie to user",
     ),
-    re_path(r"^users/(?P<user_id>[0-9]+)/recommendations$", user_movies_views.recommendations, name="recommendations"),
+    re_path(
+        r"^users/(?P<user_id>[0-9]+)/recommendations$",
+        user_movies_views.recommendations,
+        name="recommendations",
+    ),
     re_path(
         r"^users/(?P<user_id>[0-9]+)/tv$",
         user_tv_show_views.list_of_details_for_tv_show_per_user,

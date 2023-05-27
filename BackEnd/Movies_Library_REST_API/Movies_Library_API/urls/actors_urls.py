@@ -1,5 +1,5 @@
+from Movies_Library_API.views import actors_views
 from django.urls import re_path
-from ..views import actors_views
 
 urlpatterns = [
     re_path(r"^actors/(?P<actor_id>\d+)$", actors_views.get_actor_details, name="get actor details"),

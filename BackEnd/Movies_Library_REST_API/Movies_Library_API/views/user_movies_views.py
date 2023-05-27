@@ -1,7 +1,16 @@
 from CustomAuthentication.models import User
 from CustomAuthentication.permissions import IsOwner
+from Movies_Library_API.models.movie_lib_models import Movie, Movie_User
+from Movies_Library_API.recommendations_algorithm import (
+    collaborative_filtering_recommendation,
+)
+from Movies_Library_API.requests.movie_db_requests import MovieRequests
 from Movies_Library_API.serializers import Movie_UserSerializer
-from django.core.exceptions import ValidationError as DjangoValidationError, ObjectDoesNotExist, MultipleObjectsReturned
+from django.core.exceptions import (
+    ValidationError as DjangoValidationError,
+    ObjectDoesNotExist,
+    MultipleObjectsReturned,
+)
 from django.http.response import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import (
@@ -14,10 +23,6 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.serializers import ValidationError as DRFValidationError
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-from ..models.movie_lib_models import Movie, Movie_User
-from ..recommendations_algorithm import collaborative_filtering_recommendation
-from ..requests.movie_requests import MovieRequests
 
 
 @api_view(["PUT"])
@@ -32,7 +37,7 @@ def add_movie_to_user(request, user_id, movie_id):
             movie_user_serializer.is_valid(raise_exception=True)
         except ValidationError:
             return JsonResponse(
-                {"message": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST
+                {"message": "Invalid data."}, status=status.HTTP_400_BAD_REQUEST
             )
 
         if movie_user is not None:
@@ -56,7 +61,7 @@ def add_movie_to_user(request, user_id, movie_id):
                 return JsonResponse(None, status=status.HTTP_204_NO_CONTENT, safe=False)
             except (DRFValidationError, DjangoValidationError) as e:
                 return JsonResponse(
-                    {"message": "The movie could not be updated"},
+                    {"message": "The movie could not be updated."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
@@ -64,7 +69,7 @@ def add_movie_to_user(request, user_id, movie_id):
             user = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-                {"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "User does not exist."}, status=status.HTTP_404_NOT_FOUND
             )
 
         movie_requests = MovieRequests()
@@ -76,7 +81,7 @@ def add_movie_to_user(request, user_id, movie_id):
 
             if movie_api is None:
                 return JsonResponse(
-                    {"message": f"The movie with given id {movie_id} does not exist"},
+                    {"message": f"The movie with given id {movie_id} does not exist."},
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
@@ -87,9 +92,9 @@ def add_movie_to_user(request, user_id, movie_id):
                     poster_url=movie_api["poster_path"],
                     runtime=movie_api["runtime"],
                 )
-            except (DRFValidationError, DjangoValidationError) as e:
+            except (DRFValidationError, DjangoValidationError):
                 return JsonResponse(
-                    {"message": "The movie could not be added"},
+                    {"message": "The movie could not be added."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
@@ -126,10 +131,14 @@ def list_of_details_for_movies_per_user(request, user_id):
             _ = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-                {"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "User does not exist."}, status=status.HTTP_404_NOT_FOUND
             )
         show_all = "true" == request.GET.get("all", 1)
-        data = Movie_User.objects.select_related("movie").filter(user_id=user_id).order_by("-movie__title")
+        data = (
+            Movie_User.objects.select_related("movie")
+            .filter(user_id=user_id)
+            .order_by("-movie__title")
+        )
         pagination = PageNumberPagination()
         page = pagination.paginate_queryset(data, request)
         if page is not None and not show_all:
@@ -149,24 +158,26 @@ def details_of_movie_for_user(request, user_id, movie_id):
             _ = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-                {"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "User does not exist."}, status=status.HTTP_404_NOT_FOUND
             )
 
         try:
             data = Movie.users.through.objects.get(user_id=user_id, movie_id=movie_id)
         except ObjectDoesNotExist:
             return JsonResponse(
-                {"message": "The movie does not exist"},
+                {"message": "The movie does not exist."},
                 status=status.HTTP_404_NOT_FOUND,
             )
         except MultipleObjectsReturned:
             return JsonResponse(
-                {"message": "Something went wrong"},
+                {"message": "Something went wrong."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
         serializer_movie_user = Movie_UserSerializer(data)
-        return JsonResponse(serializer_movie_user.data, safe=False, status=status.HTTP_200_OK)
+        return JsonResponse(
+            serializer_movie_user.data, safe=False, status=status.HTTP_200_OK
+        )
 
 
 @api_view(["GET"])
@@ -178,7 +189,7 @@ def recommendations(request, user_id):
             _ = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-                {"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "User does not exist."}, status=status.HTTP_404_NOT_FOUND
             )
 
         movies = collaborative_filtering_recommendation(user_id)

@@ -1,5 +1,7 @@
 from CustomAuthentication.models import User
 from CustomAuthentication.permissions import IsOwner
+from Movies_Library_API.models.movie_lib_models import Movie, MovieTrash
+from Movies_Library_API.requests.movie_db_requests import MovieRequests
 from Movies_Library_API.serializers import MovieTrashSerializer
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.http.response import JsonResponse
@@ -14,9 +16,6 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.serializers import ValidationError as DRFValidationError
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-from ..models.movie_lib_models import Movie, MovieTrash
-from ..requests.movie_db_requests import MovieRequests
 
 
 @api_view(["GET", "POST", "DELETE"])
