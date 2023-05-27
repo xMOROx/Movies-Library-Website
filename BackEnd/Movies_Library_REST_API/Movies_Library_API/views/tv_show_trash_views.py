@@ -70,9 +70,9 @@ def crud_for_tv_show_inside_trash(request, user_id, tv_show_id):
                     status=status.HTTP_404_NOT_FOUND
                 )
             try:
-                movie = TVShow.objects.create(
+                tv_show = TVShow.objects.create(
                     id=tv_show_api["id"],
-                    title=tv_show_api["title"],
+                    title=tv_show_api["name"],
                     poster_url=tv_show_api["poster_path"],
                 )
             except (DRFValidationError, DjangoValidationError) as e:
