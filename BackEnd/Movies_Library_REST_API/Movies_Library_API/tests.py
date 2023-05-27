@@ -1,8 +1,10 @@
 from CustomAuthentication.models import User
+from Movies_Library_API.models.movie_lib_models import Movie
 from django.db import transaction
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
+from rest_framework_simplejwt.tokens import AccessToken
 
 
 # ===================================== Actors =========================================
@@ -527,5 +529,208 @@ class BanUserViewTests(APITestCase):
         response_data = response.json()
         self.assertEqual(response_data["message"], "User is already unbanned.")
 
+
 # =============================================== Users views ==============================================================
+
+class AddMovieToUserTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email="user@localhost",
+            password="user123",
+            first_name="User",
+            last_name="User",
+        )
+        self.movie = Movie.objects.create(
+            title="Test movie",
+            poster_url="https://www.google.com",
+            runtime=120,
+        )
+
+        self.movie_id = self.movie.id
+        self.client = APIClient()
+        self.client.login(email="user@localhost", password="user123")
+        self.client.force_authenticate(user=self.user)
+        self.access_token = AccessToken.for_user(self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {str(self.access_token)}")
+
+    @transaction.atomic
+    def test_add_movie_to_existing_user(self):
+        url = reverse('add movie to user', kwargs={'user_id': self.user.id, 'movie_id': self.movie_id})
+
+        data = {
+            "rating": 4,
+            "is_favorite": True,
+            "status": "Watched"
+        }
+
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    @transaction.atomic
+    def test_add_movie_to_nonexistent_user(self):
+        url = reverse('add movie to user', kwargs={'user_id': 999, 'movie_id': self.movie_id})
+        admin = User.objects.create_superuser(
+            email="admin@localhost",
+            password="admin123",
+            first_name="Admin",
+            last_name="Admin",
+        )
+        self.client.login(email="admin@localhost", password="admin123")
+        self.client.force_authenticate(user=admin)
+
+        data = {
+            "rating": 3,
+            "is_favorite": False,
+            "status": "Not watched"
+        }
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response_data = response.json()
+        self.assertEqual(response_data["message"], "User does not exist.")
+
+    @transaction.atomic
+    def test_add_movie_with_no_permission(self):
+        url = reverse('add movie to user', kwargs={'user_id': 999, 'movie_id': self.movie_id})
+
+        data = {
+            "rating": 3,
+            "is_favorite": False,
+            "status": "Not watched"
+        }
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        response_data = response.json()
+        self.assertEqual(response_data["detail"], "You do not have permission to perform this action.")
+
+    @transaction.atomic
+    def test_add_movie_with_invalid_data(self):
+        url = reverse('add movie to user', kwargs={'user_id': self.user.id, 'movie_id': self.movie_id})
+        data = {
+            "rating": "invalid",
+            "is_favorite": "invalid",
+            "status": "Invalid status"
+        }
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response_data = response.json()
+        self.assertEqual(response_data["message"], "Invalid data.")
+
+
+class ListOfDetailsForMoviesPerUserTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email="user@localhost",
+            password="user123",
+            first_name="User",
+            last_name="User",
+        )
+        self.client = APIClient()
+        self.client.login(email="user@localhost", password="user123")
+        self.client.force_authenticate(user=self.user)
+        self.access_token = AccessToken.for_user(self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {str(self.access_token)}")
+
+    @transaction.atomic
+    def test_list_movies_per_existing_user(self):
+        url = reverse('details of user movies', kwargs={'user_id': self.user.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_list_movies_per_nonexistent_user(self):
+        url = reverse('details of user movies', kwargs={'user_id': 999})
+        admin = User.objects.create_superuser(
+            email="admin@localhost",
+            password="admin123",
+            first_name="Admin",
+            last_name="Admin",
+        )
+        self.client.force_authenticate(user=admin)
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response_data = response.json()
+        self.assertEqual(response_data["message"], "User does not exist.")
+
+    @transaction.atomic
+    def test_list_movies_with_no_permission(self):
+        url = reverse('details of user movies', kwargs={'user_id': 999})
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        response_data = response.json()
+        self.assertEqual(response_data["detail"], "You do not have permission to perform this action.")
+
+
+class DetailsOfMovieForUserTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email="user@localhost",
+            password="user123",
+            first_name="User",
+            last_name="User",
+        )
+
+        self.movie = Movie.objects.create(
+            title="Test movie",
+            poster_url="https://www.google.com",
+            runtime=120,
+        )
+        self.movie_id = self.movie.id
+
+        self.client = APIClient()
+        self.client.login(email="user@localhost", password="user123")
+        self.client.force_authenticate(user=self.user)
+        self.access_token = AccessToken.for_user(self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {str(self.access_token)}")
+
+        url = reverse('add movie to user', kwargs={'user_id': self.user.id, 'movie_id': self.movie_id})
+
+        data = {
+            "rating": 4,
+            "is_favorite": True,
+            "status": "Watched"
+        }
+
+        _ = self.client.put(url, data)
+
+    @transaction.atomic
+    def test_details_of_existing_movie_for_user(self):
+        url = reverse('details of movie for user', kwargs={'user_id': self.user.id, 'movie_id': self.movie_id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_details_of_nonexistent_movie_for_user(self):
+        url = reverse('details of movie for user', kwargs={'user_id': self.user.id, 'movie_id': 999})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response_data = response.json()
+        self.assertEqual(response_data["message"], "The movie does not exist.")
+
+    @transaction.atomic
+    def test_details_with_invalid_user(self):
+        url = reverse('details of movie for user', kwargs={'user_id': 999, 'movie_id': self.movie_id})
+        admin = User.objects.create_superuser(
+            email="admin@localhost",
+            password="admin123",
+            first_name="Admin",
+            last_name="Admin",
+        )
+        self.client.force_authenticate(user=admin)
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response_data = response.json()
+        self.assertEqual(response_data["message"], "User does not exist.")
+
+    @transaction.atomic
+    def test_details_with_no_permissions(self):
+        url = reverse('details of movie for user', kwargs={'user_id': 999, 'movie_id': self.movie_id})
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        response_data = response.json()
+        self.assertEqual(response_data["detail"], "You do not have permission to perform this action.")
 # =============================================== Movies trash views ==============================================================
