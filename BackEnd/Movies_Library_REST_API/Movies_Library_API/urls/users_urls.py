@@ -20,7 +20,7 @@ urlpatterns = [
     ),
     re_path(r"^users/(?P<user_id>[0-9]+)/recommendations$", user_movies_views.recommendations, name="recommendations"),
     re_path(
-        r"^users/(?P<user_id>[0-9]+)/tv",
+        r"^users/(?P<user_id>[0-9]+)/tv$",
         user_tv_show_views.list_of_details_for_tv_show_per_user,
         name="details of user tv shows",
     ),

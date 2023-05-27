@@ -15,6 +15,9 @@ urlpatterns = [
         r"^tv/airing_today", tv_shows_views.airing_today, name="airing today"
     ),
     re_path(
+        r"^tv/airing_this_week", tv_shows_views.airing_this_week, name="airing this week"
+    ),
+    re_path(
         r"^tv/(?P<tv_show_id>[0-9]+)/credits$",
         tv_shows_views.tv_show_credits,
         name="tv show credits",
