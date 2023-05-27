@@ -10,5 +10,6 @@ urlpatterns = [
     re_path(r"^api/v1/", include("Movies_Library_API.urls.users_urls")),
     re_path(r"^api/v1/", include("Movies_Library_API.urls.admin_urls")),
     re_path(r"^api/v1/", include("Movies_Library_API.urls.movie_trash_urls")),
+    re_path(r"^api/v1/", include("Movies_Library_API.urls.tv_show_trash_urls")),
     re_path(r"^api/v1/auth/", include("CustomAuthentication.urls")),
 ]
