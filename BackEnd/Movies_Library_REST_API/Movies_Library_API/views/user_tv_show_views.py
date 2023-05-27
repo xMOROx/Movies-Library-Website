@@ -83,7 +83,7 @@ def add_tv_show_to_user(request, user_id, tv_show_id):
             try:
                 tv_show = TVShow.objects.create(
                     id=tv_show_api["id"],
-                    title=tv_show_api["title"],
+                    title=tv_show_api["name"],
                     poster_url=tv_show_api["poster_path"],
                 )
             except (DRFValidationError, DjangoValidationError) as e:

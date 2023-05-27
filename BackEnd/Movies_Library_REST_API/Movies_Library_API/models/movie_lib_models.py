@@ -155,7 +155,7 @@ class MovieTrash(models.Model):
 
 class TVShowTrash(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    tv_show = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    tv_show = models.ForeignKey(TVShow, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.user} - {self.tv_show}"
