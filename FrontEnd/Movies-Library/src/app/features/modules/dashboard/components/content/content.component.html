@@ -12,9 +12,17 @@
       <button mat-raised-button color="primary" aria-label="Set Favorite filter" (click)="this.applyFilter('Favorite')">Favorite</button>
     </mat-card>
 
-    <div class="contents__right-side" [ngClass]="contentType !== 'trash' ? 'contents__right-side-normal-view' : 'contents__right-side-trash-view'">
+    <mat-card class="contents__filter" *ngIf="contentType === 'trash'">
+      <div>Filter by</div>
+      <button mat-raised-button color="primary" aria-label="Set Movies filter" (click)="this.applyFilter('movies')">Movies</button>
+      <button mat-raised-button color="primary" aria-label="Set Tv Show filter" (click)="this.applyFilter('tv-shows')">Tv Shows</button>
+
+    </mat-card>
+
+<!--    <div class="contents__right-side" [ngClass]="contentType !== 'trash' ? 'contents__right-side-normal-view' : 'contents__right-side-trash-view'">-->
+    <div class="contents__right-side" [ngClass]="'contents__right-side-normal-view'">
       <div class="contents__list">
-        <app-poster-card *ngFor="let content of content" [model]="content" [contentType]="contentType">
+        <app-poster-card *ngFor="let content of content" [model]="content" [contentType]="contentType" [trashFilter]="trashFilter">
         </app-poster-card>
       </div>
 

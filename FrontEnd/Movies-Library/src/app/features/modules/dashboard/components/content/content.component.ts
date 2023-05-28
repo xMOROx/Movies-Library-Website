@@ -18,6 +18,7 @@ export class ContentComponent implements OnInit {
   public content: Array<PaginationModel> = [];
   public totalResults: any;
   public filterType: string = 'all';
+  public trashFilter: string = '';
   private userId: any;
 
   constructor(private moviesService: MoviesService,
@@ -31,11 +32,12 @@ export class ContentComponent implements OnInit {
 
   ngOnInit() {
     this.userId = this.storage.getUser().id;
-
+    this.trashFilter = '';
     if (this.contentType === 'movies') {
       this.getMoviesForUser();
     } else if (this.contentType === 'trash') {
-      this.getMoviesFromTrash();
+      this.trashFilter = 'movies';
+      this.getContentFromTrash();
     } else if (this.contentType === "tv-shows") {
       this.getTVShowsForUser();
     }
@@ -76,8 +78,8 @@ export class ContentComponent implements OnInit {
     );
   }
 
-  public getMoviesFromTrash() {
-    this.trashService.getTrashForUser(this.storage.getUser().id, "movies").subscribe(
+  public getContentFromTrash(filter: string = 'movies') {
+    this.trashService.getTrashForUser(this.storage.getUser().id, filter).subscribe(
       {
         next: (response: any) => {
           if (!response) {
@@ -96,7 +98,7 @@ export class ContentComponent implements OnInit {
     if (this.contentType === 'movies') {
       this.getMoviesForUser();
     } else if (this.contentType === 'trash') {
-      this.getMoviesFromTrash();
+      this.getContentFromTrash();
     } else if (this.contentType === "TV-shows") {
       this.getTVShowsForUser();
     }
@@ -119,11 +121,13 @@ export class ContentComponent implements OnInit {
   }
 
   public applyFilter(filter: string) {
+    this.trashFilter = '';
     this.filterType = filter;
     if (this.contentType.toLowerCase() === 'movies') {
       this.getMoviesForUser(this.filterType);
     } else if (this.contentType.toLowerCase() === 'trash') {
-      this.getMoviesFromTrash();
+      this.trashFilter = filter;
+      this.getContentFromTrash(filter);
     } else if (this.contentType.toLowerCase() === "tv-shows".toLowerCase()) {
       this.getTVShowsForUser(this.filterType);
     }

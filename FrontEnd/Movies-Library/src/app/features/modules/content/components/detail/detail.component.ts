@@ -23,6 +23,7 @@ import { TvShowsService } from "../../../../services/tv-shows.service";
 export class DetailComponent implements OnInit {
   public contentType: string = '';
   public content?: Partial<MovieModel | TvModel | any>;
+  public providersLink: any = undefined;
   public recommendedContentList: Array<PaginationModel> = [];
   public video?: ContentModel;
   public isLoading: boolean = true;
@@ -58,6 +59,7 @@ export class DetailComponent implements OnInit {
         this.getMovieById(id);
         this.getMovieVideoById(id);
         this.getMovieRecommendationsById(id);
+        this.getProvidersMovie(id);
 
         if (this.user != null) {
           this.getMovieDetailsForUsers(id, this.user.id);
@@ -67,6 +69,7 @@ export class DetailComponent implements OnInit {
         this.getTvById(id);
         this.getTvVideoById(id);
         this.getTvRecommendationsById(id);
+        this.getProvidersTv(id);
 
         if (this.user != null) {
           this.getTvDetailsForUsers(id, this.user.id);
@@ -74,6 +77,18 @@ export class DetailComponent implements OnInit {
         }
       }
 
+    });
+  }
+
+  private getProvidersTv(id: string) {
+    this.tvService.getTvProviders(id).subscribe((providers: any) => {
+      this.providersLink = providers.link;
+    });
+  }
+
+  private getProvidersMovie(id: string) {
+    this.moviesService.getMovieProviders(id).subscribe((providers: any) => {
+      this.providersLink = providers.link;
     });
   }
 
@@ -239,4 +254,6 @@ export class DetailComponent implements OnInit {
     }
     return result + (runtime % 60).toString() + "min";
   }
+
+  protected readonly window = window;
 }
