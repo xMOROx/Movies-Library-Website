@@ -27,37 +27,23 @@ def crud_for_movie_inside_trash(request, user_id, movie_id):
             _ = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-<<<<<<< Updated upstream
-                {"message": "This user does not exist"},
+                {"message": "The user does not exist"},
                 status=status.HTTP_404_NOT_FOUND,
-=======
-                {"message": "The user does not exist."}, status=status.HTTP_404_NOT_FOUND
->>>>>>> Stashed changes
             )
 
         try:
             _ = Movie.objects.get(pk=movie_id)
         except Movie.DoesNotExist:
             return JsonResponse(
-<<<<<<< Updated upstream
-                {"message": "This movie does not exist"},
+                {"message": "The movie does not exist"},
                 status=status.HTTP_404_NOT_FOUND,
-=======
-                {"message": "The movie does not exist."},
-                status=status.HTTP_404_NOT_FOUND
->>>>>>> Stashed changes
             )
         try:
             data = MovieTrash.objects.get(user=user_id, movie=movie_id)
         except MovieTrash.DoesNotExist:
             return JsonResponse(
-<<<<<<< Updated upstream
-                {"message": "This movie is not in trash"},
+                {"message": "The movie is not in trash"},
                 status=status.HTTP_404_NOT_FOUND,
-=======
-                {"message": "The movie is not in trash."},
-                status=status.HTTP_404_NOT_FOUND
->>>>>>> Stashed changes
             )
 
         serializer = MovieTrashSerializer(data)
@@ -67,12 +53,7 @@ def crud_for_movie_inside_trash(request, user_id, movie_id):
             user = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-<<<<<<< Updated upstream
-                {"message": "This user does not exist"},
-                status=status.HTTP_404_NOT_FOUND,
-=======
                 {"message": "User does not exist."}, status=status.HTTP_404_NOT_FOUND
->>>>>>> Stashed changes
             )
 
         movie_requests = MovieRequests()
@@ -83,13 +64,8 @@ def crud_for_movie_inside_trash(request, user_id, movie_id):
             movie_api = movie_requests.get_details(movie_id)
             if movie_api is None:
                 return JsonResponse(
-<<<<<<< Updated upstream
-                    {"message": "This movie does not exist"},
-                    status=status.HTTP_404_NOT_FOUND,
-=======
                     {"message": "The movie does not exist."},
-                    status=status.HTTP_404_NOT_FOUND
->>>>>>> Stashed changes
+                    status=status.HTTP_404_NOT_FOUND,
                 )
             try:
                 movie = Movie.objects.create(
@@ -107,13 +83,8 @@ def crud_for_movie_inside_trash(request, user_id, movie_id):
         try:
             _ = MovieTrash.objects.get(user=user_id, movie=movie_id)
             return JsonResponse(
-<<<<<<< Updated upstream
-                {"message": "Movie already in trash"},
-                status=status.HTTP_400_BAD_REQUEST,
-=======
                 {"message": "Movie already in trash."},
-                status=status.HTTP_400_BAD_REQUEST
->>>>>>> Stashed changes
+                status=status.HTTP_400_BAD_REQUEST,
             )
         except MovieTrash.DoesNotExist:
             movie_trash = MovieTrash.objects.create(user=user, movie=movie)
@@ -129,23 +100,14 @@ def crud_for_movie_inside_trash(request, user_id, movie_id):
             _ = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-<<<<<<< Updated upstream
-                {"message": "This user does not exist"},
-                status=status.HTTP_404_NOT_FOUND,
-=======
                 {"message": "User does not exist."}, status=status.HTTP_404_NOT_FOUND
->>>>>>> Stashed changes
             )
         try:
             _ = Movie.objects.get(pk=movie_id)
         except Movie.DoesNotExist:
             return JsonResponse(
-<<<<<<< Updated upstream
-                {"message": "This movie does not exist"},
+                {"message": "The movie does not exist."},
                 status=status.HTTP_404_NOT_FOUND,
-=======
-                {"message": "The movie does not exist."}, status=status.HTTP_404_NOT_FOUND
->>>>>>> Stashed changes
             )
 
         movie_trash = get_object_or_404(MovieTrash, user=user_id, movie=movie_id)
@@ -162,12 +124,7 @@ def get_all_movies(request, user_id):
             _ = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-<<<<<<< Updated upstream
-                {"message": "This user does not exist"},
-                status=status.HTTP_404_NOT_FOUND,
-=======
                 {"message": "User does not exist."}, status=status.HTTP_404_NOT_FOUND
->>>>>>> Stashed changes
             )
 
         show_all = "true" == request.GET.get("all", 1)

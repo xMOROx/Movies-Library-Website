@@ -80,4 +80,4 @@ class TVShowTrashSerializer(serializers.ModelSerializer):
             obj.tv_show
         except AttributeError:
             return None
-        return TVShowSerializer(obj.tv_show).data
+        return TVShowSerializer(obj.tv_show).da
