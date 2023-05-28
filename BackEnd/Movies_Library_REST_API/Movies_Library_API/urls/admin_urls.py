@@ -1,5 +1,5 @@
+from Movies_Library_API.views import admin_views as auth_views
 from django.urls import re_path
-from ..views import admin_views as auth_views
 
 urlpatterns = [
     re_path(

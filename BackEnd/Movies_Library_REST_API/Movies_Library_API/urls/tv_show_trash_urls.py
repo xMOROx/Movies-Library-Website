@@ -1,5 +1,5 @@
 from django.urls import re_path
-from ..views import tv_show_trash_views
+from Movies_Library_API.views import tv_show_trash_views
 
 urlpatterns = [
     re_path(
@@ -11,5 +11,5 @@ urlpatterns = [
         r"^trash/users/(?P<user_id>[0-9]+)/tv-shows/(?P<tv_show_id>[0-9]+)$",
         tv_show_trash_views.crud_for_tv_show_inside_trash,
         name="get tv show from trash",
-    )
+    ),
 ]

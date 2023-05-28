@@ -1,19 +1,19 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {DomSanitizer} from '@angular/platform-browser';
-import {ActivatedRoute, Router} from '@angular/router';
-import {take, throwError} from 'rxjs';
-import {MoviesService} from 'src/app/features/services/movies.service';
-import {ContentModel} from '../../models/Content.model';
-import {MovieModel} from '../../models/Movie.model';
-import {PaginationModel} from '../../models/pagination.model';
-import {TvModel} from '../../models/Tv.model';
-import {User} from "../../../../../authentication/models/User";
-import {StorageService} from "../../../../../authentication/services/storage.service";
-import {catchError} from "rxjs/operators";
-import {RatingComponent} from "../../../../../shared/components/rating/rating.component";
-import {TrashService} from "../../../../services/trash.service";
-import {TvShowsService} from "../../../../services/tv-shows.service";
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
+import { take, throwError } from 'rxjs';
+import { MoviesService } from 'src/app/features/services/movies.service';
+import { ContentModel } from '../../models/Content.model';
+import { MovieModel } from '../../models/Movie.model';
+import { PaginationModel } from '../../models/pagination.model';
+import { TvModel } from '../../models/Tv.model';
+import { User } from "../../../../../authentication/models/User";
+import { StorageService } from "../../../../../authentication/services/storage.service";
+import { catchError } from "rxjs/operators";
+import { RatingComponent } from "../../../../../shared/components/rating/rating.component";
+import { TrashService } from "../../../../services/trash.service";
+import { TvShowsService } from "../../../../services/tv-shows.service";
 
 @Component({
   selector: 'app-detail',
@@ -183,9 +183,7 @@ export class DetailComponent implements OnInit {
   }
 
   public openDialog(): void {
-    const dialogRef = this.trailerDialog.open(this.matTrailerDialog, {
-      backdropClass: 'backdropBackground',
-    });
+    const dialogRef = this.trailerDialog.open(this.matTrailerDialog, { backdropClass: 'backdropBackground' },);
     dialogRef.disableClose = false;
   }
 

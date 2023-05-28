@@ -1,7 +1,11 @@
 from CustomAuthentication.models import User
 from CustomAuthentication.permissions import IsOwner
 from Movies_Library_API.serializers import TVShow_UserSerializer
-from django.core.exceptions import ValidationError as DjangoValidationError, ObjectDoesNotExist, MultipleObjectsReturned
+from django.core.exceptions import (
+    ValidationError as DjangoValidationError,
+    ObjectDoesNotExist,
+    MultipleObjectsReturned,
+)
 from django.http.response import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import (
@@ -15,9 +19,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.serializers import ValidationError as DRFValidationError
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from ..models.movie_lib_models import TVShow, TVShow_User
-from ..recommendations_algorithm import collaborative_filtering_recommendation
-from ..requests.tv_shows_requests import TVShowsRequests
+from Movies_Library_API.models.movie_lib_models import TVShow, TVShow_User
+from Movies_Library_API.recommendations_algorithm import (
+    collaborative_filtering_recommendation,
+)
+from Movies_Library_API.requests.tv_shows_requests import TVShowsRequests
 
 
 @api_view(["PUT"])
@@ -25,7 +31,9 @@ from ..requests.tv_shows_requests import TVShowsRequests
 @authentication_classes([JWTAuthentication])
 def add_tv_show_to_user(request, user_id, tv_show_id):
     if request.method == "PUT":
-        tv_show_user = TVShow_User.objects.filter(user=user_id, tv_show=tv_show_id).first()
+        tv_show_user = TVShow_User.objects.filter(
+            user=user_id, tv_show=tv_show_id
+        ).first()
 
         try:
             tv_show_user_serializer = TVShow_UserSerializer(data=request.data)
@@ -38,7 +46,9 @@ def add_tv_show_to_user(request, user_id, tv_show_id):
         if tv_show_user is not None:
             try:
                 if "rating" in tv_show_user_serializer.validated_data:
-                    tv_show_user.rating = tv_show_user_serializer.validated_data["rating"]
+                    tv_show_user.rating = tv_show_user_serializer.validated_data[
+                        "rating"
+                    ]
 
                 if "is_favorite" in tv_show_user_serializer.validated_data:
                     tv_show_user.is_favorite = tv_show_user_serializer.validated_data[
@@ -46,7 +56,9 @@ def add_tv_show_to_user(request, user_id, tv_show_id):
                     ]
 
                 if "status" in tv_show_user_serializer.validated_data:
-                    tv_show_user.status = tv_show_user_serializer.validated_data["status"]
+                    tv_show_user.status = tv_show_user_serializer.validated_data[
+                        "status"
+                    ]
 
                 if tv_show_user.status == "Not watched":
                     tv_show_user.delete()
@@ -76,7 +88,9 @@ def add_tv_show_to_user(request, user_id, tv_show_id):
 
             if tv_show_api is None:
                 return JsonResponse(
-                    {"message": f"The tv show with given id {tv_show_id} does not exist"},
+                    {
+                        "message": f"The tv show with given id {tv_show_id} does not exist"
+                    },
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
@@ -106,7 +120,7 @@ def add_tv_show_to_user(request, user_id, tv_show_id):
             tv_show=tv_show,
             rating=tv_show_user_serializer.validated_data["rating"],
             is_favorite=tv_show_user_serializer.validated_data["is_favorite"],
-            status= tv_show_user_serializer.validated_data["status"],
+            status=tv_show_user_serializer.validated_data["status"],
         )
 
         tv_show_user.save()
@@ -128,7 +142,11 @@ def list_of_details_for_tv_show_per_user(request, user_id):
                 {"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND
             )
         show_all = "true" == request.GET.get("all", 1)
-        data = TVShow_User.objects.select_related("tv_show").filter(user_id=user_id).order_by("-tv_show__title")
+        data = (
+            TVShow_User.objects.select_related("tv_show")
+            .filter(user_id=user_id)
+            .order_by("-tv_show__title")
+        )
         pagination = PageNumberPagination()
         page = pagination.paginate_queryset(data, request)
         if page is not None and not show_all:
@@ -152,7 +170,9 @@ def details_of_tv_show_for_user(request, user_id, tv_show_id):
             )
 
         try:
-            data = TVShow.users.through.objects.get(user_id=user_id, tv_show_id=tv_show_id)
+            data = TVShow.users.through.objects.get(
+                user_id=user_id, tv_show_id=tv_show_id
+            )
         except ObjectDoesNotExist:
             return JsonResponse(
                 {"message": "The tv show does not exist"},
@@ -165,7 +185,9 @@ def details_of_tv_show_for_user(request, user_id, tv_show_id):
             )
 
         serializer_tv_show_user = TVShow_UserSerializer(data)
-        return JsonResponse(serializer_tv_show_user.data, safe=False, status=status.HTTP_200_OK)
+        return JsonResponse(
+            serializer_tv_show_user.data, safe=False, status=status.HTTP_200_OK
+        )
 
 
 # @api_view(["GET"])

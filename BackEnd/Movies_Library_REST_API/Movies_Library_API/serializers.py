@@ -1,5 +1,14 @@
+from Movies_Library_API.models.movie_lib_models import Movie, Movie_User, MovieTrash
 from rest_framework import serializers
-from .models.movie_lib_models import Movie, Movie_User, MovieTrash, TVShow_User, TVShowTrash, TVShow
+from Movies_Library_API.models.movie_lib_models import (
+    Movie,
+    Movie_User,
+    MovieTrash,
+    TVShow,
+    TVShow_Actor,
+    TVShow_User,
+    TVShowTrash,
+)
 
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -71,5 +80,4 @@ class TVShowTrashSerializer(serializers.ModelSerializer):
             obj.tv_show
         except AttributeError:
             return None
-        return TVShowSerializer(obj.tv_show).data
-
+        return TVShowSerializer(obj.tv_show).da
