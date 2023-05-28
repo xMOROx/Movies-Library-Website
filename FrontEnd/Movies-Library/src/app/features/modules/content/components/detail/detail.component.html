@@ -48,6 +48,16 @@
           <div *ngIf="contentType === 'movies'" class="content__runtime">
             <h4>Runtime</h4>
             <p>{{getWatchTime(content?.['runtime'])}}</p>
+<!--            <div *ngIf="providers !== undefined">-->
+<!--              <h4>Providers</h4>-->
+<!--              <div class="providers">-->
+<!--                <div *ngFor="let provider of providers">-->
+<!--                  <img src="https://image.tmdb.org/t/p/original{{provider?.logo_path}}"-->
+<!--                       data-loaded="true" [alt]="provider?.provider_name" appImgMissingDirective>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
           </div>
 
           <div *ngIf="contentType === 'tv-shows'" class="content__seasons">
@@ -60,6 +70,12 @@
               <p>{{content?.['number_of_episodes']}}</p>
             </div>
           </div>
+
+          <button *ngIf="providersLink" mat-raised-button color="accent" aria-label="Providers"
+                  class="play-trailer" (click)="window.open(providersLink)">
+            <mat-icon>play_arrow</mat-icon>
+            Providers
+          </button>
 
           <button *ngIf="video" mat-raised-button color="primary" aria-label="Trailer" (click)="openDialog()"
                   class="play-trailer">
@@ -84,7 +100,6 @@
           </div>
 
         </div>
-
       </div>
 
     </div>

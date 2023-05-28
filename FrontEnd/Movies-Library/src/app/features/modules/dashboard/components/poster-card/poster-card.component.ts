@@ -11,6 +11,7 @@ export class PosterCardComponent implements OnInit {
   @Input() public model: any;
   public apiModel: any;
   @Input() public contentType: string = "";
+  @Input() public trashFilter: string = "";
   public isMovie: boolean = true;
   public numberOfStars: Array<number> = [];
   public maxRatingArray: any = [];
@@ -22,7 +23,7 @@ export class PosterCardComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.contentType === 'movies' || this.contentType === 'trash') {
+    if (this.contentType === 'movies' || this.trashFilter === 'movies') {
       this.isMovie = true;
       this.moviesService.getMovieById(this.model['movie'].id).subscribe(
         {
@@ -35,7 +36,7 @@ export class PosterCardComponent implements OnInit {
         }
       );
 
-    } else if (this.contentType === "tv-shows") {
+    } else if (this.contentType === "tv-shows" || this.trashFilter === 'tv-shows') {
       this.isMovie = false;
       this.tvService.getTvById(this.model['tv_show'].id).subscribe(
         {

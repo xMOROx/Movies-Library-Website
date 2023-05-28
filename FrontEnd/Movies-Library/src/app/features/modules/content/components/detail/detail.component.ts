@@ -25,6 +25,7 @@ export class DetailComponent implements OnInit {
   public content?: Partial<MovieModel | TvModel | any>;
   public similarContentList: Array<PaginationModel> = [];
   public recommendationContentList: Array<PaginationModel> = [];
+  public providersLink: any = undefined;
   public video?: ContentModel;
   public isLoading: boolean = true;
   public movie?: MovieModel;
@@ -60,6 +61,7 @@ export class DetailComponent implements OnInit {
         this.getMovieVideoById(id);
         this.getSimilarMoviesById(id);
         this.getRecommendationMoviesById(id);
+        this.getProvidersMovie(id);
 
         if (this.user != null) {
           this.getMovieDetailsForUsers(id, this.user.id);
@@ -70,6 +72,7 @@ export class DetailComponent implements OnInit {
         this.getTvVideoById(id);
         this.getSimilarTVsById(id);
         this.getRecommendationTVsById(id);
+        this.getProvidersTv(id);
 
         if (this.user != null) {
           this.getTvDetailsForUsers(id, this.user.id);
@@ -77,6 +80,18 @@ export class DetailComponent implements OnInit {
         }
       }
 
+    });
+  }
+
+  private getProvidersTv(id: string) {
+    this.tvService.getTvProviders(id).subscribe((providers: any) => {
+      this.providersLink = providers.link;
+    });
+  }
+
+  private getProvidersMovie(id: string) {
+    this.moviesService.getMovieProviders(id).subscribe((providers: any) => {
+      this.providersLink = providers.link;
     });
   }
 
@@ -254,4 +269,6 @@ export class DetailComponent implements OnInit {
     }
     return result + (runtime % 60).toString() + "min";
   }
+
+  protected readonly window = window;
 }
