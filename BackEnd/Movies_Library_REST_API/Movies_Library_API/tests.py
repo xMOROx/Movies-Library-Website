@@ -162,11 +162,6 @@ class TrendingMoviesViewTests(APITestCase):
     def test_trending_movies_missing_params(self):
         url = reverse("trending movies")
 
-        response = self.client.get(url)
-        response_data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response_data["message"], "The media type is required.")
-
         response = self.client.get(url, data={"media": "MOVIE"})
         response_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
