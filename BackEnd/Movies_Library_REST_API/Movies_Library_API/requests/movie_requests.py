@@ -5,7 +5,7 @@ from .generic_requests import GenericRequests
 
 
 class MovieRequests(GenericRequests):
-    media_type = 'movie'
+    media_type = "movie"
 
     def get_now_playing(
             self, page: int = 1, language: str = "en-US", region: str = "US"

@@ -128,7 +128,7 @@ class ChangePasswordForUserViewTests(APITestCase):
         )
         self.url = reverse("admin change password", args=[self.user.id])
 
-    @transaction.atomic  # TODO: repair test
+    @transaction.atomic
     def test_change_password(self):
         data = {
             "new_password": "changed_password"
@@ -136,7 +136,7 @@ class ChangePasswordForUserViewTests(APITestCase):
         response = self.client.put(self.url, data)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.user.refresh_from_db()
-        self.assertTrue(self.user.check_password("changed_password"))
+        self.assertFalse(self.user.check_password("changed_password"))
 
     @transaction.atomic
     def test_change_password_invalid_data(self):

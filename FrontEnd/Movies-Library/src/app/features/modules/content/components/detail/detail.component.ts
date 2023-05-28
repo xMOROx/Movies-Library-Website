@@ -23,6 +23,7 @@ import { TvShowsService } from "../../../../services/tv-shows.service";
 export class DetailComponent implements OnInit {
   public contentType: string = '';
   public content?: Partial<MovieModel | TvModel | any>;
+
   public similarContentList: Array<PaginationModel> = [];
   public recommendationContentList: Array<PaginationModel> = [];
   public providersLink: any = undefined;
