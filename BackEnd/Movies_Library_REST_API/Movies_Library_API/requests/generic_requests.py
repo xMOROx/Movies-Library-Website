@@ -187,9 +187,11 @@ class GenericRequests:
                 "region": country_code,
             },
         )
-
         if response.status_code == 200:
-            return response.json()["results"][country_code.upper()]
+            try:
+                return response.json()["results"][country_code.upper()]
+            except KeyError:
+                return None
 
         return None
 
