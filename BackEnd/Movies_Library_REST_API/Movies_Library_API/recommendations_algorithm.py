@@ -1,8 +1,7 @@
 import numpy as np
 from CustomAuthentication.models import User
+from Movies_Library_API.models.movie_lib_models import Movie_User, Movie
 from sklearn.metrics.pairwise import cosine_similarity
-
-from .models.movie_lib_models import Movie_User, Movie
 
 
 def collaborative_filtering_recommendation(user_id, top_n=10):

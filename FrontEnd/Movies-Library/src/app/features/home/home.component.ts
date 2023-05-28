@@ -5,7 +5,7 @@ import { TvModel } from 'src/app/features/modules/content/models/Tv.model';
 import { MoviesService } from "src/app/features/services/movies.service";
 import { ActorModel } from '../modules/actors/models/Actor.model';
 import { ActorsService } from '../modules/actors/services/actors.service';
-import {TvShowsService} from "../services/tv-shows.service";
+import { TvShowsService } from "../services/tv-shows.service";
 SwiperCore.use([Pagination]);
 @Component({
   selector: 'app-home',
@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
     }
   };
 
-  public movieTabList = ['Now playing', 'Upcoming', 'Popular', 'Trending'];
+  public movieTabList = ['Now playing', 'Upcoming', 'Popular', "Trending"];
   public moviesList: Array<MovieModel> = [];
   public selectedMovieTab = 0;
 
@@ -120,7 +120,6 @@ export class HomeComponent implements OnInit {
   }
 
   private getMovies(tabName: string) {
-    //TODO: improve if else => dictionary
     if (tabName === 'Trending') {
       this.getTrendingMovies(); //TODO: Add time window
     } else if (tabName === 'Upcoming') {

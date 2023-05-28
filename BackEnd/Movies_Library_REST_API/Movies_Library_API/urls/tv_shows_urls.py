@@ -1,5 +1,5 @@
 from django.urls import re_path
-from ..views import tv_shows_views
+from Movies_Library_API.views import tv_shows_views
 
 urlpatterns = [
     re_path(
@@ -8,14 +8,18 @@ urlpatterns = [
         name="tv show details api",
     ),
     re_path(r"^tv/popular$", tv_shows_views.popular_tv_shows, name="popular tv shows"),
-    re_path(r"^tv/upcoming$", tv_shows_views.upcoming_tv_shows, name="upcoming tv shows"),
-    re_path(r"^tv/latest$", tv_shows_views.latest_tv_shows, name="latest tv shows"),
-    re_path(r"^tv/trending", tv_shows_views.trending_tv_shows, name="trending tv shows"),
     re_path(
-        r"^tv/airing_today", tv_shows_views.airing_today, name="airing today"
+        r"^tv/upcoming$", tv_shows_views.upcoming_tv_shows, name="upcoming tv shows"
     ),
+    re_path(r"^tv/latest$", tv_shows_views.latest_tv_shows, name="latest tv shows"),
     re_path(
-        r"^tv/airing_this_week", tv_shows_views.airing_this_week, name="airing this week"
+        r"^tv/trending", tv_shows_views.trending_tv_shows, name="trending tv shows"
+    ),
+    re_path(r"^tv/airing_today", tv_shows_views.airing_today, name="airing today"),
+    re_path(
+        r"^tv/airing_this_week",
+        tv_shows_views.airing_this_week,
+        name="airing this week",
     ),
     re_path(
         r"^tv/(?P<tv_show_id>[0-9]+)/credits$",

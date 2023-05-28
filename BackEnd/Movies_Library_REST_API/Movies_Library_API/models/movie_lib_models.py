@@ -43,6 +43,9 @@ class Movie(models.Model):
     def get_movies_for_user(self, user):
         return self.objects.filter(users=user)
 
+    class Meta:
+        app_label = "Movies_Library_API"
+
 
 class Actor(models.Model):
     name = models.CharField(max_length=255)
