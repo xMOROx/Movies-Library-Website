@@ -23,7 +23,8 @@ import { TvShowsService } from "../../../../services/tv-shows.service";
 export class DetailComponent implements OnInit {
   public contentType: string = '';
   public content?: Partial<MovieModel | TvModel | any>;
-  public recommendedContentList: Array<PaginationModel> = [];
+  public similarContentList: Array<PaginationModel> = [];
+  public recommendationContentList: Array<PaginationModel> = [];
   public video?: ContentModel;
   public isLoading: boolean = true;
   public movie?: MovieModel;
@@ -57,7 +58,8 @@ export class DetailComponent implements OnInit {
       if (this.contentType === 'movies') {
         this.getMovieById(id);
         this.getMovieVideoById(id);
-        this.getMovieRecommendationsById(id);
+        this.getSimilarMoviesById(id);
+        this.getRecommendationMoviesById(id);
 
         if (this.user != null) {
           this.getMovieDetailsForUsers(id, this.user.id);
@@ -66,7 +68,8 @@ export class DetailComponent implements OnInit {
       } else {
         this.getTvById(id);
         this.getTvVideoById(id);
-        this.getTvRecommendationsById(id);
+        this.getSimilarTVsById(id);
+        this.getRecommendationTVsById(id);
 
         if (this.user != null) {
           this.getTvDetailsForUsers(id, this.user.id);
@@ -110,7 +113,7 @@ export class DetailComponent implements OnInit {
       if (res?.results?.length > 0) {
         const trailerList = res.results.filter((video: any) => video.type === 'Trailer');
         this.video = trailerList[0];
-        this.video!.url = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${this.video!.key}`);
+        this.video!.url = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${this?.video!.key}`);
       } else {
         this.video = undefined;
       }
@@ -139,15 +142,27 @@ export class DetailComponent implements OnInit {
     });
   }
 
-  private getMovieRecommendationsById(id: string) {
-    this.moviesService.getRecommendedMovies(id, 1).pipe(take(1)).subscribe((res: any) => {
-      this.recommendedContentList = res.results.slice(0, 12);
+  private getSimilarMoviesById(id: string) {
+    this.moviesService.getSimilarMovies(id, 1).pipe(take(1)).subscribe((res: any) => {
+      this.similarContentList = res.results.slice(0, 12);
     });
   }
 
-  private getTvRecommendationsById(id: string) {
+  private getRecommendationMoviesById(id: string) {
+    this.moviesService.getRecommendedMovies(id, 1).pipe(take(1)).subscribe((res: any) => {
+      this.recommendationContentList = res.results.slice(0, 12);
+    });
+  }
+
+  private getSimilarTVsById(id: string) {
+    this.tvService.getSimilarTv(id, 1).pipe(take(1)).subscribe((res: any) => {
+      this.similarContentList = res.results.slice(0, 12);
+    });
+  }
+
+  private getRecommendationTVsById(id: string) {
     this.tvService.getRecommendedTv(id, 1).pipe(take(1)).subscribe((res: any) => {
-      this.recommendedContentList = res.results.slice(0, 12);
+      this.recommendationContentList = res.results.slice(0, 12);
     });
   }
 

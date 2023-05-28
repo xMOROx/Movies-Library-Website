@@ -153,20 +153,39 @@
     </button>
   </section>
 
-  <section class="content__recommendations container">
+  <section class="content__similar_or_recommended container">
 
-    <h2>Recommended Movies</h2>
+    <h2>Similar {{contentType}}</h2>
 
-    <div class="content__recommendations--cards" *ngIf="recommendedContentList.length > 0; else noRecomendedMovies">
-      <div *ngFor="let content of recommendedContentList;">
+    <div class="content__similar_or_recommended--cards" *ngIf="similarContentList.length > 0; else noSimilarMovies">
+      <div *ngFor="let content of similarContentList;">
         <app-movie-card [model]="content" [isMovie]="contentType === 'movies'"></app-movie-card>
       </div>
     </div>
 
-    <ng-template #noRecomendedMovies>
-      <div class="content__no-recomended">
+    <ng-template #noSimilarMovies>
+      <div class="content__no-similar_or_recommended">
         <mat-icon [inline]="true">sentiment_dissatisfied</mat-icon>
-        <span>No recommended movies</span>
+        <span>No similar {{contentType.slice(0, contentType.length - 1)}}</span>
+      </div>
+    </ng-template>
+
+  </section>
+
+  <section class="content__similar_or_recommended container">
+
+    <h2>Recommended {{contentType}}</h2>
+
+    <div class="content__similar_or_recommended--cards" *ngIf="recommendationContentList.length > 0; else noRecommendedMovies">
+      <div *ngFor="let content of recommendationContentList;">
+        <app-movie-card [model]="content" [isMovie]="contentType === 'movies'"></app-movie-card>
+      </div>
+    </div>
+
+    <ng-template #noRecommendedMovies>
+      <div class="content__no-similar_or_recommended">
+        <mat-icon [inline]="true">sentiment_dissatisfied</mat-icon>
+        <span>No recommended {{contentType.slice(0, contentType.length - 1)}}</span>
       </div>
     </ng-template>
 
