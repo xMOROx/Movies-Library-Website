@@ -1,7 +1,6 @@
-from datetime import datetime, timedelta
-import requests
 import Movies_Library_API.config as config
-from django.conf import settings
+import requests
+
 from .generic_requests import GenericRequests
 
 
@@ -9,7 +8,7 @@ class MovieRequests(GenericRequests):
     media_type = "movie"
 
     def get_now_playing(
-        self, page: int = 1, language: str = "en-US", region: str = "US"
+            self, page: int = 1, language: str = "en-US", region: str = "US"
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"{self.media_type}/now_playing",
