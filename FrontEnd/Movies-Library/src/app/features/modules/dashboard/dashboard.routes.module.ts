@@ -14,7 +14,7 @@ const dashboardRoutes: Routes = [
     children: [
       {path: '', component: DashboardComponent},
       {path: 'movies', component: ContentComponent},
-      {path: 'TV-shows', component: ContentComponent},
+      {path: 'tv-shows', component: ContentComponent},
       {path: 'trash', component: ContentComponent},
       {path: 'settings', component: SettingsComponent},
 

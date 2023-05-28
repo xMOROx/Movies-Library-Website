@@ -13,6 +13,7 @@ class UserManager(auth_models.BaseUserManager):
             is_active: bool = True,
             is_staff: bool = False,
             is_superuser: bool = False,
+            is_banned: bool = False,
     ) -> "User":
         if not email:
             raise ValueError("Users must have an email address")
@@ -32,6 +33,7 @@ class UserManager(auth_models.BaseUserManager):
         user.is_active = is_active
         user.is_staff = is_staff
         user.is_superuser = is_superuser
+        user.is_banned = is_banned
 
         user.save(using=self._db)
 

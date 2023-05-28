@@ -30,10 +30,10 @@
             </div>
 
             <div *ngIf="!isInTrash" class="trash--unchecked">
-              <mat-icon (click)="addMovieToTrash()">delete_outlined</mat-icon>
+              <mat-icon (click)="addContentToTrash()">delete_outlined</mat-icon>
             </div>
             <div *ngIf="isInTrash" class="trash--checked">
-              <mat-icon (click)="deleteMovieFromTrash()">delete_outlined</mat-icon>
+              <mat-icon (click)="deleteContentFromTrash()">delete_outlined</mat-icon>
             </div>
           </div>
 
@@ -44,6 +44,22 @@
 
           <h4>Overview</h4>
           <p>{{content?.['overview']}}</p>
+
+          <div *ngIf="contentType === 'movies'" class="content__runtime">
+            <h4>Runtime</h4>
+            <p>{{getWatchTime(content?.['runtime'])}}</p>
+          </div>
+
+          <div *ngIf="contentType === 'tv-shows'" class="content__seasons">
+            <div>
+              <h4>Seasons</h4>
+              <p>{{content?.['number_of_seasons']}}</p>
+            </div>
+            <div>
+              <h4>Episodes</h4>
+              <p>{{content?.['number_of_episodes']}}</p>
+            </div>
+          </div>
 
           <button *ngIf="video" mat-raised-button color="primary" aria-label="Trailer" (click)="openDialog()"
                   class="play-trailer">
@@ -59,7 +75,7 @@
           </div>
           <div *ngIf="user != undefined " class="content__data--form">
             <mat-form-field appearance="fill" color="primary">
-              <mat-select (selectionChange)="addMovie()" [(value)]="status">
+              <mat-select (selectionChange)="addContent()" [(value)]="status">
                 <mat-option value="Not watched">Not watched</mat-option>
                 <mat-option value="Plan to watch">Plan to watch</mat-option>
                 <mat-option value="Watched">Watched</mat-option>
@@ -91,10 +107,10 @@
       </div>
 
       <div *ngIf="!isInTrash" class="trash--unchecked">
-        <mat-icon (click)="addMovieToTrash()">delete_outlined</mat-icon>
+        <mat-icon (click)="addContentToTrash()">delete_outlined</mat-icon>
       </div>
       <div *ngIf="isInTrash" class="trash--checked">
-        <mat-icon (click)="deleteMovieFromTrash()">delete_outlined</mat-icon>
+        <mat-icon (click)="deleteContentFromTrash()">delete_outlined</mat-icon>
       </div>
     </div>
 
@@ -105,9 +121,24 @@
 
     <h4>Overview</h4>
     <p>{{content?.['overview']}}</p>
+    <div *ngIf="contentType === 'movies'" class="content__runtime">
+      <h4>Runtime</h4>
+      <p>{{getWatchTime(content?.['runtime'])}}</p>
+    </div>
+
+    <div *ngIf="contentType === 'tv-shows'" class="content__seasons">
+      <div>
+        <h4>Seasons</h4>
+        <p>{{content?.['number_of_seasons']}}</p>
+      </div>
+      <div>
+        <h4>Episodes</h4>
+        <p>{{content?.['number_of_episodes']}}</p>
+      </div>
+    </div>
     <div *ngIf="user != undefined " class="content__data-mobile--form">
       <mat-form-field appearance="fill" color="primary">
-        <mat-select (selectionChange)="addMovie()" [(value)]="status">
+        <mat-select (selectionChange)="addContent()" [(value)]="status">
           <mat-option value="Not watched">Not watched</mat-option>
           <mat-option value="Plan to watch">Plan to watch</mat-option>
           <mat-option value="Watched">Watched</mat-option>

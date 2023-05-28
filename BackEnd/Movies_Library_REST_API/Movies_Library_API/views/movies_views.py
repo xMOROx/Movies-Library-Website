@@ -1,3 +1,5 @@
+from Movies_Library_API.models.movie_lib_models import Movie
+from Movies_Library_API.requests.movie_requests import MovieRequests
 from Movies_Library_API.serializers import MovieSerializer
 from django.http.response import JsonResponse
 from rest_framework import status
@@ -7,9 +9,6 @@ from rest_framework.decorators import (
 )
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
-
-from ..models.movie_lib_models import Movie
-from ..requests.movie_requests import MovieRequests
 
 
 @api_view(["GET"])
@@ -108,19 +107,17 @@ def trending_movies(request):
 
         if time_window is None:
             return JsonResponse(
-                {"message": "The time window is required"},
+                {"message": "The time window is required."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        data = MovieRequests().get_trending_by_time(
-            time_window, page, language, region
-        )
+        data = MovieRequests().get_trending_by_time(time_window, page, language, region)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The movies do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The movies does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -138,7 +135,7 @@ def now_playing_movies(request):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The movies do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The movie does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -154,7 +151,7 @@ def movie_credits(request, movie_id):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The movie does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -171,7 +168,7 @@ def movie_recommendations(request, movie_id):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The movie does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -189,7 +186,7 @@ def similar_movies(request, movie_id):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The movie does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -205,7 +202,7 @@ def movie_provider(request, movie_id):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The movie does not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The movie does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -220,7 +217,7 @@ def movie_genres(request):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The genres does not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The genres does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -242,7 +239,7 @@ def movies_by_genre(request):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The movies does not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The movies does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -257,7 +254,7 @@ def movie_videos(request, movie_id):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The videos does not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The videos does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -272,7 +269,7 @@ def search_movies(request):
 
         if query is None:
             return JsonResponse(
-                {"message": "The query is required"},
+                {"message": "The query is required."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -282,5 +279,5 @@ def search_movies(request):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The movies does not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The movies does not exist."}, status=status.HTTP_404_NOT_FOUND
         )

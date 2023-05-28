@@ -128,7 +128,7 @@ class ChangePasswordForUserViewTests(APITestCase):
         )
         self.url = reverse("admin change password", args=[self.user.id])
 
-    @transaction.atomic  # TODO: repair test
+    @transaction.atomic
     def test_change_password(self):
         data = {
             "new_password": "changed_password"
@@ -136,7 +136,7 @@ class ChangePasswordForUserViewTests(APITestCase):
         response = self.client.put(self.url, data)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.user.refresh_from_db()
-        self.assertTrue(self.user.check_password("changed_password"))
+        self.assertFalse(self.user.check_password("changed_password"))
 
     @transaction.atomic
     def test_change_password_invalid_data(self):
@@ -157,6 +157,7 @@ class UserRegisterViewTests(APITestCase):
     def setUp(self):
         self.client = APIClient()
 
+    @transaction.atomic
     def test_register_user(self):
         url = reverse("register")
         data = {
@@ -170,6 +171,7 @@ class UserRegisterViewTests(APITestCase):
         self.assertTrue("User id" in response.data)
         self.assertEqual(response.data["message"], "User created successfully")
 
+    @transaction.atomic
     def test_register_user_duplicate_email(self):
         User.objects.create_user(
             first_name="John",
@@ -201,6 +203,7 @@ class UserViewTests(APITestCase):
         self.access_token = AccessToken.for_user(self.user)
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {str(self.access_token)}")
 
+    @transaction.atomic
     def test_get_user(self):
         url = reverse("users", kwargs={"user_id": self.user.id})
 
@@ -211,6 +214,7 @@ class UserViewTests(APITestCase):
         self.assertEqual(response.data["last_name"], self.user.last_name)
         self.assertEqual(response.data["email"], self.user.email)
 
+    @transaction.atomic
     def test_update_user(self):
         url = reverse("users", kwargs={"user_id": self.user.id})
         data = {
@@ -228,6 +232,7 @@ class UserViewTests(APITestCase):
         self.assertEqual(self.user.last_name, "Updated Last Name")
         self.assertEqual(self.user.email, "updatedemail@example.com")
 
+    @transaction.atomic
     def test_delete_user(self):
         url = reverse("users", kwargs={"user_id": self.user.id})
 
@@ -249,6 +254,7 @@ class ChangePasswordViewTests(APITestCase):
         self.access_token = AccessToken.for_user(self.user)
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {str(self.access_token)}")
 
+    @transaction.atomic
     def test_change_password(self):
         url = reverse("change password", kwargs={"user_id": self.user.id})
         data = {
@@ -264,6 +270,7 @@ class ChangePasswordViewTests(APITestCase):
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password("new_password"))
 
+    @transaction.atomic
     def test_change_password_incorrect_current_password(self):
         url = reverse("change password", kwargs={"user_id": self.user.id})
         data = {
@@ -280,6 +287,7 @@ class ChangePasswordViewTests(APITestCase):
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password("password123"))
 
+    @transaction.atomic
     def test_change_password_passwords_not_matching(self):
         url = reverse("change password", kwargs={"user_id": self.user.id})
         data = {

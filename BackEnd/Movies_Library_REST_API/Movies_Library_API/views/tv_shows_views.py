@@ -8,8 +8,8 @@ from rest_framework.decorators import (
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from ..models.movie_lib_models import TVShow
-from ..requests.tv_shows_requests import TVShowsRequests
+from Movies_Library_API.models.movie_lib_models import TVShow
+from Movies_Library_API.requests.tv_shows_requests import TVShowsRequests
 
 
 @api_view(["GET"])

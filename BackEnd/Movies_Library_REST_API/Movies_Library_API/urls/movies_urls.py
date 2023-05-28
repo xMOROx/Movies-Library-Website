@@ -1,5 +1,5 @@
+from Movies_Library_API.views import movies_views
 from django.urls import re_path
-from ..views import movies_views
 
 urlpatterns = [
     re_path(

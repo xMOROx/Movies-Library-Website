@@ -1,12 +1,13 @@
 from datetime import datetime, timedelta
-import requests
+
 import Movies_Library_API.config as config
+import requests
 from django.conf import settings
 
 
 class GenericRequests:
     _URL = settings.API_URL
-    media_type = ''
+    media_type = ""
 
     def get_popular(
         self, page: int = 1, language: str = "en-US", region: str = "US"
@@ -72,11 +73,9 @@ class GenericRequests:
         page: int = 1,
         language: str = "en-US",
         region: str = "US",
-    ) -> (
-        dict | None
-    ):  # TODO: change latest definition. It should be the latest movie with is now playing
+    ) -> dict | None:
         response = requests.get(
-            url=self._URL + f"{self.media_type}/latest",  # TODO: change to discover endpoint
+            url=self._URL + f"{self.media_type}/latest",
             params={
                 "api_key": config.api_key,
                 "language": language,
@@ -106,10 +105,10 @@ class GenericRequests:
 
     def get_trending_by_time(
         self,
-            time_window: str,
-            page: int = 1,
-            language: str = "en-US",
-            region: str = "US",
+        time_window: str,
+        page: int = 1,
+        language: str = "en-US",
+        region: str = "US",
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"trending/{self.media_type}/" + time_window,
@@ -134,7 +133,11 @@ class GenericRequests:
         return None
 
     def get_recommendations(
-        self, content_id: int, page: int = 1, language: str = "en-US", region: str = "US"
+        self,
+        content_id: int,
+        page: int = 1,
+        language: str = "en-US",
+        region: str = "US",
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"{self.media_type}/{content_id}/recommendations",
@@ -152,7 +155,11 @@ class GenericRequests:
         return None
 
     def get_similar(
-        self, content_id: int, page: int = 1, language: str = "en-US", region: str = "US"
+        self,
+        content_id: int,
+        page: int = 1,
+        language: str = "en-US",
+        region: str = "US",
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"{self.media_type}/{content_id}/similar",

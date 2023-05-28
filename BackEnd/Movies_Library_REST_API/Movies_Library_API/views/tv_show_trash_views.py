@@ -16,7 +16,7 @@ from Movies_Library_API.serializers import TVShowTrashSerializer
 from CustomAuthentication.models import User
 from CustomAuthentication.permissions import IsOwner
 
-from ..requests.tv_shows_requests import TVShowsRequests
+from Movies_Library_API.requests.tv_shows_requests import TVShowsRequests
 from rest_framework.serializers import ValidationError as DRFValidationError
 from django.core.exceptions import ValidationError as DjangoValidationError
 
@@ -30,7 +30,8 @@ def crud_for_tv_show_inside_trash(request, user_id, tv_show_id):
             _ = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-                {"message": "This user does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "This user does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         try:
@@ -38,14 +39,14 @@ def crud_for_tv_show_inside_trash(request, user_id, tv_show_id):
         except TVShow.DoesNotExist:
             return JsonResponse(
                 {"message": "This tv show does not exist"},
-                status=status.HTTP_404_NOT_FOUND
+                status=status.HTTP_404_NOT_FOUND,
             )
         try:
             data = TVShowTrash.objects.get(user=user_id, tv_show=tv_show_id)
         except TVShowTrash.DoesNotExist:
             return JsonResponse(
                 {"message": "This tv show is not in trash"},
-                status=status.HTTP_404_NOT_FOUND
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         serializer = TVShowTrashSerializer(data)
@@ -55,7 +56,8 @@ def crud_for_tv_show_inside_trash(request, user_id, tv_show_id):
             user = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-                {"message": "This user does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "This user does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         tv_show_requests = TVShowsRequests()
@@ -67,7 +69,7 @@ def crud_for_tv_show_inside_trash(request, user_id, tv_show_id):
             if tv_show_api is None:
                 return JsonResponse(
                     {"message": "This tv show does not exist"},
-                    status=status.HTTP_404_NOT_FOUND
+                    status=status.HTTP_404_NOT_FOUND,
                 )
             try:
                 tv_show = TVShow.objects.create(
@@ -85,13 +87,10 @@ def crud_for_tv_show_inside_trash(request, user_id, tv_show_id):
             _ = TVShowTrash.objects.get(user=user_id, tv_show=tv_show_id)
             return JsonResponse(
                 {"message": "Tv show already in trash"},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
         except TVShowTrash.DoesNotExist:
-            tv_show_trash = TVShowTrash.objects.create(
-                user=user,
-                tv_show=tv_show
-            )
+            tv_show_trash = TVShowTrash.objects.create(user=user, tv_show=tv_show)
             tv_show_trash.save()
 
             serializer = TVShowTrashSerializer(tv_show_trash)
@@ -104,20 +103,20 @@ def crud_for_tv_show_inside_trash(request, user_id, tv_show_id):
             _ = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-                {"message": "This user does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "This user does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
             )
         try:
             _ = TVShow.objects.get(pk=tv_show_id)
         except TVShow.DoesNotExist:
             return JsonResponse(
-                {"message": "This tv show does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "This tv show does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         tv_show_trash = get_object_or_404(TVShowTrash, user=user_id, tv_show=tv_show_id)
         tv_show_trash.delete()
-        return JsonResponse(
-            None, status=status.HTTP_204_NO_CONTENT, safe=False
-        )
+        return JsonResponse(None, status=status.HTTP_204_NO_CONTENT, safe=False)
 
 
 @api_view(["GET"])
@@ -129,10 +128,13 @@ def get_all_tv_shows(request, user_id):
             _ = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return JsonResponse(
-                {"message": "This user does not exist"}, status=status.HTTP_404_NOT_FOUND
+                {"message": "This user does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
             )
         show_all = "true" == request.GET.get("all", 1)
-        data = get_list_or_404(TVShowTrash.objects.order_by("-tv_show__title"), user=user_id)
+        data = get_list_or_404(
+            TVShowTrash.objects.order_by("-tv_show__title"), user=user_id
+        )
         pagination = PageNumberPagination()
         page = pagination.paginate_queryset(data, request)
         if page is not None and not show_all:
@@ -141,4 +143,3 @@ def get_all_tv_shows(request, user_id):
 
         serializer = TVShowTrashSerializer(data, many=True)
         return JsonResponse(serializer.data, safe=False)
-
