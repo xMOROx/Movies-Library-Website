@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MoviesService} from "../../../../services/movies.service";
+import {TvShowsService} from "../../../../services/tv-shows.service";
 
 @Component({
   selector: 'app-poster-card',
@@ -12,8 +13,11 @@ export class PosterCardComponent implements OnInit {
   @Input() public contentType: string = "";
   public isMovie: boolean = true;
   public numberOfStars: Array<number> = [];
+  public maxRatingArray: any = [];
+  private maxRating = 10;
   constructor(
     private moviesService: MoviesService,
+    private tvService: TvShowsService
   ) {
   }
 
@@ -31,10 +35,25 @@ export class PosterCardComponent implements OnInit {
         }
       );
 
-    } else if (this.contentType === "TV-shows") {
+    } else if (this.contentType === "tv-shows") {
       this.isMovie = false;
+      this.tvService.getTvById(this.model['tv_show'].id).subscribe(
+        {
+          next: (response: any) => {
+            this.apiModel = response;
+          },
+          error: (_: any) => {
+
+          }
+        }
+      );
     }
+    if (this.model.rating === undefined) {
+      this.model.rating = 0;
+    }
+
     this.numberOfStars = Array(this.model.rating).fill(0).map((x, i) => i);
+    this.maxRatingArray = Array(this.maxRating - this.numberOfStars.length).fill(0);
 
   }
 

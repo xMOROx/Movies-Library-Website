@@ -28,7 +28,7 @@ export class TvShowsService {
       popularity: tv.populatiry,
       vote_count: tv.vote_count,
       first_air_date: tv.first_air_date,
-      backdrop_path: tv.backdrop_path,
+      backdrop_path: environment.backdropPath + tv.backdrop_path,
       original_language: tv.original_language,
       id: tv.id,
       vote_average: tv.vote_average,

@@ -35,7 +35,7 @@ export class MoviesService {
       original_title: movie.original_title,
       overview: movie.overview,
       popularity: movie.popularity,
-      poster_path: environment.posterPath + movie.poster_path,
+      poster_path: movie.poster_path,
       production_companies: movie.production_companies,
       production_countries: movie.production_countries,
       release_date: movie.release_date,

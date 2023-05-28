@@ -233,4 +233,12 @@ export class DetailComponent implements OnInit {
       });
     }
   }
+
+  public getWatchTime(runtime: number): string {
+    let result = ""
+    if (Math.floor(runtime / 60) > 0) {
+      result += Math.floor(runtime / 60).toString() + "h ";
+    }
+    return result + (runtime % 60).toString() + "min";
+  }
 }

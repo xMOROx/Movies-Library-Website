@@ -1,26 +1,50 @@
-<div class="poster">
-
-  <a [routerLink]="isMovie ? '/movies/' + model['movie'].id : '/tv-shows/' + model['movie'].id"
-     [title]="'Go to ' + model.title ?? model.name">
+<div class="poster" *ngIf="isMovie">
+  <a [routerLink]="'/movies/' + model['movie'].id"
+     [title]="'Go to ' + model['movie'].title">
     <img class="poster__image" loading="lazy"
-         [src]="'https://image.tmdb.org/t/p/w220_and_h330_face/' + model['movie']['poster_url']" srcset="https://image.tmdb.org/t/p/w220_and_h330_face/{{model['movie']['poster_url']}} 1x,
-         https://image.tmdb.org/t/p/w440_and_h660_face/{{model['movie']['poster_url']}} 2x" [alt]="model['movie'].title ?? model['movie'].name" appImageMissing>
+         [src]="'https://image.tmdb.org/t/p/w220_and_h330_face' + model['movie']['poster_url']"
+         srcset="https://image.tmdb.org/t/p/w220_and_h330_face/{{model['movie']['poster_url']}} 1x,
+         https://image.tmdb.org/t/p/w440_and_h660_face/{{model['movie']['poster_url']}} 2x" [alt]="model['movie'].title"
+         appImageMissing>
   </a>
-
   <div class="poster__content">
-    <a *ngIf="model['movie'].title ?? model['movie'].name" [routerLink]="isMovie ? '/movies/' + model['movie'].id : '/tv-shows/' + model['movie'].id"
-       [title]="model['movie'].title ?? model['movie'].name" class="poster__title colored-hover">
-      {{model['movie'].title ?? model['movie'].name}}
+    <a [routerLink]="'/movies/' + model['movie'].id"
+       [title]="'Go to' + model['movie'].title" class="poster__title colored-hover">
+      {{model['movie'].title}}
     </a>
-    <p *ngIf="apiModel?.['release_date'] ?? apiModel?.['first_air_date']">
-      {{(apiModel?.['release_date'] ?? apiModel?.['first_air_date']) | date}}
+    <p *ngIf="apiModel?.['release_date']">
+      {{apiModel?.['release_date'] | date}}
     </p>
     <p>
-      <span  class="poster__rating">
+      <span class="poster__rating">
         <mat-icon *ngFor="let star of numberOfStars"> star</mat-icon>
-        <mat-icon *ngIf="model.rating < 1" class="none__rating"> star_outlined</mat-icon>
+        <mat-icon *ngFor="let _ of maxRatingArray" class="none__rating"> star_outlined</mat-icon>
       </span>
     </p>
   </div>
-
+</div>
+<div class="poster" *ngIf="!isMovie">
+  <a [routerLink]="'/tv-shows/' + model['tv_show'].id"
+     [title]="'Go to ' + model['tv_show'].title">
+    <img class="poster__image" loading="lazy"
+         [src]="'https://image.tmdb.org/t/p/w220_and_h330_face' + model['tv_show']['poster_url']"
+         srcset="https://image.tmdb.org/t/p/w220_and_h330_face/{{model['tv_show']['poster_url']}} 1x,
+         https://image.tmdb.org/t/p/w440_and_h660_face/{{model['tv_show']['poster_url']}} 2x"
+         [alt]="model['tv_show'].title" appImageMissing>
+  </a>
+  <div class="poster__content">
+    <a [routerLink]="'/tv-shows/' + model['tv_show'].id"
+       [title]="'Go to' + model['tv_show'].title" class="poster__title colored-hover">
+      {{model['tv_show'].title}}
+    </a>
+    <p *ngIf="apiModel?.['first_air_date']">
+      {{apiModel?.['first_air_date'] | date}}
+    </p>
+    <p>
+      <span class="poster__rating">
+        <mat-icon *ngFor="let star of numberOfStars"> star</mat-icon>
+        <mat-icon *ngFor="let _ of maxRatingArray" class="none__rating"> star_outlined</mat-icon>
+      </span>
+    </p>
+  </div>
 </div>

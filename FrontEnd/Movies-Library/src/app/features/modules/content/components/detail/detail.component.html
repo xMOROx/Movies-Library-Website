@@ -45,6 +45,22 @@
           <h4>Overview</h4>
           <p>{{content?.['overview']}}</p>
 
+          <div *ngIf="contentType === 'movies'" class="content__runtime">
+            <h4>Runtime</h4>
+            <p>{{getWatchTime(content?.['runtime'])}}</p>
+          </div>
+
+          <div *ngIf="contentType === 'tv-shows'" class="content__seasons">
+            <div>
+              <h4>Seasons</h4>
+              <p>{{content?.['number_of_seasons']}}</p>
+            </div>
+            <div>
+              <h4>Episodes</h4>
+              <p>{{content?.['number_of_episodes']}}</p>
+            </div>
+          </div>
+
           <button *ngIf="video" mat-raised-button color="primary" aria-label="Trailer" (click)="openDialog()"
                   class="play-trailer">
             <mat-icon>play_arrow</mat-icon>
@@ -105,6 +121,21 @@
 
     <h4>Overview</h4>
     <p>{{content?.['overview']}}</p>
+    <div *ngIf="contentType === 'movies'" class="content__runtime">
+      <h4>Runtime</h4>
+      <p>{{getWatchTime(content?.['runtime'])}}</p>
+    </div>
+
+    <div *ngIf="contentType === 'tv-shows'" class="content__seasons">
+      <div>
+        <h4>Seasons</h4>
+        <p>{{content?.['number_of_seasons']}}</p>
+      </div>
+      <div>
+        <h4>Episodes</h4>
+        <p>{{content?.['number_of_episodes']}}</p>
+      </div>
+    </div>
     <div *ngIf="user != undefined " class="content__data-mobile--form">
       <mat-form-field appearance="fill" color="primary">
         <mat-select (selectionChange)="addContent()" [(value)]="status">
