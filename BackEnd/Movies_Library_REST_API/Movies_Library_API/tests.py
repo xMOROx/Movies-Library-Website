@@ -339,7 +339,7 @@ class SearchMoviesViewTests(APITestCase):
         self.assertEqual(response_data["message"], "The query is required.")
 
 
-# ======================== Admin view ========================
+# ================================== Admin ===================================
 class AdminUserListViewTests(APITestCase):
     def setUp(self):
         self.superuser = User.objects.create_superuser(
@@ -733,4 +733,3 @@ class DetailsOfMovieForUserTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         response_data = response.json()
         self.assertEqual(response_data["detail"], "You do not have permission to perform this action.")
-# =============================================== Movies trash views ==============================================================

@@ -4,7 +4,7 @@ from Movies_Library_API.models.movie_lib_models import Movie, Movie_User
 from Movies_Library_API.recommendations_algorithm import (
     collaborative_filtering_recommendation,
 )
-from Movies_Library_API.requests.movie_db_requests import MovieRequests
+from Movies_Library_API.requests.movie_requests import MovieRequests
 from Movies_Library_API.serializers import Movie_UserSerializer
 from django.core.exceptions import (
     ValidationError as DjangoValidationError,

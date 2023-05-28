@@ -4,7 +4,8 @@ from rest_framework import views, response, permissions
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_204_NO_CONTENT,
-    HTTP_200_OK, HTTP_404_NOT_FOUND,
+    HTTP_200_OK,
+    HTTP_404_NOT_FOUND,
 )
 
 
@@ -38,7 +39,11 @@ class AdminUserUpdateView(views.APIView):
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
             return response.Response(
-                {"message": "User does not exist.", "status": HTTP_404_NOT_FOUND, "id": user_id},
+                {
+                    "message": "User does not exist.",
+                    "status": HTTP_404_NOT_FOUND,
+                    "id": user_id,
+                },
                 status=HTTP_404_NOT_FOUND,
             )
 
@@ -54,7 +59,11 @@ class AdminUserUpdateView(views.APIView):
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
             return response.Response(
-                {"message": "User does not exist.", "status": HTTP_404_NOT_FOUND, "id": user_id},
+                {
+                    "message": "User does not exist.",
+                    "status": HTTP_404_NOT_FOUND,
+                    "id": user_id,
+                },
                 status=HTTP_404_NOT_FOUND,
             )
 
@@ -87,11 +96,19 @@ class BanUserView(views.APIView):
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
             return response.Response(
-                {"message": "User does not exist.", "status": HTTP_404_NOT_FOUND, "id": user_id},
+                {
+                    "message": "User does not exist.",
+                    "status": HTTP_404_NOT_FOUND,
+                    "id": user_id,
+                },
                 status=HTTP_404_NOT_FOUND,
             )
 
-        is_banned = False if request.data["is_banned"] == 'False' else bool(request.data["is_banned"])
+        is_banned = (
+            False
+            if request.data["is_banned"] == "False"
+            else bool(request.data["is_banned"])
+        )
 
         if is_banned == user.is_banned:
             return response.Response(

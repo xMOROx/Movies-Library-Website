@@ -1,4 +1,4 @@
-from Movies_Library_API.views import user_movies_views
+from Movies_Library_API.views import user_movies_views, user_tv_show_views
 from django.urls import re_path
 
 urlpatterns = [

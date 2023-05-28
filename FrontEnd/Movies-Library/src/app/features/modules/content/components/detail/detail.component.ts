@@ -168,9 +168,13 @@ export class DetailComponent implements OnInit {
   }
 
   public openDialog(): void {
+<<<<<<< Updated upstream
     const dialogRef = this.trailerDialog.open(this.matTrailerDialog, {
       backdropClass: 'backdropBackground',
     });
+=======
+    const dialogRef = this.trailerDialog.open(this.matTrailerDialog, { backdropClass: 'backdropBackground'}, );
+>>>>>>> Stashed changes
     dialogRef.disableClose = false;
   }
 

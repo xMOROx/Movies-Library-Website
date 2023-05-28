@@ -29,7 +29,11 @@ export class HomeComponent implements OnInit {
     }
   };
 
+<<<<<<< Updated upstream
   public movieTabList = ['Now playing', 'Upcoming', 'Popular', 'Trending'];
+=======
+  public movieTabList = ['Now playing', 'Upcoming', 'Popular', "Trending"];
+>>>>>>> Stashed changes
   public moviesList: Array<MovieModel> = [];
   public selectedMovieTab = 0;
 
