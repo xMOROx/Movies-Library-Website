@@ -10,7 +10,7 @@ class GenericRequests:
     media_type = ""
 
     def get_popular(
-        self, page: int = 1, language: str = "en-US", region: str = "US"
+            self, page: int = 1, language: str = "en-US", region: str = "US"
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"{self.media_type}/popular",
@@ -26,7 +26,7 @@ class GenericRequests:
         return None
 
     def get_details(
-        self, movie_id: int, language: str = "en-US", region: str = "US"
+            self, movie_id: int, language: str = "en-US", region: str = "US"
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"{self.media_type}/" + str(movie_id),
@@ -37,11 +37,11 @@ class GenericRequests:
         return None
 
     def get_upcoming(
-        self,
-        page: int = 1,
-        time_type_start_offset: str = "month",
-        language: str = "en-US",
-        region: str = "US",
+            self,
+            page: int = 1,
+            time_type_start_offset: str = "month",
+            language: str = "en-US",
+            region: str = "US",
     ) -> dict | None:
         start_time = datetime.now()
 
@@ -69,10 +69,10 @@ class GenericRequests:
         return None
 
     def get_latest(
-        self,
-        page: int = 1,
-        language: str = "en-US",
-        region: str = "US",
+            self,
+            page: int = 1,
+            language: str = "en-US",
+            region: str = "US",
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"{self.media_type}/latest",
@@ -88,7 +88,7 @@ class GenericRequests:
         return None
 
     def get_now_playing(
-        self, page: int = 1, language: str = "en-US", region: str = "US"
+            self, page: int = 1, language: str = "en-US", region: str = "US"
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"{self.media_type}/now_playing",
@@ -104,11 +104,11 @@ class GenericRequests:
         return None
 
     def get_trending_by_time(
-        self,
-        time_window: str,
-        page: int = 1,
-        language: str = "en-US",
-        region: str = "US",
+            self,
+            time_window: str,
+            page: int = 1,
+            language: str = "en-US",
+            region: str = "US",
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"trending/{self.media_type}/" + time_window,
@@ -122,7 +122,7 @@ class GenericRequests:
         return response.json()
 
     def get_credits(
-        self, content_id: int, language: str = "en-US", region: str = "US"
+            self, content_id: int, language: str = "en-US", region: str = "US"
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"{self.media_type}/{content_id}/credits",
@@ -133,11 +133,11 @@ class GenericRequests:
         return None
 
     def get_recommendations(
-        self,
-        content_id: int,
-        page: int = 1,
-        language: str = "en-US",
-        region: str = "US",
+            self,
+            content_id: int,
+            page: int = 1,
+            language: str = "en-US",
+            region: str = "US",
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"{self.media_type}/{content_id}/recommendations",
@@ -155,11 +155,11 @@ class GenericRequests:
         return None
 
     def get_similar(
-        self,
-        content_id: int,
-        page: int = 1,
-        language: str = "en-US",
-        region: str = "US",
+            self,
+            content_id: int,
+            page: int = 1,
+            language: str = "en-US",
+            region: str = "US",
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"{self.media_type}/{content_id}/similar",
@@ -177,7 +177,7 @@ class GenericRequests:
         return None
 
     def get_provider(
-        self, content_id: int, country_code: str = "US", language: str = "en-US"
+            self, content_id: int, country_code: str = "US", language: str = "en-US"
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"{self.media_type}/{content_id}/watch/providers",
@@ -194,7 +194,7 @@ class GenericRequests:
         return None
 
     def search(
-        self, query: str, page: str = 1, language: str = "en-US", region: str = "US"
+            self, query: str, page: str = 1, language: str = "en-US", region: str = "US"
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"search/{self.media_type}",
@@ -220,7 +220,7 @@ class GenericRequests:
         return None
 
     def get_content_by_genre(
-        self, genre_ids: str, page: int = 1, language: str = "en-US"
+            self, genre_ids: str, page: int = 1, language: str = "en-US"
     ) -> dict | None:
         response = requests.get(
             url=self._URL + f"discover/{self.media_type}",

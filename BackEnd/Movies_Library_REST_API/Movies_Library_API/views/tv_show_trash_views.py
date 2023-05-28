@@ -1,6 +1,10 @@
+from CustomAuthentication.models import User
+from CustomAuthentication.permissions import IsOwner
+from Movies_Library_API.requests.tv_shows_requests import TVShowsRequests
+from Movies_Library_API.serializers import TVShowTrashSerializer
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.http.response import JsonResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
-
 from rest_framework import status
 from rest_framework.decorators import (
     api_view,
@@ -9,16 +13,10 @@ from rest_framework.decorators import (
 )
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.serializers import ValidationError as DRFValidationError
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from ..models.movie_lib_models import TVShow, TVShowTrash
-from Movies_Library_API.serializers import TVShowTrashSerializer
-from CustomAuthentication.models import User
-from CustomAuthentication.permissions import IsOwner
-
-from Movies_Library_API.requests.tv_shows_requests import TVShowsRequests
-from rest_framework.serializers import ValidationError as DRFValidationError
-from django.core.exceptions import ValidationError as DjangoValidationError
 
 
 @api_view(["GET", "POST", "DELETE"])
@@ -51,6 +49,7 @@ def crud_for_tv_show_inside_trash(request, user_id, tv_show_id):
 
         serializer = TVShowTrashSerializer(data)
         return JsonResponse(serializer.data, safe=False)
+
     elif request.method == "POST":
         try:
             user = User.objects.get(pk=user_id)
@@ -98,6 +97,7 @@ def crud_for_tv_show_inside_trash(request, user_id, tv_show_id):
             return JsonResponse(
                 serializer.data, status=status.HTTP_201_CREATED, safe=False
             )
+
     elif request.method == "DELETE":
         try:
             _ = User.objects.get(pk=user_id)
