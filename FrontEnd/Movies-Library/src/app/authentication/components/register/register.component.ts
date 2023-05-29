@@ -50,6 +50,7 @@ export class RegisterComponent implements OnInit {
               this.signupForm.reset();
               this.router.navigate(['/']);
               this.dialogRef.close();
+              alert('You have successfully registered! Please login to continue.');
             }
           },
           error: (err) => {

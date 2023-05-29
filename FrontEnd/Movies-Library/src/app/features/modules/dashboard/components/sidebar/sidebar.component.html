@@ -27,10 +27,16 @@
         <span *ngIf="isExpanded" class="menu-item">Trash</span>
       </mat-list-item>
 
-      <mat-list-item [routerLink]="'settings'" [routerLinkActive]="['activated-route']">
-        <mat-icon >settings</mat-icon>
-        <span *ngIf="isExpanded" class="menu-item">Settings</span>
+      <mat-list-item [routerLink]="'recommended'" [routerLinkActive]="['activated-route']">
+        <mat-icon>thumb_up</mat-icon>
+        <span *ngIf="isExpanded" class="menu-item">Recommended</span>
       </mat-list-item>
+
+      <mat-list-item [routerLink]="'manage-users'" [routerLinkActive]="['activated-route']" *ngIf="auth.isAdmin()">
+        <mat-icon>manage_accounts</mat-icon>
+        <span *ngIf="isExpanded" class="menu-item">Users</span>
+      </mat-list-item>
+
 
     </mat-nav-list>
   </mat-sidenav>

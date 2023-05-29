@@ -1,5 +1,7 @@
 from CustomAuthentication.models import User
 from CustomAuthentication.permissions import IsOwner
+from Movies_Library_API.models.movie_lib_models import TVShow, TVShow_User
+from Movies_Library_API.requests.tv_shows_requests import TVShowsRequests
 from Movies_Library_API.serializers import TVShow_UserSerializer
 from django.core.exceptions import (
     ValidationError as DjangoValidationError,
@@ -18,12 +20,6 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.serializers import ValidationError as DRFValidationError
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-from Movies_Library_API.models.movie_lib_models import TVShow, TVShow_User
-from Movies_Library_API.recommendations_algorithm import (
-    collaborative_filtering_recommendation,
-)
-from Movies_Library_API.requests.tv_shows_requests import TVShowsRequests
 
 
 @api_view(["PUT"])
@@ -188,21 +184,3 @@ def details_of_tv_show_for_user(request, user_id, tv_show_id):
         return JsonResponse(
             serializer_tv_show_user.data, safe=False, status=status.HTTP_200_OK
         )
-
-
-# @api_view(["GET"])
-# @permission_classes([IsAuthenticated & IsOwner])
-# @authentication_classes([JWTAuthentication])
-# def recommendations(request, user_id):
-#     if request.method == "GET":
-#         try:
-#             _ = User.objects.get(pk=user_id)
-#         except User.DoesNotExist:
-#             return JsonResponse(
-#                 {"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND
-#             )
-#
-#         tv_shows = collaborative_filtering_recommendation(user_id)
-#         tv_shows_serialized = TVShow_UserSerializer(tv_shows, many=True)
-#         data = {"tv_shows": tv_shows_serialized.data}
-#         return JsonResponse(data, safe=False, status=status.HTTP_200_OK)

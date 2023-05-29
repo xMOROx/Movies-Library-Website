@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {
   HttpClient,
@@ -79,7 +79,7 @@ export class AuthService {
     };
 
     return this.http.get(api, this.httpOptions).pipe(
-      map((res:any) => {
+      map((res: any) => {
         return this.parseRoles(res) || {}
       }),
       catchError(this.handleError)
@@ -159,5 +159,15 @@ export class AuthService {
     };
 
     return this.http.put(api, body, this.httpOptions);
+  }
+
+  public isStaff(): boolean {
+    let user = this.storageService.getUser();
+    return user.roles.staff;
+  }
+
+  public isAdmin(): boolean {
+    let user = this.storageService.getUser();
+    return user.roles.admin;
   }
 }

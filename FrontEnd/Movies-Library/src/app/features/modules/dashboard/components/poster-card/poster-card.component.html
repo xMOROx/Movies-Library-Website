@@ -15,7 +15,7 @@
     <p *ngIf="apiModel?.['release_date']">
       {{apiModel?.['release_date'] | date}}
     </p>
-    <p>
+    <p *ngIf="contentType.toLowerCase() !== 'recommended'">
       <span class="poster__rating">
         <mat-icon *ngFor="let star of numberOfStars"> star</mat-icon>
         <mat-icon *ngFor="let _ of maxRatingArray" class="none__rating"> star_outlined</mat-icon>
@@ -32,7 +32,7 @@
          https://image.tmdb.org/t/p/w440_and_h660_face/{{model['tv_show']['poster_url']}} 2x"
          [alt]="model['tv_show'].title" appImageMissing>
   </a>
-  <div class="poster__content">
+  <div class="poster__content" >
     <a [routerLink]="'/tv-shows/' + model['tv_show'].id"
        [title]="'Go to' + model['tv_show'].title" class="poster__title colored-hover">
       {{model['tv_show'].title}}
@@ -40,8 +40,8 @@
     <p *ngIf="apiModel?.['first_air_date']">
       {{apiModel?.['first_air_date'] | date}}
     </p>
-    <p>
-      <span class="poster__rating">
+    <p *ngIf="contentType.toLowerCase() !== 'recommended'">
+      <span class="poster__rating" >
         <mat-icon *ngFor="let star of numberOfStars"> star</mat-icon>
         <mat-icon *ngFor="let _ of maxRatingArray" class="none__rating"> star_outlined</mat-icon>
       </span>

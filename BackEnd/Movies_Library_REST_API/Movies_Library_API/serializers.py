@@ -1,11 +1,9 @@
-from Movies_Library_API.models.movie_lib_models import Movie, Movie_User, MovieTrash
 from rest_framework import serializers
 from Movies_Library_API.models.movie_lib_models import (
     Movie,
     Movie_User,
     MovieTrash,
     TVShow,
-    TVShow_Actor,
     TVShow_User,
     TVShowTrash,
 )
@@ -29,6 +27,21 @@ class Movie_UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie_User
         exclude = ("user",)
+
+    def get_movie(self, obj):
+        try:
+            obj.movie
+        except AttributeError:
+            return None
+        return MovieSerializer(obj.movie).data
+
+
+class RecommendedMovies_UserSerializer(serializers.ModelSerializer):
+    movie = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Movie_User
+        exclude = ("user", "rating", "is_favorite", "status")
 
     def get_movie(self, obj):
         try:
