@@ -1,4 +1,4 @@
-from Movies_Library_API.models.movie_lib_models import Movie
+from Movies_Library_API.models.movie_lib_models import Movie, MovieTrash
 from Movies_Library_API.requests.movie_requests import MovieRequests
 from Movies_Library_API.serializers import MovieSerializer
 from django.http.response import JsonResponse
@@ -49,8 +49,11 @@ def popular_movies(request):
         page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
 
         data = MovieRequests().get_popular(page, language, region)
+        if user != -1:
+            data = filter_movie_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -68,8 +71,12 @@ def upcoming_movies(request):
         time_window = request.GET.get("time_window", "month")
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
 
         data = MovieRequests().get_upcoming(page, time_window, language, region)
+
+        if user != -1:
+            data = filter_movie_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -86,7 +93,11 @@ def latest_movies(request):
         language = request.GET.get("language", "en-US")
         page = request.GET.get("page", 1)
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
+
         data = MovieRequests().get_latest(page, language, region)
+        if user != -1:
+            data = filter_movie_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -104,6 +115,7 @@ def trending_movies(request):
         page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
 
         if time_window is None:
             return JsonResponse(
@@ -112,6 +124,9 @@ def trending_movies(request):
             )
 
         data = MovieRequests().get_trending_by_time(time_window, page, language, region)
+
+        if user != -1:
+            data = filter_movie_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -128,8 +143,12 @@ def now_playing_movies(request):
         page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
 
         data = MovieRequests().get_now_playing(page, language, region)
+
+        if user != -1:
+            data = filter_movie_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -162,7 +181,12 @@ def movie_recommendations(request, movie_id):
         page = request.GET.get("page")
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
+
         data = MovieRequests().get_recommendations(movie_id, page, language, region)
+
+        if user != -1:
+            data = filter_movie_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -179,8 +203,12 @@ def similar_movies(request, movie_id):
         page = request.GET.get("page")
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
 
         data = MovieRequests().get_similar(movie_id, page, language, region)
+
+        if user != -1:
+            data = filter_movie_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -228,12 +256,16 @@ def movies_by_genre(request):
         genre_ids = request.GET.get("genres", "")
         page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
+        user = int(request.GET.get("user", -1))
 
         if genre_ids == "":
             data = MovieRequests().get_popular(page, language)
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         data = MovieRequests().get_content_by_genre(genre_ids, page, language)
+
+        if user != -1:
+            data = filter_movie_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -266,6 +298,7 @@ def search_movies(request):
         page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
 
         if query is None:
             return JsonResponse(
@@ -275,9 +308,21 @@ def search_movies(request):
 
         data = MovieRequests().search(query, page, language, region)
 
+        if user != -1:
+            data = filter_movie_inside_trash(data, user)
+
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The movies does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
+
+
+def filter_movie_inside_trash(data, user_id):
+    trash = MovieTrash.objects.filter(user_id=user_id)
+    for movie in data['results']:
+        for trashed_movie in trash:
+            if movie['id'] == trashed_movie.movie_id:
+                data['results'].remove(movie)
+    return data
