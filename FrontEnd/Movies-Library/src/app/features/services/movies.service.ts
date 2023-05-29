@@ -1,17 +1,16 @@
-import { Injectable, ModuleWithProviders } from '@angular/core';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { AuthService } from "src/app/authentication/services/auth.service";
 import { environment } from "src/environments/environment";
 import { MovieModel } from "src/app/features/modules/content/models/Movie.model";
-import { Observable, of, tap } from "rxjs";
+import { Observable, of } from "rxjs";
 import { AggregatedMovieModel } from "src/app/features/modules/content/models/AggregatedMovie.model";
+import {StorageService} from "../../authentication/services/storage.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MoviesService {
-  private movieList?: Array<AggregatedMovieModel>;
-
   private endpoint: string = `${environment.backEnd}api/v1/`;
   private language: string = "en-US";
   private region: string = "US";
@@ -52,7 +51,7 @@ export class MoviesService {
     } as MovieModel;
   }
 
-  constructor(private http: HttpClient, private auth: AuthService) { }
+  constructor(private http: HttpClient, private auth: AuthService, private storage: StorageService) { }
 
   public getUserMovies(id: any, all: boolean = false, page: any = 1): Observable<any> {
     if (!this.auth.isAuthenticated().subscribe((res: any) => res)) {
@@ -83,27 +82,51 @@ export class MoviesService {
   }
 
   public getPopularMovies(page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}movies/popular?page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}movies/popular?page=${page}&language=${this.language}&region=${this.region}&user=${user}`, this.httpOptions);
   }
 
   public getUpcomingMovies(page: number, timeWindow: string): Observable<any> {
-    return this.http.get(`${this.endpoint}movies/upcoming?page=${page}&language=${this.language}&region=${this.region}&time_window=${timeWindow}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}movies/upcoming?page=${page}&language=${this.language}&region=${this.region}&time_window=${timeWindow}&user=${user}`, this.httpOptions);
   }
 
   public getLatestMovies(page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}movies/latest?page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}movies/latest?page=${page}&language=${this.language}&region=${this.region}&user=${user}`, this.httpOptions);
   }
 
   public getTrendingMovies(page: number, timeWindow: string): Observable<any> {
-    return this.http.get(`${this.endpoint}movies/trending?page=${page}&language=${this.language}&region=${this.region}&time_window=${timeWindow}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}movies/trending?page=${page}&language=${this.language}&region=${this.region}&time_window=${timeWindow}&user=${user}`, this.httpOptions);
   }
 
   public getNowPlayingMovies(page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}movies/now_playing?page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}movies/now_playing?page=${page}&language=${this.language}&region=${this.region}&user=${user}`, this.httpOptions);
   }
 
   public searchMovies(searchQuery: string, page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}movies/search?query=${searchQuery}&page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}movies/search?query=${searchQuery}&page=${page}&language=${this.language}&region=${this.region}&user=${user}`, this.httpOptions);
   }
 
   public getGenres(): Observable<any> {
@@ -116,8 +139,11 @@ export class MoviesService {
       genres += genre_id + ','
     });
     genres = genres.slice(0, -1);
-
-    return this.http.get(`${this.endpoint}movies/with?genres=${genres}&page=${page}&language=${this.language}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}movies/with?genres=${genres}&page=${page}&language=${this.language}&user=${user}`, this.httpOptions);
   }
 
   public getMovieCredits(id: string): Observable<any> {
@@ -129,11 +155,19 @@ export class MoviesService {
   }
 
   public getRecommendedMovies(id: string, page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}movies/${id}/recommendations?language=${this.language}&region=${this.region}&page=${page}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}movies/${id}/recommendations?language=${this.language}&region=${this.region}&page=${page}&user=${user}`, this.httpOptions);
   }
 
   public getSimilarMovies(id: string, page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}movies/${id}/similar?language=${this.language}&region=${this.region}&page=${page}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}movies/${id}/similar?language=${this.language}&region=${this.region}&page=${page}&user=${user}`, this.httpOptions);
   }
 
   public getMovieProviders(id: string): Observable<any> {

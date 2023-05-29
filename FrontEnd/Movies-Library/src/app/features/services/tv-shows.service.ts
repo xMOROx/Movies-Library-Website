@@ -4,6 +4,7 @@ import {TvModel} from "../modules/content/models/Tv.model";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AuthService} from "../../authentication/services/auth.service";
 import {Observable, of} from "rxjs";
+import {StorageService} from "../../authentication/services/storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -44,7 +45,7 @@ export class TvShowsService {
     } as TvModel;
   }
 
-  constructor(private http: HttpClient, private auth: AuthService) { }
+  constructor(private http: HttpClient, private auth: AuthService, private storage: StorageService) { }
 
   public getUserTvShows(id: any, all: boolean = false, page: any = 1): Observable<any> {
     if (!this.auth.isAuthenticated().subscribe((res: any) => res)) {
@@ -74,31 +75,59 @@ export class TvShowsService {
   }
 
   public getPopularTv(page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}tv/popular?page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}tv/popular?page=${page}&language=${this.language}&region=${this.region}&user=${user}`, this.httpOptions);
   }
 
   public getUpcomingTv(page: number, timeWindow: string): Observable<any> {
-    return this.http.get(`${this.endpoint}tv/upcoming?page=${page}&language=${this.language}&region=${this.region}&time_window=${timeWindow}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}tv/upcoming?page=${page}&language=${this.language}&region=${this.region}&time_window=${timeWindow}&user=${user}`, this.httpOptions);
   }
 
   public getLatestTv(page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}tv/latest?page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}tv/latest?page=${page}&language=${this.language}&region=${this.region}&user=${user}`, this.httpOptions);
   }
 
   public getTrendingTv(page: number, timeWindow: string): Observable<any> {
-    return this.http.get(`${this.endpoint}tv/trending?page=${page}&language=${this.language}&region=${this.region}&time_window=${timeWindow}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}tv/trending?page=${page}&language=${this.language}&region=${this.region}&time_window=${timeWindow}&user=${user}`, this.httpOptions);
   }
 
   public getAiringToday(page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}tv/airing_today?page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}tv/airing_today?page=${page}&language=${this.language}&region=${this.region}&user=${user}`, this.httpOptions);
   }
 
   public getAiringThisWeek(page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}tv/airing_this_week?page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}tv/airing_this_week?page=${page}&language=${this.language}&region=${this.region}&user=${user}`, this.httpOptions);
   }
 
   public searchTv(searchQuery: string, page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}tv/search?query=${searchQuery}&page=${page}&language=${this.language}&region=${this.region}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}tv/search?query=${searchQuery}&page=${page}&language=${this.language}&region=${this.region}&user=${user}`, this.httpOptions);
   }
 
   public getGenres(): Observable<any> {
@@ -111,8 +140,11 @@ export class TvShowsService {
       genres += genre_id + ','
     });
     genres = genres.slice(0, -1);
-
-    return this.http.get(`${this.endpoint}tv/with?genres=${genres}&page=${page}&language=${this.language}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}tv/with?genres=${genres}&page=${page}&language=${this.language}&user=${user}`, this.httpOptions);
   }
 
   public getTvCredits(id: string): Observable<any> {
@@ -124,11 +156,19 @@ export class TvShowsService {
   }
 
   public getRecommendedTv(id: string, page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}tv/${id}/recommendations?language=${this.language}&region=${this.region}&page=${page}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}tv/${id}/recommendations?language=${this.language}&region=${this.region}&page=${page}&user=${user}`, this.httpOptions);
   }
 
   public getSimilarTv(id: string, page: number): Observable<any> {
-    return this.http.get(`${this.endpoint}tv/${id}/similar?language=${this.language}&region=${this.region}&page=${page}`, this.httpOptions);
+    let user = -1;
+    if (this.storage.getUser()) {
+      user = this.storage.getUser().id;
+    }
+    return this.http.get(`${this.endpoint}tv/${id}/similar?language=${this.language}&region=${this.region}&page=${page}&user=${user}`, this.httpOptions);
   }
 
   public getTvProviders(id: string): Observable<any> {
