@@ -163,7 +163,7 @@
 
   }
 
-  &__recommendations {
+  &__similar_or_recommended {
 
     @media (min-width: $breakpoint-xs) and (max-width: $breakpoint-sm) {
       padding: 16px;
@@ -203,7 +203,7 @@
 
   }
 
-  &__no-recomended {
+  &__no-similar_or_recommended {
     display: flex;
     align-items: center;
     justify-content: center;

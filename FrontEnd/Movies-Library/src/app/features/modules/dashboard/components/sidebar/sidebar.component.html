@@ -17,14 +17,14 @@
         <span *ngIf="isExpanded" class="menu-item">Movies</span>
       </mat-list-item>
 
-      <mat-list-item [routerLink]="'trash'" [routerLinkActive]="['activated-route']">
-        <mat-icon >delete</mat-icon>
-        <span *ngIf="isExpanded" class="menu-item">Trash</span>
-      </mat-list-item>
-
       <mat-list-item [routerLink]="'tv-shows'" [routerLinkActive]="['activated-route']">
         <mat-icon >live_tv</mat-icon>
         <span *ngIf="isExpanded" class="menu-item">Tv shows</span>
+      </mat-list-item>
+
+      <mat-list-item [routerLink]="'trash'" [routerLinkActive]="['activated-route']">
+        <mat-icon >delete</mat-icon>
+        <span *ngIf="isExpanded" class="menu-item">Trash</span>
       </mat-list-item>
 
       <mat-list-item [routerLink]="'settings'" [routerLinkActive]="['activated-route']">

@@ -1,4 +1,4 @@
-from Movies_Library_API.models.movie_lib_models import Movie
+from Movies_Library_API.models.movie_lib_models import Movie, MovieTrash
 from Movies_Library_API.requests.movie_requests import MovieRequests
 from Movies_Library_API.serializers import MovieSerializer
 from django.http.response import JsonResponse
@@ -7,8 +7,7 @@ from rest_framework.decorators import (
     api_view,
     permission_classes,
 )
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 
 
 @api_view(["GET"])
@@ -52,6 +51,8 @@ def popular_movies(request):
 
         data = MovieRequests().get_popular(page, language, region)
 
+        data = filter_movie_inside_trash(data)
+
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
@@ -70,6 +71,8 @@ def upcoming_movies(request):
         region = request.GET.get("region", "US")
 
         data = MovieRequests().get_upcoming(page, time_window, language, region)
+
+        data = filter_movie_inside_trash(data)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -113,6 +116,8 @@ def trending_movies(request):
 
         data = MovieRequests().get_trending_by_time(time_window, page, language, region)
 
+        data = filter_movie_inside_trash(data)
+
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
@@ -147,6 +152,7 @@ def movie_credits(request, movie_id):
         region = request.GET.get("region", "US")
         data = MovieRequests().get_credits(movie_id, language, region)
 
+
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
@@ -163,6 +169,8 @@ def movie_recommendations(request, movie_id):
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
         data = MovieRequests().get_recommendations(movie_id, page, language, region)
+
+        data = filter_movie_inside_trash(data)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -181,6 +189,8 @@ def similar_movies(request, movie_id):
         region = request.GET.get("region", "US")
 
         data = MovieRequests().get_similar(movie_id, page, language, region)
+
+        data = filter_movie_inside_trash(data)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -275,9 +285,21 @@ def search_movies(request):
 
         data = MovieRequests().search(query, page, language, region)
 
+        data = filter_movie_inside_trash(data)
+
+
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
             {"message": "The movies does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
+
+
+def filter_movie_inside_trash(data):
+    trash = MovieTrash.objects.all()
+    for movie in data['results']:
+        for trashed_movie in trash:
+            if movie['id'] == trashed_movie.movie_id:
+                data['results'].remove(movie)
+    return data
