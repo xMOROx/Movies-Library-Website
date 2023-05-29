@@ -6,18 +6,20 @@ import { DashboardRoutesModule } from "./dashboard.routes.module";
 import { SidebarComponent } from "./components/sidebar/sidebar.component";
 import { MaterialModule } from "../../../shared/material/material.module";
 import { ContentComponent } from "./components/content/content.component";
-import { SettingsComponent } from "./components/settings/settings.component";
-import {PosterCardComponent} from "./components/poster-card/poster-card.component";
-import {UsersModule} from "../users/users.module";
+import { PosterCardComponent } from "./components/poster-card/poster-card.component";
+import { ManageUsersComponent } from "./components/manage-users/manage-users.component";
+import { UsersModule } from "../users/users.module";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
-    imports: [
-        DashboardRoutesModule,
-        CommonModule,
-        SharedModule,
-        MaterialModule,
-        UsersModule
-    ],
-  declarations: [DashboardComponent, SidebarComponent, ContentComponent, SettingsComponent, PosterCardComponent]
+  imports: [
+    DashboardRoutesModule,
+    CommonModule,
+    SharedModule,
+    MaterialModule,
+    UsersModule,
+    FormsModule
+  ],
+  declarations: [DashboardComponent, SidebarComponent, ContentComponent, PosterCardComponent, ManageUsersComponent]
 })
 export class DashboardModule { }

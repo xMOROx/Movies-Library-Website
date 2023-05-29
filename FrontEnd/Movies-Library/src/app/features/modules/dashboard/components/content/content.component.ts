@@ -40,6 +40,8 @@ export class ContentComponent implements OnInit {
       this.getContentFromTrash();
     } else if (this.contentType === "tv-shows") {
       this.getTVShowsForUser();
+    } else if (this.contentType === 'recommended') {
+      this.getRecommendedForUser();
     }
   }
 
@@ -94,6 +96,22 @@ export class ContentComponent implements OnInit {
     );
   }
 
+  private getRecommendedForUser() {
+    this.moviesService.getRecommendedForUser(this.storage.getUser().id).subscribe(
+      {
+        next: (response: any) => {
+          if (!response) {
+            this.router.navigate(['/']);
+          }
+          this.content = response.results;
+          this.totalResults = response.count;
+        },
+        error: (_: any) => {
+        }
+      }
+    );
+  }
+
   public changePage(event: any) {
     if (this.contentType === 'movies') {
       this.getMoviesForUser();
@@ -132,5 +150,6 @@ export class ContentComponent implements OnInit {
       this.getTVShowsForUser(this.filterType);
     }
   }
+
 
 }
