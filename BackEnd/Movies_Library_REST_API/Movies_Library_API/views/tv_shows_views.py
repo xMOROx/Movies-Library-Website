@@ -7,11 +7,7 @@ from rest_framework.decorators import (
     api_view,
     permission_classes,
 )
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny
-
-from Movies_Library_API.models.movie_lib_models import TVShow
-from Movies_Library_API.requests.tv_shows_requests import TVShowsRequests
+from rest_framework.permissions import AllowAny
 
 
 @api_view(["GET"])
@@ -21,7 +17,7 @@ def tv_show_detail(request, tv_show_id):
         data = TVShow.objects.get(tv_show_id)
     except TVShow.DoesNotExist:
         return JsonResponse(
-            {"message": "The tv show does not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The tv show does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
     if request.method == "GET":
@@ -41,7 +37,7 @@ def tv_show_details_api(request, tv_show_id):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The tv show does not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The tv show does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -63,7 +59,7 @@ def popular_tv_shows(request):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The tv show do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The tv show do not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -86,7 +82,7 @@ def upcoming_tv_shows(request):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The tv shows do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The tv shows do not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -108,7 +104,7 @@ def latest_tv_shows(request):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The tv shows do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The tv shows do not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -139,7 +135,7 @@ def trending_tv_shows(request):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The tv shows do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The tv shows do not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -161,7 +157,7 @@ def airing_today(request):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The tv shows do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The tv shows do not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -183,7 +179,7 @@ def airing_this_week(request):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The tv shows do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The tv shows do not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -199,7 +195,7 @@ def tv_show_credits(request, tv_show_id):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The tv show does not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The tv show does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -221,7 +217,7 @@ def tv_show_recommendations(request, tv_show_id):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The tv shows do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The tv shows do not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -243,7 +239,7 @@ def similar_tv_shows(request, tv_show_id):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The tv shows do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The tv shows do not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -259,7 +255,7 @@ def tv_show_provider(request, tv_show_id):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The tv show does not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The tv show does not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -274,7 +270,7 @@ def tv_show_genres(request):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The genres do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The genres do not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -300,7 +296,7 @@ def tv_shows_by_genre(request):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "Tv shows do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "Tv shows do not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -315,7 +311,7 @@ def tv_show_videos(request, tv_show_id):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The videos do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The videos do not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -331,7 +327,7 @@ def search_tv_shows(request):
 
         if query is None:
             return JsonResponse(
-                {"message": "The query is required"},
+                {"message": "The query is required."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -344,7 +340,7 @@ def search_tv_shows(request):
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         return JsonResponse(
-            {"message": "The tv shows do not exist"}, status=status.HTTP_404_NOT_FOUND
+            {"message": "The tv shows do not exist."}, status=status.HTTP_404_NOT_FOUND
         )
 
 
@@ -357,4 +353,5 @@ def filter_tv_show_inside_trash(data, user_id):
                 counter += 1
                 data['results'].remove(tv_show)
     data['total_results'] = data['total_results'] - counter
+
     return data

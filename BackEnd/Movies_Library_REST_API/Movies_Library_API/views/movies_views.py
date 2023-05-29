@@ -7,8 +7,7 @@ from rest_framework.decorators import (
     api_view,
     permission_classes,
 )
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 
 
 @api_view(["GET"])
@@ -55,6 +54,8 @@ def popular_movies(request):
         if user != -1:
             data = filter_movie_inside_trash(data, user)
 
+        data = filter_movie_inside_trash(data)
+
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
@@ -77,6 +78,7 @@ def upcoming_movies(request):
 
         if user != -1:
             data = filter_movie_inside_trash(data, user)
+
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -165,6 +167,7 @@ def movie_credits(request, movie_id):
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
         data = MovieRequests().get_credits(movie_id, language, region)
+
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -308,8 +311,10 @@ def search_movies(request):
 
         data = MovieRequests().search(query, page, language, region)
 
+
         if user != -1:
             data = filter_movie_inside_trash(data, user)
+
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -321,6 +326,7 @@ def search_movies(request):
 
 def filter_movie_inside_trash(data, user_id):
     trash = MovieTrash.objects.filter(user_id=user_id)
+
     for movie in data['results']:
         for trashed_movie in trash:
             if movie['id'] == trashed_movie.movie_id:

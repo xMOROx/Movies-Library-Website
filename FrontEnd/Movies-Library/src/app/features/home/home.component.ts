@@ -1,12 +1,14 @@
-import { Component, OnInit, } from '@angular/core';
-import SwiperCore, { Pagination, SwiperOptions, } from 'swiper';
-import { MovieModel } from 'src/app/features/modules/content/models/Movie.model';
-import { TvModel } from 'src/app/features/modules/content/models/Tv.model';
-import { MoviesService } from "src/app/features/services/movies.service";
-import { ActorModel } from '../modules/actors/models/Actor.model';
-import { ActorsService } from '../modules/actors/services/actors.service';
-import { TvShowsService } from "../services/tv-shows.service";
+import {Component, OnInit,} from '@angular/core';
+import SwiperCore, {Pagination, SwiperOptions,} from 'swiper';
+import {MovieModel} from 'src/app/features/modules/content/models/Movie.model';
+import {TvModel} from 'src/app/features/modules/content/models/Tv.model';
+import {MoviesService} from "src/app/features/services/movies.service";
+import {ActorModel} from '../modules/actors/models/Actor.model';
+import {ActorsService} from '../modules/actors/services/actors.service';
+import {TvShowsService} from "../services/tv-shows.service";
+
 SwiperCore.use([Pagination]);
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -19,17 +21,17 @@ export class HomeComponent implements OnInit {
     navigation: true,
     watchSlidesProgress: true,
     grabCursor: true,
-    pagination: { clickable: true, },
-    scrollbar: { draggable: true },
+    pagination: {clickable: true,},
+    scrollbar: {draggable: true},
     breakpoints: {
-      992: { slidesPerView: 6.3, spaceBetween: 20, slidesOffsetBefore: 0, slidesOffsetAfter: 0 },
-      768: { slidesPerView: 4.3, spaceBetween: 15, slidesOffsetBefore: 0, slidesOffsetAfter: 0 },
-      576: { slidesPerView: 3.3, spaceBetween: 15, slidesOffsetBefore: 0, slidesOffsetAfter: 0 },
-      320: { slidesPerView: 2.3, spaceBetween: 10, slidesOffsetBefore: 10, slidesOffsetAfter: 10 },
+      992: {slidesPerView: 6.3, spaceBetween: 20, slidesOffsetBefore: 0, slidesOffsetAfter: 0},
+      768: {slidesPerView: 4.3, spaceBetween: 15, slidesOffsetBefore: 0, slidesOffsetAfter: 0},
+      576: {slidesPerView: 3.3, spaceBetween: 15, slidesOffsetBefore: 0, slidesOffsetAfter: 0},
+      320: {slidesPerView: 2.3, spaceBetween: 10, slidesOffsetBefore: 10, slidesOffsetAfter: 10},
     }
   };
 
-  public movieTabList = ['Now playing', 'Upcoming', 'Popular', "Trending"];
+  public movieTabList = ['Now playing', 'Upcoming week', "Upcoming month", 'Popular', "Trending day", "Trending week"];
   public moviesList: Array<MovieModel> = [];
   public selectedMovieTab = 0;
 
@@ -44,8 +46,8 @@ export class HomeComponent implements OnInit {
   public sortActorOrder: string = 'desc';
 
 
-
-  constructor(private moviesService: MoviesService, private actorsService: ActorsService, private tvService: TvShowsService) { }
+  constructor(private moviesService: MoviesService, private actorsService: ActorsService, private tvService: TvShowsService) {
+  }
 
   ngOnInit() {
     this.getMovies(this.movieTabList[this.selectedMovieTab]);
@@ -120,10 +122,14 @@ export class HomeComponent implements OnInit {
   }
 
   private getMovies(tabName: string) {
-    if (tabName === 'Trending') {
-      this.getTrendingMovies(); //TODO: Add time window
-    } else if (tabName === 'Upcoming') {
-      this.getUpcomingMovies(); //TODO: Add time window
+    if (tabName === 'Trending week') {
+      this.getTrendingMovies(1, "week");
+    } else if (tabName === 'Trending day') {
+      this.getTrendingMovies(1, "day");
+    } else if (tabName === 'Upcoming week') {
+      this.getUpcomingMovies(1, "week");
+    } else if (tabName === 'Upcoming month') {
+      this.getUpcomingMovies(1, "month");
     } else if (tabName === 'Now playing') {
       this.getNowPlayingMovies();
     } else if (tabName === 'Latest') {
