@@ -48,10 +48,12 @@ def popular_tv_shows(request):
         page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
 
         data = TVShowsRequests().get_popular(page, language, region)
 
-        data = filter_tv_show_inside_trash(data)
+        if user != -1:
+            data = filter_tv_show_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -69,10 +71,12 @@ def upcoming_tv_shows(request):
         time_window = request.GET.get("time_window", "month")
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
 
         data = TVShowsRequests().get_upcoming(page, time_window, language, region)
 
-        data = filter_tv_show_inside_trash(data)
+        if user != -1:
+            data = filter_tv_show_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -89,7 +93,12 @@ def latest_tv_shows(request):
         language = request.GET.get("language", "en-US")
         page = request.GET.get("page", 1)
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
+
         data = TVShowsRequests().get_latest(page, language, region)
+
+        if user != -1:
+            data = filter_tv_show_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -107,6 +116,7 @@ def trending_tv_shows(request):
         page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
 
         if time_window is None:
             return JsonResponse(
@@ -118,7 +128,8 @@ def trending_tv_shows(request):
             time_window, page, language, region
         )
 
-        data = filter_tv_show_inside_trash(data)
+        if user != -1:
+            data = filter_tv_show_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -135,10 +146,12 @@ def airing_today(request):
         page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
 
         data = TVShowsRequests().get_airing_today(page, language, region)
 
-        data = filter_tv_show_inside_trash(data)
+        if user != -1:
+            data = filter_tv_show_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -155,10 +168,12 @@ def airing_this_week(request):
         page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
 
         data = TVShowsRequests().get_airing_this_week(page, language, region)
 
-        data = filter_tv_show_inside_trash(data)
+        if user != -1:
+            data = filter_tv_show_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -191,9 +206,12 @@ def tv_show_recommendations(request, tv_show_id):
         page = request.GET.get("page")
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
+
         data = TVShowsRequests().get_recommendations(tv_show_id, page, language, region)
 
-        data = filter_tv_show_inside_trash(data)
+        if user != -1:
+            data = filter_tv_show_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -210,10 +228,12 @@ def similar_tv_shows(request, tv_show_id):
         page = request.GET.get("page")
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
 
         data = TVShowsRequests().get_similar(tv_show_id, page, language, region)
 
-        data = filter_tv_show_inside_trash(data)
+        if user != -1:
+            data = filter_tv_show_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -261,12 +281,16 @@ def tv_shows_by_genre(request):
         genre_ids = request.GET.get("genres", "")
         page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
+        user = int(request.GET.get("user", -1))
 
         if genre_ids == "":
             data = TVShowsRequests().get_popular(page, language)
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
         data = TVShowsRequests().get_content_by_genre(genre_ids, page, language)
+
+        if user != -1:
+            data = filter_tv_show_inside_trash(data, user)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -299,6 +323,7 @@ def search_tv_shows(request):
         page = request.GET.get("page", 1)
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
+        user = int(request.GET.get("user", -1))
 
         if query is None:
             return JsonResponse(
@@ -308,6 +333,9 @@ def search_tv_shows(request):
 
         data = TVShowsRequests().search(query, page, language, region)
 
+        if user != -1:
+            data = filter_tv_show_inside_trash(data, user)
+
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
@@ -316,10 +344,13 @@ def search_tv_shows(request):
         )
 
 
-def filter_tv_show_inside_trash(data):
-    trash = TVShowTrash.objects.all()
+def filter_tv_show_inside_trash(data, user_id):
+    trash = TVShowTrash.objects.filter(user_id=user_id)
+    counter = 0
     for tv_show in data['results']:
         for trashed_tv_show in trash:
             if tv_show['id'] == trashed_tv_show.tv_show_id:
+                counter += 1
                 data['results'].remove(tv_show)
+    data['total_results'] = data['total_results'] - counter
     return data
