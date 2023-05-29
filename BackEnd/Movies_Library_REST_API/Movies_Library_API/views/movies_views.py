@@ -152,7 +152,6 @@ def movie_credits(request, movie_id):
         region = request.GET.get("region", "US")
         data = MovieRequests().get_credits(movie_id, language, region)
 
-
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
@@ -169,8 +168,6 @@ def movie_recommendations(request, movie_id):
         language = request.GET.get("language", "en-US")
         region = request.GET.get("region", "US")
         data = MovieRequests().get_recommendations(movie_id, page, language, region)
-
-        data = filter_movie_inside_trash(data)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -190,7 +187,6 @@ def similar_movies(request, movie_id):
 
         data = MovieRequests().get_similar(movie_id, page, language, region)
 
-        data = filter_movie_inside_trash(data)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -287,7 +283,6 @@ def search_movies(request):
 
         data = filter_movie_inside_trash(data)
 
-
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
 
@@ -298,8 +293,9 @@ def search_movies(request):
 
 def filter_movie_inside_trash(data):
     trash = MovieTrash.objects.all()
-    for movie in data['results']:
-        for trashed_movie in trash:
-            if movie['id'] == trashed_movie.movie_id:
-                data['results'].remove(movie)
+    if 'result' in data:
+        for movie in data['results']:
+            for trashed_movie in trash:
+                if movie['id'] == trashed_movie.movie_id:
+                    data['results'].remove(movie)
     return data
