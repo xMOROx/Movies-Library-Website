@@ -813,16 +813,19 @@ class ListOfDetailsForTVShowPerUserTestCase(APITestCase):
         self.access_token = AccessToken.for_user(self.user)
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {str(self.access_token)}")
 
+    @transaction.atomic
     def test_list_of_details_for_tv_show_per_user(self):
         url = reverse('details of user tv shows', kwargs={'user_id': self.user.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    @transaction.atomic
     def test_list_of_details_for_tv_show_per_user_with_pagination(self):
         url = reverse('details of user tv shows', kwargs={'user_id': self.user.id})
         response = self.client.get(url, data={"all": "false"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    @transaction.atomic
     def test_list_of_details_for_tv_show_per_user_for_nonexistent_user(self):
         url = reverse('details of user tv shows', kwargs={'user_id': 999})
         admin = User.objects.create_superuser(
@@ -869,11 +872,13 @@ class DetailsOfTVShowForUserTestCase(APITestCase):
 
         _ = self.client.put(url, data)
 
+    @transaction.atomic
     def test_details_of_tv_show_for_user(self):
         url = reverse('details of tv show for user', kwargs={'user_id': self.user.id, 'tv_show_id': self.tv_show_id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    @transaction.atomic
     def test_details_of_nonexistent_tv_show_for_user(self):
         url = reverse('details of tv show for user', kwargs={'user_id': self.user.id, 'tv_show_id': 999})
         response = self.client.get(url)
@@ -881,6 +886,7 @@ class DetailsOfTVShowForUserTestCase(APITestCase):
         response_data = response.json()
         self.assertEqual(response_data["message"], f"The tv show does not exist")
 
+    @transaction.atomic
     def test_details_of_tv_show_for_nonexistent_user(self):
         url = reverse('details of tv show for user', kwargs={'user_id': 999, 'tv_show_id': self.tv_show_id})
         admin = User.objects.create_superuser(
@@ -899,23 +905,27 @@ class DetailsOfTVShowForUserTestCase(APITestCase):
 # ======================== Tv shows ========================
 
 class TVShowDetailsAPITestCase(APITestCase):
+    @transaction.atomic
     def test_tv_show_details_api(self):
-        url = reverse('tv show details api', kwargs={'tv_show_id': 1})
+        url = reverse('tv show details api', kwargs={'tv_show_id': 234})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    @transaction.atomic
     def test_tv_show_details_api_with_language_and_region(self):
-        url = reverse('tv show details api', kwargs={'tv_show_id': 1})
+        url = reverse('tv show details api', kwargs={'tv_show_id': 234})
         response = self.client.get(url, data={"language": "en-US", "region": "US"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class PopularTVShowsTestCase(APITestCase):
+    @transaction.atomic
     def test_popular_tv_shows(self):
         url = reverse('popular tv shows')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    @transaction.atomic
     def test_popular_tv_shows_with_pagination(self):
         url = reverse('popular tv shows')
         response = self.client.get(url, data={"page": 2})
@@ -923,11 +933,13 @@ class PopularTVShowsTestCase(APITestCase):
 
 
 class UpcomingTVShowsTestCase(APITestCase):
+    @transaction.atomic
     def test_upcoming_tv_shows(self):
         url = reverse('upcoming tv shows')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    @transaction.atomic
     def test_upcoming_tv_shows_with_pagination(self):
         url = reverse('upcoming tv shows')
         response = self.client.get(url, data={"page": 2})
@@ -935,12 +947,173 @@ class UpcomingTVShowsTestCase(APITestCase):
 
 
 class LatestTVShowsTestCase(APITestCase):
+    @transaction.atomic
     def test_latest_tv_shows(self):
         url = reverse('latest tv shows')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    @transaction.atomic
     def test_latest_tv_shows_with_language_and_region(self):
         url = reverse('latest tv shows')
         response = self.client.get(url, data={"language": "en-US", "region": "US"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class TrendingTVShowsTestCase(APITestCase):
+    @transaction.atomic
+    def test_trending_tv_shows(self):
+        url = reverse('trending tv shows')
+        response = self.client.get(url, data={"time_window": "week"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_trending_tv_shows_with_language_and_region(self):
+        url = reverse('trending tv shows')
+        response = self.client.get(url, data={"time_window": "week", "language": "en-US", "region": "US"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_trending_tv_shows_without_time_window(self):
+        url = reverse('trending tv shows')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response_data = response.json()
+        self.assertEqual(response_data["message"], "The time window is required")
+
+
+class AiringTodayTestCase(APITestCase):
+    @transaction.atomic
+    def test_airing_today(self):
+        url = reverse('airing today')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_airing_today_with_pagination(self):
+        url = reverse('airing today')
+        response = self.client.get(url, data={"page": 2})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class AiringThisWeekTestCase(APITestCase):
+    @transaction.atomic
+    def test_airing_this_week(self):
+        url = reverse('airing this week')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_airing_this_week_with_pagination(self):
+        url = reverse('airing this week')
+        response = self.client.get(url, data={"page": 2})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class TVShowCreditsTestCase(APITestCase):
+    @transaction.atomic
+    def test_tv_show_credits(self):
+        tv_show_id = 123
+        url = reverse('tv show credits', args=[tv_show_id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_tv_show_credits_with_language_and_region(self):
+        tv_show_id = 123
+        url = reverse('tv show credits', args=[tv_show_id])
+        response = self.client.get(url, data={"language": "en-US", "region": "US"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class TVShowRecommendationsTestCase(APITestCase):
+    @transaction.atomic
+    def test_tv_show_recommendations(self):
+        tv_show_id = 123
+        url = reverse('recommendations after tv show', args=[tv_show_id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_tv_show_recommendations_with_pagination(self):
+        tv_show_id = 123
+        url = reverse('recommendations after tv show', args=[tv_show_id])
+        response = self.client.get(url, data={"page": 2})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class SimilarTVShowsTestCase(APITestCase):
+    @transaction.atomic
+    def test_similar_tv_shows(self):
+        tv_show_id = 123
+        url = reverse('similar tv shows', args=[tv_show_id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_similar_tv_shows_with_pagination(self):
+        tv_show_id = 123
+        url = reverse('similar tv shows', args=[tv_show_id])
+        response = self.client.get(url, data={"page": 2})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class TVShowGenresTestCase(APITestCase):
+    @transaction.atomic
+    def test_tv_show_genres(self):
+        url = reverse('genres for tv shows')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_tv_show_genres_with_language(self):
+        url = reverse('genres for tv shows')
+        response = self.client.get(url, data={"language": "en-US"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class TVShowsByGenreTestCase(APITestCase):
+    @transaction.atomic
+    def test_tv_shows_by_genre(self):
+        genre_ids = "1,2"
+        url = reverse('tv shows by genre')
+        response = self.client.get(url, data={"genres": genre_ids})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_tv_shows_by_genre_with_pagination(self):
+        genre_ids = "1,2"
+        url = reverse('tv shows by genre')
+        response = self.client.get(url, data={"genres": genre_ids, "page": 2})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class TVShowVideosTestCase(APITestCase):
+    @transaction.atomic
+    def test_tv_show_videos(self):
+        tv_show_id = 123
+        url = reverse('tv show videos', args=[tv_show_id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_tv_show_videos_with_language(self):
+        tv_show_id = 123
+        url = reverse('tv show videos', args=[tv_show_id])
+        response = self.client.get(url, data={"language": "en-US"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class SearchTVShowsTestCase(APITestCase):
+    @transaction.atomic
+    def test_search_tv_shows(self):
+        query = "Game of Thrones"
+        url = reverse('search tv show')
+        response = self.client.get(url, data={"query": query})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @transaction.atomic
+    def test_search_tv_shows_with_pagination(self):
+        query = "Game of Thrones"
+        url = reverse('search tv show')
+        response = self.client.get(url, data={"query": query, "page": 2})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
