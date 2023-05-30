@@ -55,7 +55,6 @@ export class PosterCardComponent implements OnInit {
 
     this.numberOfStars = Array(this.model.rating).fill(0).map((x, i) => i);
     this.maxRatingArray = Array(this.maxRating - this.numberOfStars.length).fill(0);
-
   }
 
 }

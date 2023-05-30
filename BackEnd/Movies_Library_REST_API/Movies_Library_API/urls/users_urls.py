@@ -18,7 +18,7 @@ urlpatterns = [
         name="add movie to user",
     ),
     re_path(
-        r"^users/(?P<user_id>[0-9]+)/recommendations$",
+        r"^users/(?P<user_id>[0-9]+)/movies/recommendations$",
         user_movies_views.recommendations,
         name="recommendations",
     ),
@@ -35,7 +35,7 @@ urlpatterns = [
     re_path(
         r"^users/(?P<user_id>[0-9]+)/tv/(?P<tv_show_id>[0-9]+)$",
         user_tv_show_views.add_tv_show_to_user,
-        name="add movie to user",
+        name="add tv show to user",
     ),
     # re_path(r"^users/(?P<user_id>[0-9]+)/recommendations$", user_movies_views.recommendations, name="recommendations"),
 ]

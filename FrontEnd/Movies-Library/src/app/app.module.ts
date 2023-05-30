@@ -19,6 +19,7 @@ import { UsersModule } from './features/modules/users/users.module';
 import { MoviesService } from './features/services/movies.service';
 import { ActorsModule } from './features/modules/actors/actors.module';
 import { RatingComponent } from './shared/components/rating/rating.component';
+import {AdminService} from "./features/services/admin.service";
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,7 +50,8 @@ import { RatingComponent } from './shared/components/rating/rating.component';
       multi: true
     },
     HttpClient,
-    MoviesService
+    MoviesService,
+    AdminService
   ],
   bootstrap: [AppComponent]
 })

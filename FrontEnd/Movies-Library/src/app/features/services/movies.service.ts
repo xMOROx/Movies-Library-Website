@@ -175,4 +175,7 @@ export class MoviesService {
   }
 
 
+  public getRecommendedForUser(id: string): Observable<any> {
+    return this.http.get(`${this.endpoint}users/${id}/movies/recommendations`, this.httpOptions);
+  }
 }

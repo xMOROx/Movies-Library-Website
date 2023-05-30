@@ -2,10 +2,10 @@ from CustomAuthentication.models import User
 from CustomAuthentication.permissions import IsOwner
 from Movies_Library_API.models.movie_lib_models import Movie, Movie_User
 from Movies_Library_API.recommendations_algorithm import (
-    collaborative_filtering_recommendation,
+    collaborative_filtering_recommendation_for_movie,
 )
 from Movies_Library_API.requests.movie_requests import MovieRequests
-from Movies_Library_API.serializers import Movie_UserSerializer
+from Movies_Library_API.serializers import Movie_UserSerializer, RecommendedMovies_UserSerializer
 from django.core.exceptions import (
     ValidationError as DjangoValidationError,
     ObjectDoesNotExist,
@@ -192,7 +192,14 @@ def recommendations(request, user_id):
                 {"message": "User does not exist."}, status=status.HTTP_404_NOT_FOUND
             )
 
-        movies = collaborative_filtering_recommendation(user_id)
-        movies_serialized = Movie_UserSerializer(movies, many=True)
-        data = {"movies": movies_serialized.data}
-        return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
+        movies = collaborative_filtering_recommendation_for_movie(user_id)
+
+        movies_serialized = RecommendedMovies_UserSerializer(movies, many=True)
+        show_all = "true" == request.GET.get("all", 1)
+
+        paginator = PageNumberPagination()
+        page = paginator.paginate_queryset(movies_serialized.data, request)
+        if page is not None and not show_all:
+            return paginator.get_paginated_response(page)
+
+        return JsonResponse(movies_serialized.data, safe=False, status=status.HTTP_200_OK)

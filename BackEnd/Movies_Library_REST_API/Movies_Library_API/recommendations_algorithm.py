@@ -4,7 +4,7 @@ from Movies_Library_API.models.movie_lib_models import Movie_User, Movie
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-def collaborative_filtering_recommendation(user_id, top_n=10):
+def collaborative_filtering_recommendation_for_movie(user_id, top_n=10):
     user_movies = Movie_User.objects.filter(user=user_id)
 
     all_users = User.objects.all()
@@ -31,7 +31,6 @@ def collaborative_filtering_recommendation(user_id, top_n=10):
 
     user_idx = user_index_mapping[int(user_id)]
     similar_users = np.argsort(user_similarities[user_idx])[::-1][1:]
-
     recommended_movies = []
 
     for similar_user_index in similar_users:
@@ -43,5 +42,8 @@ def collaborative_filtering_recommendation(user_id, top_n=10):
 
         if len(recommended_movies) >= top_n:
             break
-
     return recommended_movies[:top_n]
+
+
+def collaborative_filtering_recommendation_for_tv_shows():
+    ...
