@@ -1,13 +1,14 @@
-import datetime
-
+from CustomAuthentication.models import User
+from CustomAuthentication.utils.validators import validate_email
 from django.contrib.auth import password_validation
 from rest_framework import serializers
-from CustomAuthentication.models import User
-from CustomAuthentication.validators import validate_email, validate_email_for_other_users
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for user
+    """
     password = serializers.CharField(write_only=True)
     email = serializers.EmailField(required=True, validators=[validate_email])
 
@@ -26,7 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
             "password": {"write_only": True},
         }
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> User:
         user = User.objects.create_user(
             email=validated_data["email"],
             password=validated_data["password"],
@@ -35,7 +36,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
         return user
 
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data) -> User:
         if "password" in validated_data:
             instance.set_password(validated_data["password"])
             del validated_data["password"]
@@ -67,7 +68,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "last_name",
         )
 
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data) -> User:
         if "email" in validated_data:
             instance.email = validated_data["email"]
             del validated_data["email"]
@@ -85,6 +86,10 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
 
 class AdminUserSerializer(UserSerializer):
+    """
+    Serializer for admin user
+    """
+
     class Meta:
         model = User
         fields = UserSerializer.Meta.fields + (
@@ -94,7 +99,7 @@ class AdminUserSerializer(UserSerializer):
             "is_active",
         )
 
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data) -> User:
         instance = super().update(instance, validated_data)
         if "is_staff" in validated_data:
             instance.is_staff = validated_data["is_staff"]
@@ -118,20 +123,20 @@ class AdminUserSerializer(UserSerializer):
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
-    def get_token(cls, user):
+    def get_token(cls, user) -> str:
         token = super().get_token(user)
         return token
 
 
 class ChangePasswordSerializer(serializers.Serializer):
     """
-    Serializer for password change endpoint.
+    Serializer for password change endpoint for normal users.
     """
     password = serializers.CharField(max_length=128, write_only=True, required=True)
     new_password = serializers.CharField(max_length=128, write_only=True, required=True)
     confirm_password = serializers.CharField(max_length=128, write_only=True, required=True)
 
-    def validate_old_password(self, value):
+    def validate_old_password(self, value: str) -> str:
         user = self.context['request'].user
         if not user.check_password(value):
             raise serializers.ValidationError(
@@ -139,14 +144,14 @@ class ChangePasswordSerializer(serializers.Serializer):
             )
         return value
 
-    def validate(self, data):
+    def validate(self, data: dict) -> dict:
         self.validate_old_password(data['password'])
         if data['new_password'] != data['confirm_password']:
             raise serializers.ValidationError({'message': "The two password fields didn't match."})
         password_validation.validate_password(data['new_password'], self.context['request'].user)
         return data
 
-    def save(self, **kwargs):
+    def save(self, **kwargs) -> User:
         password = self.validated_data['new_password']
         user = self.context['request'].user
         user.set_password(password)
@@ -156,18 +161,17 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 class AdminChangePasswordSerializer(serializers.Serializer):
     """
-    Serializer for password change endpoint.
+    Serializer for password change endpoint for admin users.
     """
     new_password = serializers.CharField(max_length=128, write_only=True, required=True)
 
-    def validate(self, data):
+    def validate(self, data: dict) -> dict:
         password_validation.validate_password(data['new_password'], self.context['request'].user)
         return data
 
-    def save(self, **kwargs):
+    def save(self, **kwargs) -> User:
         password = self.validated_data['new_password']
         user = self.context['request'].user
-        print("user", user)
         user.set_password(password)
         user.save()
         return user

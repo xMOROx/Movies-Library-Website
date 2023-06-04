@@ -1,6 +1,6 @@
-from django.db import models
-
 from django.contrib.auth import models as auth_models
+from django.db import models
+from django.db.models import EmailField
 
 
 class UserManager(auth_models.BaseUserManager):
@@ -15,6 +15,7 @@ class UserManager(auth_models.BaseUserManager):
             is_superuser: bool = False,
             is_banned: bool = False,
     ) -> "User":
+
         if not email:
             raise ValueError("Users must have an email address")
         if not first_name:
@@ -76,6 +77,9 @@ class UserManager(auth_models.BaseUserManager):
 
 
 class User(auth_models.AbstractUser):
+    """
+        Custom User model
+    """
     first_name = models.CharField(verbose_name="First Name", max_length=255)
     last_name = models.CharField(verbose_name="Last Name", max_length=255)
     email = models.EmailField(verbose_name="Email", max_length=255, unique=True)
@@ -87,7 +91,7 @@ class User(auth_models.AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
-    def __str__(self):
+    def __str__(self) -> EmailField:
         return self.email
 
     class Meta:
