@@ -1,9 +1,13 @@
-from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
 from CustomAuthentication.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
+from django.db.models import CharField
 
 
 class TVShow(models.Model):
+    """
+    TVShow model class
+    """
     title = models.CharField(max_length=255)
     poster_url = models.CharField(max_length=255, null=True)
 
@@ -15,14 +19,17 @@ class TVShow(models.Model):
         blank=True,
     )
 
-    def __str__(self):
+    def __str__(self) -> CharField:
         return self.title
 
-    def get_tv_shows_for_user(self, user):
+    def get_tv_shows_for_user(self, user: User) -> models.QuerySet:
         return self.objects.filter(users=user)
 
 
 class Movie(models.Model):
+    """
+    Movie model class
+    """
     title = models.CharField(max_length=255)
     poster_url = models.CharField(max_length=255, null=True)
     runtime = models.IntegerField(
@@ -37,10 +44,10 @@ class Movie(models.Model):
         blank=True,
     )
 
-    def __str__(self):
+    def __str__(self) -> CharField:
         return self.title
 
-    def get_movies_for_user(self, user):
+    def get_movies_for_user(self, user: User) -> models.QuerySet:
         return self.objects.filter(users=user)
 
     class Meta:
@@ -48,6 +55,9 @@ class Movie(models.Model):
 
 
 class Actor(models.Model):
+    """
+    Actor model class
+    """
     name = models.CharField(max_length=255)
     movies = models.ManyToManyField(
         Movie,
@@ -73,11 +83,14 @@ class Actor(models.Model):
         blank=True,
     )
 
-    def __str__(self):
+    def __str__(self) -> CharField:
         return self.name
 
 
 class Movie_User(models.Model):
+    """
+    Movie_User model class
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
 
@@ -92,11 +105,14 @@ class Movie_User(models.Model):
         blank=True,
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.user} - {self.movie}"
 
 
 class TVShow_User(models.Model):
+    """
+    TVShow_User model class
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     tv_show = models.ForeignKey(TVShow, on_delete=models.CASCADE)
 
@@ -111,54 +127,69 @@ class TVShow_User(models.Model):
         blank=True,
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.user} - {self.tv_show}"
 
 
 class Movie_Actor(models.Model):
+    """
+    Movie_Actor model class
+    """
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
     priority = models.IntegerField(
         default=1, validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.movie} - {self.actor}"
 
 
 class TVShow_Actor(models.Model):
+    """
+    TVShow_Actor model class
+    """
     tv_show = models.ForeignKey(TVShow, on_delete=models.CASCADE)
     actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
     priority = models.IntegerField(
         default=1, validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.tv_show} - {self.actor}"
 
 
 class User_Actor(models.Model):
+    """
+    User_Actor model class
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
     status = models.IntegerField(
         default=1, validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.user} - {self.actor}"
 
 
 class MovieTrash(models.Model):
+    """
+    MovieTrash model class
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.user} - {self.movie}"
 
 
 class TVShowTrash(models.Model):
+    """
+    TVShowTrash model class
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     tv_show = models.ForeignKey(TVShow, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.user} - {self.tv_show}"

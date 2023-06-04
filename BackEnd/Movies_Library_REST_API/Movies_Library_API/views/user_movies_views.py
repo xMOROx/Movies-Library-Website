@@ -1,5 +1,5 @@
 from CustomAuthentication.models import User
-from CustomAuthentication.permissions import IsOwner
+from CustomAuthentication.utils.permissions import IsOwner
 from Movies_Library_API.models.movie_lib_models import Movie, Movie_User
 from Movies_Library_API.recommendations_algorithm import (
     collaborative_filtering_recommendation_for_movie,
@@ -28,13 +28,23 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated & IsOwner])
 @authentication_classes([JWTAuthentication])
-def add_movie_to_user(request, user_id, movie_id):
+def add_movie_to_user(request, user_id: int, movie_id: int) -> JsonResponse:
+    """
+    Add or create(PUT) movie to user
+    :param request: request object
+    :param user_id: user id - 404 if user does not exist
+    :param movie_id: movie id - 404 if movie does not exist
+    :return: JsonResponse with status code(201) or error message with status code(400, 404)
+    Allowing only authenticated users to access this view and only the owner of the account or superuser
+    """
+
     if request.method == "PUT":
         movie_user = Movie_User.objects.filter(user=user_id, movie=movie_id).first()
 
         try:
             movie_user_serializer = Movie_UserSerializer(data=request.data)
             movie_user_serializer.is_valid(raise_exception=True)
+
         except ValidationError:
             return JsonResponse(
                 {"message": "Invalid data."}, status=status.HTTP_400_BAD_REQUEST
@@ -67,6 +77,7 @@ def add_movie_to_user(request, user_id, movie_id):
 
         try:
             user = User.objects.get(pk=user_id)
+
         except User.DoesNotExist:
             return JsonResponse(
                 {"message": "User does not exist."}, status=status.HTTP_404_NOT_FOUND
@@ -76,6 +87,7 @@ def add_movie_to_user(request, user_id, movie_id):
 
         try:
             movie = Movie.objects.get(pk=movie_id)
+
         except Movie.DoesNotExist:
             movie_api = movie_requests.get_details(movie_id)
 
@@ -92,6 +104,7 @@ def add_movie_to_user(request, user_id, movie_id):
                     poster_url=movie_api["poster_path"],
                     runtime=movie_api["runtime"],
                 )
+
             except (DRFValidationError, DjangoValidationError):
                 return JsonResponse(
                     {"message": "The movie could not be added."},
@@ -125,37 +138,63 @@ def add_movie_to_user(request, user_id, movie_id):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated & IsOwner])
 @authentication_classes([JWTAuthentication])
-def list_of_details_for_movies_per_user(request, user_id):
+def list_of_details_for_movies_per_user(request, user_id: int) -> JsonResponse:
+    """
+    List of details for movies per user
+    Accept query parameter "all" with value "true" to show all movies
+    :param request: request object
+    :param user_id: user id - 404 if user does not exist
+    :return: JsonResponse with list of details for movies per user and status code(200)
+    or error message and status code(404)
+    Allowing only authenticated users to access this view and only the owner of the account or superuser
+    """
+
     if request.method == "GET":
         try:
             _ = User.objects.get(pk=user_id)
+
         except User.DoesNotExist:
             return JsonResponse(
                 {"message": "User does not exist."}, status=status.HTTP_404_NOT_FOUND
             )
+
         show_all = "true" == request.GET.get("all", 1)
         data = (
             Movie_User.objects.select_related("movie")
             .filter(user_id=user_id)
             .order_by("-movie__title")
         )
+
         pagination = PageNumberPagination()
         page = pagination.paginate_queryset(data, request)
+
         if page is not None and not show_all:
             serializer = Movie_UserSerializer(page, many=True)
+
             return pagination.get_paginated_response(serializer.data)
 
         serializer = Movie_UserSerializer(data, many=True)
+
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated & IsOwner])
 @authentication_classes([JWTAuthentication])
-def details_of_movie_for_user(request, user_id, movie_id):
+def details_of_movie_for_user(request, user_id: int, movie_id: int) -> JsonResponse:
+    """
+    Details of movie for user
+    :param request: request object
+    :param user_id: user id - 404 if user does not exist
+    :param movie_id: movie id - 404 if movie does not exist
+    :return: JsonResponse with details of movie for user and status code(200) or error message and status code(404, 500)
+    Allowing only authenticated users to access this view and only the owner of the account or superuser
+    """
+
     if request.method == "GET":
         try:
             _ = User.objects.get(pk=user_id)
+
         except User.DoesNotExist:
             return JsonResponse(
                 {"message": "User does not exist."}, status=status.HTTP_404_NOT_FOUND
@@ -163,11 +202,13 @@ def details_of_movie_for_user(request, user_id, movie_id):
 
         try:
             data = Movie.users.through.objects.get(user_id=user_id, movie_id=movie_id)
+
         except ObjectDoesNotExist:
             return JsonResponse(
                 {"message": "The movie does not exist."},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
         except MultipleObjectsReturned:
             return JsonResponse(
                 {"message": "Something went wrong."},
@@ -175,6 +216,7 @@ def details_of_movie_for_user(request, user_id, movie_id):
             )
 
         serializer_movie_user = Movie_UserSerializer(data)
+
         return JsonResponse(
             serializer_movie_user.data, safe=False, status=status.HTTP_200_OK
         )
@@ -183,10 +225,20 @@ def details_of_movie_for_user(request, user_id, movie_id):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated & IsOwner])
 @authentication_classes([JWTAuthentication])
-def recommendations(request, user_id):
+def recommendations(request, user_id: int) -> JsonResponse:
+    """
+    Recommendation movies for user
+    Accept query parameter "all" with value "true" to show all movies
+    :param request: request object
+    :param user_id: user id - 404 if user does not exist
+    :return: JsonResponse with recommended movies and status code(200) or error message and status code(404)
+    Allowing only authenticated users to access this view and only the owner of the account or superuser
+    """
+
     if request.method == "GET":
         try:
             _ = User.objects.get(pk=user_id)
+
         except User.DoesNotExist:
             return JsonResponse(
                 {"message": "User does not exist."}, status=status.HTTP_404_NOT_FOUND
@@ -199,6 +251,7 @@ def recommendations(request, user_id):
 
         paginator = PageNumberPagination()
         page = paginator.paginate_queryset(movies_serialized.data, request)
+
         if page is not None and not show_all:
             return paginator.get_paginated_response(page)
 
