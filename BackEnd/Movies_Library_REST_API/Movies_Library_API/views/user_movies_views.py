@@ -69,7 +69,7 @@ def add_movie_to_user(request, user_id: int, movie_id: int) -> JsonResponse:
                     movie_user.save()
 
                 return JsonResponse(None, status=status.HTTP_204_NO_CONTENT, safe=False)
-            except (DRFValidationError, DjangoValidationError) as e:
+            except (DRFValidationError, DjangoValidationError):
                 return JsonResponse(
                     {"message": "The movie could not be updated."},
                     status=status.HTTP_400_BAD_REQUEST,

@@ -54,7 +54,3 @@ def collaborative_filtering_recommendation_for_movie(user_id: int, top_n: int = 
         if len(recommended_movies) >= top_n:
             break
     return recommended_movies[:top_n]
-
-
-def collaborative_filtering_recommendation_for_tv_shows():
-    ...  # TODO: implement this function

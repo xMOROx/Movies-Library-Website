@@ -38,10 +38,10 @@ class UserRegisterView(CreateAPIView):
 
         serializer.save()
 
-        id = serializer.data.get("id")
+        user_id = serializer.data.get("id")
 
         response_data = {
-            "User id": id,
+            "User id": user_id,
             "message": "User created successfully",
             "status": HTTP_201_CREATED,
         }
@@ -58,7 +58,7 @@ class UserView(views.APIView):
     serializer_class = UserSerializer
     lookup_field = "user_id"
 
-    def get(self, request, user_id) -> response.Response:
+    def get(self, user_id) -> response.Response:
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
@@ -101,7 +101,7 @@ class UserView(views.APIView):
 
         return response.Response(serializer.data, status=HTTP_204_NO_CONTENT)
 
-    def delete(self, request, user_id) -> response.Response:
+    def delete(self, user_id) -> response.Response:
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:

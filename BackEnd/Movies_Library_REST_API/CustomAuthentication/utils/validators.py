@@ -15,7 +15,7 @@ def validate_email(email: str) -> None:
         raise ValidationError("Email already exists")
 
 
-def validate_email_for_other_users(email:str, user_id:int) -> None:
+def validate_email_for_other_users(email: str, user_id: int) -> None:
     """
     Validate email for uniqueness for other users
     :param email: email to validate
