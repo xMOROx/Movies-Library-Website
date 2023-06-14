@@ -95,7 +95,7 @@ def crud_for_movie_inside_trash(request, user_id: int, movie_id: int) -> JsonRes
                     runtime=movie_api["runtime"],
                 )
 
-            except (DRFValidationError, DjangoValidationError) as e:
+            except (DRFValidationError, DjangoValidationError):
                 return JsonResponse(
                     {"message": "The movie could not be added."},
                     status=status.HTTP_400_BAD_REQUEST,

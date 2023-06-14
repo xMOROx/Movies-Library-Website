@@ -1,4 +1,3 @@
-from CustomAuthentication.views import admin_views
 from CustomAuthentication.views import views
 from django.urls import re_path
 from rest_framework_simplejwt.views import (
