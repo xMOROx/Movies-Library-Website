@@ -37,5 +37,4 @@ urlpatterns = [
         user_tv_show_views.add_tv_show_to_user,
         name="add tv show to user",
     ),
-    # re_path(r"^users/(?P<user_id>[0-9]+)/recommendations$", user_movies_views.recommendations, name="recommendations"),
 ]

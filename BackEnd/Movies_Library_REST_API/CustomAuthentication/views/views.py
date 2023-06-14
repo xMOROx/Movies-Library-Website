@@ -1,7 +1,7 @@
 from CustomAuthentication.models import User
-from CustomAuthentication.permissions import IsOwner
 from CustomAuthentication.serializers import UserSerializer, ChangePasswordSerializer, UserUpdateSerializer
-from CustomAuthentication.validators import validate_email_for_other_users
+from CustomAuthentication.utils.permissions import IsOwner
+from CustomAuthentication.utils.validators import validate_email_for_other_users
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import views, response, permissions
 from rest_framework.exceptions import ValidationError
@@ -17,12 +17,15 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class UserRegisterView(CreateAPIView):
+    """
+    An endpoint for creating users.
+    """
     queryset = User.objects.all()
     permission_classes = [permissions.AllowAny]
     authentication_classes = []
     serializer_class = UserSerializer
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs) -> response.Response:
         serializer = self.serializer_class(data=request.data)
 
         try:
@@ -47,12 +50,15 @@ class UserRegisterView(CreateAPIView):
 
 
 class UserView(views.APIView):
+    """
+    An endpoint for retrieving, updating and deleting users.
+    """
     permission_classes = [permissions.IsAuthenticated, IsOwner]
     authentication_classes = [JWTAuthentication]
     serializer_class = UserSerializer
     lookup_field = "user_id"
 
-    def get(self, request, user_id):
+    def get(self, request, user_id) -> response.Response:
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
@@ -65,7 +71,7 @@ class UserView(views.APIView):
 
         return response.Response(serializer.data, status=HTTP_200_OK)
 
-    def put(self, request, user_id):
+    def put(self, request, user_id) -> response.Response:
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
@@ -95,7 +101,7 @@ class UserView(views.APIView):
 
         return response.Response(serializer.data, status=HTTP_204_NO_CONTENT)
 
-    def delete(self, request, user_id):
+    def delete(self, request, user_id) -> response.Response:
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
@@ -111,7 +117,7 @@ class UserView(views.APIView):
 
 class ChangePasswordView(UpdateAPIView):
     """
-    An endpoint for changing password.
+    An endpoint for changing password for user by himself.
     JSON FORMAT:
     For example:
     {
@@ -127,10 +133,10 @@ class ChangePasswordView(UpdateAPIView):
     authentication_classes = [JWTAuthentication]
     lookup_field = "user_id"
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None) -> User:
         return self.request.user
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request, *args, **kwargs) -> response.Response:
 
         serializer = self.get_serializer(data=request.data)
 

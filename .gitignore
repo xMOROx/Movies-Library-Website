@@ -42,3 +42,14 @@ BackEnd/Movies_Library_REST_API/Movies_Library_API/views/user_tv_show_views.py
 BackEnd/Movies_Library_REST_API/__pycache__/__init__.cpython-311.pyc
 BackEnd/Movies_Library_REST_API/Movies_Library_API/urls/__pycache__/tv_show_trash_urls.cpython-311.pyc
 BackEnd/Movies_Library_REST_API/Movies_Library_API/migrations/0001_initial.py
+BackEnd/Movies_Library_REST_API/Movies_Library_API/migrations/0001_initial.py
+BackEnd/Movies_Library_REST_API/Movies_Library_API/migrations/0001_initial.py
+BackEnd/Movies_Library_REST_API/CustomAuthentication/urls/__pycache__/__init__.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/CustomAuthentication/urls/__pycache__/admin_urls.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/CustomAuthentication/urls/__pycache__/auth_urls.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/CustomAuthentication/utils/__pycache__/__init__.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/CustomAuthentication/utils/__pycache__/permissions.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/CustomAuthentication/utils/__pycache__/validators.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/CustomAuthentication/views/__pycache__/__init__.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/CustomAuthentication/views/__pycache__/admin_views.cpython-311.pyc
+BackEnd/Movies_Library_REST_API/CustomAuthentication/views/__pycache__/views.cpython-311.pyc

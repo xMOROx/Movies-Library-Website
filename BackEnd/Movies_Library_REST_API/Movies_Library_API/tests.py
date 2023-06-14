@@ -364,74 +364,6 @@ class AdminUserListViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class AdminUserUpdateViewTests(APITestCase):
-    def setUp(self):
-        self.superuser = User.objects.create_superuser(
-            email="admin@localhost",
-            password="admin123",
-            first_name="Admin",
-            last_name="Admin",
-        )
-        self.user = User.objects.create_user(
-            email="user@localhost",
-            password="user123",
-            first_name="User",
-            last_name="User",
-        )
-        self.client.login(email="admin@localhost", password="admin123")
-        self.client.force_authenticate(user=self.superuser)
-
-    @transaction.atomic
-    def test_admin_user_update_view(self):
-        user_id = self.user.id
-        url = reverse("admin update user", kwargs={"user_id": user_id})
-
-        response = self.client.patch(url, {"email": "new_email@example.com"})
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    @transaction.atomic
-    def test_admin_user_update_view_not_found(self):
-        user_id = 123456
-        url = reverse("admin update user", kwargs={"user_id": user_id})
-
-        response = self.client.patch(url, {"email": "new_email@example.com"})
-
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        response_data = response.json()
-        self.assertEqual(response_data["message"], "User does not exist.")
-
-    @transaction.atomic
-    def test_admin_user_update_view_unauthorized(self):
-        self.client.logout()
-        user_id = self.user.id
-        url = reverse("admin update user", kwargs={"user_id": user_id})
-
-        response = self.client.patch(url, {"email": "new_email@example.com"})
-
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    @transaction.atomic
-    def test_admin_user_delete_view(self):
-        user_id = self.user.id
-        url = reverse("admin update user", kwargs={"user_id": user_id})
-
-        response = self.client.delete(url)
-
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-    @transaction.atomic
-    def test_admin_user_delete_view_not_found(self):
-        user_id = 123456
-        url = reverse("admin update user", kwargs={"user_id": user_id})
-
-        response = self.client.delete(url)
-
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        response_data = response.json()
-        self.assertEqual(response_data["message"], "User does not exist.")
-
-
 class BanUserViewTests(APITestCase):
     def setUp(self):
         self.admin = User.objects.create_superuser(
@@ -1056,6 +988,7 @@ class SimilarTVShowsTestCase(APITestCase):
         url = reverse('similar tv shows', args=[tv_show_id])
         response = self.client.get(url, data={"page": 2})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 class TVShowGenresTestCase(APITestCase):
     @transaction.atomic

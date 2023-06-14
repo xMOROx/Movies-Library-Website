@@ -1,8 +1,12 @@
-from django.contrib import admin
 from CustomAuthentication import models
+from django.contrib import admin
 
 
 class UserAdmin(admin.ModelAdmin):
+    """
+        Admin class for User model
+
+    """
     list_display = ("id", "email", "is_staff", "is_superuser", "is_active", "is_banned")
     list_display_links = ["id", "email"]
     search_fields = ("email", "first_name", "last_name")

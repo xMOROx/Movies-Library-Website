@@ -1,78 +1,98 @@
 from CustomAuthentication.models import User
-from CustomAuthentication.serializers import AdminUserSerializer
+from CustomAuthentication.serializers import AdminUserSerializer, AdminChangePasswordSerializer
 from rest_framework import views, response, permissions
+from rest_framework.exceptions import ValidationError
+from rest_framework.generics import UpdateAPIView
 from rest_framework.status import (
-    HTTP_400_BAD_REQUEST,
+    HTTP_409_CONFLICT,
     HTTP_204_NO_CONTENT,
-    HTTP_200_OK,
-    HTTP_404_NOT_FOUND,
+    HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_404_NOT_FOUND,
+
 )
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
-class AdminUserListView(views.APIView):
-    queryset = User.objects.all()
+class UserListView(views.APIView):
+    """
+    An endpoint for getting all users by admin.
+    Order by id descending.
+    """
     serializer_class = AdminUserSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    authentication_classes = [JWTAuthentication]
 
-    def get(self, request):
-        users = self.queryset.all().order_by("-id")
+    def get(self, request) -> response.Response:
+        users = User.objects.all().order_by("-id")
         serializer = self.serializer_class(users, many=True)
-
         return response.Response(serializer.data, status=HTTP_200_OK)
 
 
-class AdminUserUpdateView(views.APIView):
+class UpdateUserView(UpdateAPIView):
+    """
+    An endpoint for updating user data by admin.
+    """
     queryset = User.objects.all()
     serializer_class = AdminUserSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    authentication_classes = [JWTAuthentication]
+    lookup_field = "id"
 
-    def patch(self, request, user_id):
-        if "is_banned" in request.data:
+    def update(self, request, *args, **kwargs) -> response.Response:
+        user = self.get_object()
+        serializer = self.serializer_class(user, data=request.data, partial=True)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError:
             return response.Response(
-                {
-                    "message": "You can't change is_banned field from here. Use /api/v1/auth/users/{id}/ban/ endpoint."
-                },
+                {"message": "Email already exists", "status": HTTP_409_CONFLICT},
+                status=HTTP_409_CONFLICT,
+            )
+
+        serializer.save()
+
+        return response.Response(
+            {"message": "User updated successfully", "status": HTTP_204_NO_CONTENT},
+            status=HTTP_204_NO_CONTENT)
+
+
+class ChangePasswordForUserView(UpdateAPIView):
+    """
+    An endpoint for changing password for user by admin.
+    JSON FORMAT:
+        For example:
+        {
+          "new_password":"new_password"
+        }
+    """
+    queryset = User.objects.all()
+    serializer_class = AdminChangePasswordSerializer
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    authentication_classes = [JWTAuthentication]
+    lookup_field = "id"
+
+    def update(self, request, *args, **kwargs) -> response.Response:
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError:
+            return response.Response(
+                {"message": "Invalid data", "status": HTTP_400_BAD_REQUEST, "errors": serializer.errors},
                 status=HTTP_400_BAD_REQUEST,
             )
 
-        try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return response.Response(
-                {
-                    "message": "User does not exist.",
-                    "status": HTTP_404_NOT_FOUND,
-                    "id": user_id,
-                },
-                status=HTTP_404_NOT_FOUND,
-            )
+        serializer.save()
 
-        serializer = self.serializer_class(user, data=request.data, partial=True)
-
-        if serializer.is_valid():
-            serializer.save()
-            return response.Response(serializer.data, status=HTTP_200_OK)
-        return response.Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, user_id):
-        try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return response.Response(
-                {
-                    "message": "User does not exist.",
-                    "status": HTTP_404_NOT_FOUND,
-                    "id": user_id,
-                },
-                status=HTTP_404_NOT_FOUND,
-            )
-
-        user.delete()
-
-        return response.Response(status=HTTP_204_NO_CONTENT)
+        return response.Response(
+            status=HTTP_204_NO_CONTENT,
+        )
 
 
 class BanUserView(views.APIView):
+    """
+    An endpoint for banning user by admin.
+    """
     queryset = User.objects.all()
     serializer_class = AdminUserSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
