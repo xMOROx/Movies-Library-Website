@@ -14,7 +14,7 @@ class GenericRequests:
     _media_type = ""
 
     def get_popular(
-        self, page: int = 1, language: str = "en-US", region: str = "US"
+            self, page: int = 1, language: str = "en-US", region: str = "US"
     ) -> dict | None:
         """
         Get popular by '_media_type' from TMDB API.
@@ -39,7 +39,7 @@ class GenericRequests:
         return None
 
     def get_details(
-        self, movie_id: int, language: str = "en-US", region: str = "US"
+            self, movie_id: int, language: str = "en-US", region: str = "US"
     ) -> dict | None:
         """
         Get details for a '_media_type' from TMDB API.
@@ -61,11 +61,11 @@ class GenericRequests:
         return None
 
     def get_upcoming(
-        self,
-        page: int = 1,
-        time_type_start_offset: str = "month",
-        language: str = "en-US",
-        region: str = "US",
+            self,
+            page: int = 1,
+            time_type_start_offset: str = "month",
+            language: str = "en-US",
+            region: str = "US",
     ) -> dict | None:
         """
         Get a list of upcoming '_media_type' in theatres or TV depends on '_media_type'.
@@ -104,10 +104,10 @@ class GenericRequests:
         return None
 
     def get_latest(
-        self,
-        page: int = 1,
-        language: str = "en-US",
-        region: str = "US",
+            self,
+            page: int = 1,
+            language: str = "en-US",
+            region: str = "US",
     ) -> dict | None:
         """
         Get the most newly created '_media_type' entry.
@@ -132,7 +132,7 @@ class GenericRequests:
         return None
 
     def get_now_playing(
-        self, page: int = 1, language: str = "en-US", region: str = "US"
+            self, page: int = 1, language: str = "en-US", region: str = "US"
     ) -> dict | None:
         """
         Get a list of '_media_type' in theatres or TV depends on '_media_type'.
@@ -157,11 +157,11 @@ class GenericRequests:
         return None
 
     def get_trending_by_time(
-        self,
-        time_window: str,
-        page: int = 1,
-        language: str = "en-US",
-        region: str = "US",
+            self,
+            time_window: str,
+            page: int = 1,
+            language: str = "en-US",
+            region: str = "US",
     ) -> dict | None:
         """
         Get a list of the current trending '_media_type' on TMDB.
@@ -185,7 +185,7 @@ class GenericRequests:
         return response.json()
 
     def get_credits(
-        self, content_id: int, language: str = "en-US", region: str = "US"
+            self, content_id: int, language: str = "en-US", region: str = "US"
     ) -> dict | None:
         """
         Get the cast and crew for a '_media_type'.
@@ -209,11 +209,11 @@ class GenericRequests:
         return None
 
     def get_recommendations(
-        self,
-        content_id: int,
-        page: int = 1,
-        language: str = "en-US",
-        region: str = "US",
+            self,
+            content_id: int,
+            page: int = 1,
+            language: str = "en-US",
+            region: str = "US",
     ) -> dict | None:
         """
         Get a list of recommended '_media_type' for a '_media_type'.
@@ -240,11 +240,11 @@ class GenericRequests:
         return None
 
     def get_similar(
-        self,
-        content_id: int,
-        page: int = 1,
-        language: str = "en-US",
-        region: str = "US",
+            self,
+            content_id: int,
+            page: int = 1,
+            language: str = "en-US",
+            region: str = "US",
     ) -> dict | None:
         """
         Get a list of similar '_media_type' for a '_media_type'.
@@ -271,7 +271,7 @@ class GenericRequests:
         return None
 
     def get_provider(
-        self, content_id: int, country_code: str = "US", language: str = "en-US"
+            self, content_id: int, country_code: str = "US", language: str = "en-US"
     ) -> dict | None:
         """
         Get a list of the availabilities per country by provider.
@@ -299,7 +299,7 @@ class GenericRequests:
         return None
 
     def search(
-        self, query: str, page: str = 1, language: str = "en-US", region: str = "US"
+            self, query: str, page: str = 1, language: str = "en-US", region: str = "US"
     ) -> dict | None:
         """
         Search for a '_media_type' by query.
@@ -342,7 +342,7 @@ class GenericRequests:
         return None
 
     def get_content_by_genre(
-        self, genre_ids: str, page: int = 1, language: str = "en-US"
+            self, genre_ids: str, page: int = 1, language: str = "en-US"
     ) -> dict | None:
         """
         Get a list of content by genre.

@@ -73,7 +73,7 @@ def add_tv_show_to_user(request, user_id: int, tv_show_id: int) -> JsonResponse:
 
                 return JsonResponse(None, status=status.HTTP_204_NO_CONTENT, safe=False)
 
-            except (DRFValidationError, DjangoValidationError) as e:
+            except (DRFValidationError, DjangoValidationError):
                 return JsonResponse(
                     {"message": "The tv show could not be updated"},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -110,7 +110,7 @@ def add_tv_show_to_user(request, user_id: int, tv_show_id: int) -> JsonResponse:
                     poster_url=tv_show_api["poster_path"],
                 )
 
-            except (DRFValidationError, DjangoValidationError) as e:
+            except (DRFValidationError, DjangoValidationError):
                 return JsonResponse(
                     {"message": "The tv show could not be added"},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -183,7 +183,7 @@ def list_of_details_for_tv_show_per_user(request, user_id: int) -> JsonResponse:
 @api_view(["GET"])
 @permission_classes([IsAuthenticated & IsOwner])
 @authentication_classes([JWTAuthentication])
-def details_of_tv_show_for_user(request, user_id:int, tv_show_id:int) -> JsonResponse:
+def details_of_tv_show_for_user(request, user_id: int, tv_show_id: int) -> JsonResponse:
     """
     Details of tv show for user
     :param request: request object

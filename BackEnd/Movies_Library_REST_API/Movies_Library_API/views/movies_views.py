@@ -84,7 +84,7 @@ def popular_movies(request) -> JsonResponse:
         if user_id != -1:
             data = filter_movie_inside_trash(data, user_id)
 
-        data = filter_movie_inside_trash(data)
+        data = filter_movie_inside_trash(data, user_id)
 
         if data is not None:
             return JsonResponse(data, safe=False, status=status.HTTP_200_OK)
@@ -394,7 +394,7 @@ def movies_by_genre(request) -> JsonResponse:
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
-def movie_videos(request, movie_id : int) -> JsonResponse:
+def movie_videos(request, movie_id: int) -> JsonResponse:
     """
     Get movie videos from API
     Accept language as url parameters

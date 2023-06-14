@@ -14,7 +14,6 @@ class IsOwner(permissions.BasePermission):
         if request.user.is_superuser:
             return True
 
-
         jwt_object = JWTAuthentication()
         header = jwt_object.get_header(request)
         raw_token = jwt_object.get_raw_token(header)

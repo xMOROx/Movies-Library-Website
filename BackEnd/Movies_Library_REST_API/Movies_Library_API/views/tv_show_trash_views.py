@@ -96,7 +96,7 @@ def crud_for_tv_show_inside_trash(request, user_id: int, tv_show_id: int) -> Jso
                     poster_url=tv_show_api["poster_path"],
                 )
 
-            except (DRFValidationError, DjangoValidationError) as e:
+            except (DRFValidationError, DjangoValidationError):
                 return JsonResponse(
                     {"message": "The tv show could not be added"},
                     status=status.HTTP_400_BAD_REQUEST,

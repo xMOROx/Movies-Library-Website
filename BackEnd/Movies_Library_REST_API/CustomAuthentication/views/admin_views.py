@@ -21,7 +21,7 @@ class UserListView(views.APIView):
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
     authentication_classes = [JWTAuthentication]
 
-    def get(self, request) -> response.Response:
+    def get(self) -> response.Response:
         users = User.objects.all().order_by("-id")
         serializer = self.serializer_class(users, many=True)
         return response.Response(serializer.data, status=HTTP_200_OK)
