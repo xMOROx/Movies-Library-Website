@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
   public socialData = [
-    { url: 'placeholder', name: 'placeholder', img: 'placeholder' },
+    { url: 'https://github.com/xMOROx/Movies-Library-Website', name: '', img: 'assets/img/github-logo.png' },
   ];
   constructor() { }
 
